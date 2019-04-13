@@ -4,7 +4,7 @@ import { Hello } from "./components/Hello";
 declare let module: any;
 
 ReactDOM.render(
-  <Hello compiler="Typescript" framework="React..." bundler="Webpack" />,
+  <Hello compiler="Typescript" framework="React" bundler="Webpack" />,
   document.getElementById("root")
 );
 
