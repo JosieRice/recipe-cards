@@ -6,12 +6,13 @@ const path = require("path"),
   port = process.env.PORT || 3000;
 
 // ADMIN AUTH
-var admin = require("firebase-admin");
-var serviceAccount = require("./admin-credentials.json");
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://recipecards-1.firebaseio.com"
-});
+// var admin = require("firebase-admin");
+// var serviceAccount = require("./admin-credentials.json");
+
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: "https://recipecards-1.firebaseio.com"
+// });
 
 app.listen(port, () => {
   console.log(`App is listening on port ${port}`);

@@ -1,6 +1,9 @@
 import * as React from "react";
 
 export default class Index extends React.Component {
+  constructor(props: any) {
+    super(props);
+  }
   render() {
 
     return (
@@ -10,4 +13,4 @@ export default class Index extends React.Component {
       </div>
     );
   }
-}
+};
