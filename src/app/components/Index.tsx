@@ -1,4 +1,6 @@
 import * as React from "react";
+import { Page } from "./styled/Page";
+import { Example } from "./Test";
 
 export default class Index extends React.Component {
   constructor(props: any) {
@@ -7,10 +9,10 @@ export default class Index extends React.Component {
   render() {
 
     return (
-      <div>
+      <Page>
         <h1>Landing Page</h1>
-        <p></p>
-      </div>
+        <Example></Example>
+      </Page>
     );
   }
 };

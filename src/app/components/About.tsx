@@ -1,13 +1,13 @@
 import * as React from "react";
+import { Page } from "./styled/Page";
 
 export default class About extends React.Component {
   render() {
 
     return (
-      <div>
+      <Page>
         <h1>About Page</h1>
-        
-      </div>
+      </Page>
     );
   }
 }
