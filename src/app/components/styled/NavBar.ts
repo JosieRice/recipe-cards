@@ -34,6 +34,11 @@ export const NavButton = styled.button`
   text-decoration: none;
 `;
 
+export const ProfilePhoto = styled.img`
+  height: 35px;
+  border-radius: 50px;
+`;
+
 // #050505
 // #1B9AAA
 // #DDDBCB
