@@ -8,8 +8,8 @@ import {
   NavButton,
   ProfilePhoto
 } from "./styled/NavBar";
-import Index from "./Index";
-import About from "./About";
+import { Index } from "./Index";
+import { About } from "./About";
 
 import { auth, provider } from "../services/Firebase";
 
@@ -76,7 +76,6 @@ export class Navigation extends React.Component<MyProps, MyState> {
                 <ProfilePhoto src={this.state.user.photoURL} />
               </LoginLI>
             )}
-
           </UnorderedList>
         </NavBar>
 

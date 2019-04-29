@@ -15,3 +15,9 @@ To Deploy
 
 `npm run build`<br>
 `firebasedeploy`<br>
+
+To Do
+1. setup a form that submits to the firebase database
+2. move user details into context
+3. bundle recipe information with user information for submitting to database
+4. figure out how to best design the database of recipes

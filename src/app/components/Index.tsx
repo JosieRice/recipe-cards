@@ -1,18 +1,13 @@
 import * as React from "react";
 import { Page } from "./styled/Page";
-import { Example } from "./Test";
 
-export default class Index extends React.Component {
-  constructor(props: any) {
-    super(props);
-  }
-  render() {
+import NewRecipe from "./NewRecipe";
 
-    return (
-      <Page>
-        <h1>Landing Page</h1>
-        <Example></Example>
-      </Page>
-    );
-  }
+export const Index = () => {
+  return (
+    <Page>
+      <h1>Landing Page</h1>
+      <NewRecipe />
+    </Page>
+  );
 };
