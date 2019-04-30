@@ -1,4 +1,4 @@
-import { auth, provider } from "./firebase";
+import { auth, provider } from "./Firebase";
 
 export const login = () => {
   auth.signInWithPopup(provider)
