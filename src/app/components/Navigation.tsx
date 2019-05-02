@@ -1,21 +1,16 @@
 import * as React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import {
-  NavBar,
-  UnorderedList,
-  ListItem,
-  LoginLI,
-  NavButton,
-  ProfilePhoto
-} from "./styled/NavBar";
+import { NavBar, UnorderedList, ListItem, LoginLI, NavButton, ProfilePhoto } from "./styled/NavBar";
 import { Index } from "./Index";
 import { About } from "./About";
 import { auth, provider } from "../services/Firebase";
 import { Provider } from "../context/UserContext";
+import { UserObj } from "../types/UserObj";
 
-interface MyProps {}
+interface MyProps { }
+
 interface MyState {
-  user: any;
+  user: UserObj;
   setUser: any;
 }
 
@@ -24,7 +19,7 @@ export class Navigation extends React.Component<MyProps, MyState> {
     super(props);
     this.state = {
       user: null,
-      setUser: (value: any) => this.setState({ user: value })
+      setUser: (value: UserObj) => this.setState({ user: value })
     };
   }
 
@@ -40,7 +35,6 @@ export class Navigation extends React.Component<MyProps, MyState> {
   login() {
     auth.signInWithPopup(provider).then(result => {
       const user = result.user;
-      console.log('user login', user)
       this.state.setUser({ user });
     });
   }
@@ -71,8 +65,8 @@ export class Navigation extends React.Component<MyProps, MyState> {
                 {!this.state.user ? (
                   <NavButton onClick={() => this.login()}>Log In</NavButton>
                 ) : (
-                  <NavButton onClick={() => this.logout()}>Log Out</NavButton>
-                )}
+                    <NavButton onClick={() => this.logout()}>Log Out</NavButton>
+                  )}
               </LoginLI>
 
               {this.state.user && (

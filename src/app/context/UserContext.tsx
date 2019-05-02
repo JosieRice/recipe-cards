@@ -1,7 +1,10 @@
 import * as React from "react";
 
-// @ts-ignore
-const userContext = React.createContext({
+interface User {
+  user: any
+}
+
+const userContext = React.createContext<User>({
   user: null
 });
  

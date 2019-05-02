@@ -18,6 +18,19 @@ To Deploy
 
 To Do
 
-2. move user details into context
-3. bundle recipe information with user information for submitting to database
-4. figure out how to best design the database of recipes
+* get data from database and display on a page
+* design a database of recipes that can ...
+    1. can search and list your recipes
+    2. can search recipes by name
+    3. can search and list other peoples recipes
+    4. can copy recipes other people have made
+    5. can make a new recipe
+    6. can see the difference between copied recipes (only the difference of the current version)
+    7. recipes will need to include
+      * recipe name
+      * creators name
+      * instructions on how to make it
+      * creators UID
+      * ingredients needed
+
+    it won't store a history of changes
