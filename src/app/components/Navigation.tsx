@@ -19,7 +19,7 @@ export class Navigation extends React.Component<MyProps, MyState> {
     super(props);
     this.state = {
       user: null,
-      setUser: (value: UserObj) => this.setState({ user: value })
+      setUser: (user: UserObj) => this.setState({ user })
     };
   }
 
@@ -27,15 +27,16 @@ export class Navigation extends React.Component<MyProps, MyState> {
   componentDidMount() {
     auth.onAuthStateChanged(user => {
       if (user) {
-        this.state.setUser({ user });
+        this.state.setUser(user);
       }
     });
   }
 
   login() {
     auth.signInWithPopup(provider).then(result => {
-      const user = result.user;
-      this.state.setUser({ user });
+      const user: UserObj = result.user;
+
+      this.state.setUser(user);
     });
   }
 
