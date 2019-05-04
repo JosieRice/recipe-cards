@@ -6,11 +6,12 @@ import { About } from "./About";
 import { auth, provider } from "../services/Firebase";
 import { Provider } from "../context/UserContext";
 import { UserObj } from "../types/UserObj";
+import MyRecipes from "./MyRecipes";
 
 interface MyProps { }
 
 interface MyState {
-  user: UserObj;
+  user: UserObj | null;
   setUser: any;
 }
 
@@ -25,7 +26,7 @@ export class Navigation extends React.Component<MyProps, MyState> {
 
   // persistent login after refresh
   componentDidMount() {
-    auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged((user: UserObj) => {
       if (user) {
         this.state.setUser(user);
       }
@@ -60,6 +61,9 @@ export class Navigation extends React.Component<MyProps, MyState> {
                 <Link to="/about/">About</Link>
               </ListItem>
 
+              <ListItem>
+                <Link to="/myrecipes/">My Recipes</Link>
+              </ListItem>
               {this.state.user && this.state.user.displayName}
 
               <LoginLI>
@@ -80,6 +84,7 @@ export class Navigation extends React.Component<MyProps, MyState> {
 
           <Route path="/" exact component={Index} />
           <Route path="/about/" component={About} />
+          <Route path="/myrecipes/" component={MyRecipes} />
         </Router>
       </Provider>
     );

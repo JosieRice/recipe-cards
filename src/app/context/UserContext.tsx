@@ -1,7 +1,8 @@
 import * as React from "react";
+import { UserObj } from "../types/UserObj";
 
 interface User {
-  user: any
+  user: UserObj | null
 }
 
 const userContext = React.createContext<User>({

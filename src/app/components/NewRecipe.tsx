@@ -1,31 +1,24 @@
 import * as React from "react";
 import { useState, useContext, FormEvent } from "react";
-import { dataBase } from "../services/Firebase";
+import { db } from "../services/Firebase";
 import { userContext } from "../context/UserContext";
 import { isEmpty } from "../utilites/Utilities";
 
-interface IProps {
-  // ... props interface 
-}
-
-const NewRecipe: React.FC<IProps> = () => {
+export default function NewRecipe() {
   const [recipeName, setRecipeName] = useState<string>("");
   const [ingredient, setIngredient] = useState<string>("");
   const context = useContext(userContext);
 
-  console.log('context', context)
-
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    dataBase
+    db
       .collection("recipes")
       .add({
         recipeName,
         ingredient,
-        creator: context.user.user.displayName,
-        userUID: context.user.user.uid
-
+        uid: context.user.uid,
+        displayName: context.user.displayName
       })
       .then(function (docRef) {
         console.log("Document written with ID: ", docRef.id);
@@ -61,5 +54,3 @@ const NewRecipe: React.FC<IProps> = () => {
     </div>
   );
 };
-
-export default NewRecipe;
