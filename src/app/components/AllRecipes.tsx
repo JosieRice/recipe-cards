@@ -1,20 +1,14 @@
 import * as React from "react";
 import { Page } from "./styled/Page";
 import { db } from "../services/Firebase";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import uuidv4 = require('uuid/v4');
-import { userContext } from "../context/UserContext";
 
-
-export default function MyRecipes() {
+export default function AllRecipes() {
   const [recipes, setRecipes] = useState([]);
-  const context = useContext(userContext);
 
   const myRecipeRef = db.collection('recipes');
-  const query = myRecipeRef.where("uid", "==", context.user.uid);
-
-
-  console.log('uid', context.user.uid)
+  const query = myRecipeRef.where("uid", ">", "A");
 
   useEffect(() => {
     query.get().then(snap => {

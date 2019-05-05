@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 export const NavBar = styled.nav`
   background: #1b9aaa;
@@ -18,6 +17,7 @@ export const UnorderedList = styled.ul`
 
 export const ListItem = styled.li`
   display: inline-block;
+  padding: 0 10px;
 `;
 
 export const LoginLI = styled(ListItem)`

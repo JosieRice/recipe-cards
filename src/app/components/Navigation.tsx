@@ -1,12 +1,14 @@
 import * as React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { NavBar, UnorderedList, ListItem, LoginLI, NavButton, ProfilePhoto } from "./styled/NavBar";
-import { Index } from "./Index";
-import { About } from "./About";
+import Index from "./Index";
+import About from "./About";
 import { auth, provider } from "../services/Firebase";
 import { Provider } from "../context/UserContext";
 import { UserObj } from "../types/UserObj";
 import MyRecipes from "./MyRecipes";
+import NewRecipe from "./NewRecipe";
+import AllRecipes from "./AllRecipes";
 
 interface MyProps { }
 
@@ -62,8 +64,17 @@ export class Navigation extends React.Component<MyProps, MyState> {
               </ListItem>
 
               <ListItem>
+                <Link to="/newrecipe/">New Recipe</Link>
+              </ListItem>
+
+              <ListItem>
                 <Link to="/myrecipes/">My Recipes</Link>
               </ListItem>
+
+              <ListItem>
+                <Link to="/allrecipes/">All Recipes</Link>
+              </ListItem>
+
               {this.state.user && this.state.user.displayName}
 
               <LoginLI>
@@ -84,7 +95,9 @@ export class Navigation extends React.Component<MyProps, MyState> {
 
           <Route path="/" exact component={Index} />
           <Route path="/about/" component={About} />
+          <Route path="/newrecipe/" component={NewRecipe} />
           <Route path="/myrecipes/" component={MyRecipes} />
+          <Route path='/allrecipes/' component={AllRecipes} />
         </Router>
       </Provider>
     );
