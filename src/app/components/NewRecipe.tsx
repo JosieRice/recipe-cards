@@ -7,21 +7,39 @@ import { Page } from "./styled/Page";
 
 export default function NewRecipe() {
   const [recipeName, setRecipeName] = useState<string>("");
-  const [instructions, setInstructions] = useState<any>("");
-  const [ingredient, setIngredient] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [prepTime, setPrepTime] = useState<string>("");
+  const [cookTime, setCookTime] = useState<string>("");
+  const [sourceUrl, setSourceUrl] = useState<string>("");
+  const [prepInstructions, setPrepInstructions] = useState<string>("");
+  const [cookInstructions, setCookInstructions] = useState<string>("");
+  const [ingredients, setIngredients] = useState<string>("");
 
   const context = useContext(userContext);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const dirtyprepInstructionsArr = ingredients.split("\n");
+    const prepInstructionsArr = dirtyprepInstructionsArr.filter(Boolean);
+
+    const dirtycookInstructionsArr = ingredients.split("\n");
+    const cookInstructionsArr = dirtycookInstructionsArr.filter(Boolean);
+
+    const dirtyIngredientsArr = ingredients.split("\n");
+    const ingredientsArr = dirtyIngredientsArr.filter(Boolean);
+
     db
       .collection(`recipes`)
       .add({
         recipeName,
-        instructions,
-        ingredients: [],
-        uid: context.user.uid,
+        description,
+        prepTime,
+        cookTime,
+        prepInstructions: prepInstructionsArr,
+        cookInstructions: cookInstructionsArr,
+        ingredients: ingredientsArr,
+        OwnerUid: context.user.uid,
         displayName: context.user.displayName,
         original: true,
         creatorUid: context.user.uid,
@@ -30,7 +48,12 @@ export default function NewRecipe() {
       .then(function (docRef) {
         console.log("Document written with ID: ", docRef.id);
         setRecipeName("");
-        setIngredient("");
+        setDescription("");
+        setPrepTime("");
+        setCookTime("");
+        setPrepInstructions("");
+        setCookInstructions("");
+        setIngredients("");
       })
       .catch(function (error) {
         console.error("Error adding document: ", error);
@@ -41,11 +64,11 @@ export default function NewRecipe() {
 
   return (
     <Page>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} id="recipeForm">
 
         <input
           type="text"
-          name="username"
+          name="recipeName"
           placeholder="Recipe Name"
           value={recipeName}
           onChange={e => setRecipeName(e.target.value)}
@@ -53,19 +76,65 @@ export default function NewRecipe() {
 
         <input
           type="text"
-          name="Instructions"
-          placeholder="Instructions"
-          value={instructions}
-          onChange={e => setInstructions(e.target.value)}
+          name="description"
+          placeholder="Description"
+          value={description}
+          onChange={e => setDescription(e.target.value)}
         />
 
         <input
           type="text"
+          name="prepTime"
+          placeholder="Prep Time"
+          value={prepTime}
+          onChange={e => setPrepTime(e.target.value)}
+        />
+
+        <input
+          type="text"
+          name="cookTime"
+          placeholder="Cooking Time"
+          value={cookTime}
+          onChange={e => setCookTime(e.target.value)}
+        />
+
+         <input
+          type="text"
+          name="sourceUrl"
+          placeholder="Recipe Source"
+          value={sourceUrl}
+          onChange={e => setSourceUrl(e.target.value)}
+        /><br /><br />
+
+        <textarea
+          form="recipeForm"
+          rows={20}
+          cols={33}
+          name="prepInstructions"
+          placeholder="Prep Instructions"
+          value={prepInstructions}
+          onChange={e => setPrepInstructions(e.target.value)}
+        />
+
+        <textarea
+          form="recipeForm"
+          rows={20}
+          cols={33}
+          name="cookInstructions"
+          placeholder="Cooking Instructions"
+          value={cookInstructions}
+          onChange={e => setCookInstructions(e.target.value)}
+        />
+
+        <textarea
+          form="recipeForm"
+          rows={20}
+          cols={33}
           name="currentItem"
           placeholder="Ingredients"
-          value={ingredient}
-          onChange={e => setIngredient(e.target.value)}
-        />
+          value={ingredients}
+          onChange={e => setIngredients(e.target.value)}
+        /><br /><br />
 
         <button>Add Recipe</button>
       </form>

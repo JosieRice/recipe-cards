@@ -8,7 +8,8 @@ export default function AllRecipes() {
   const [recipes, setRecipes] = useState([]);
 
   const myRecipeRef = db.collection('recipes');
-  const query = myRecipeRef.where("uid", ">", "A");
+  // query for all recipes in all uid's
+  const query = myRecipeRef.where("uid", ">", "0");
 
   useEffect(() => {
     query.get().then(snap => {
