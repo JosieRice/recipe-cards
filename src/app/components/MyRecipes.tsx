@@ -8,13 +8,13 @@ import { userContext } from "../context/UserContext";
 
 export default function MyRecipes() {
   const [recipes, setRecipes] = useState([]);
-  const context = useContext(userContext);
+  const [user] = useContext(userContext);
 
   const myRecipeRef = db.collection('recipes');
-  const query = myRecipeRef.where("uid", "==", context.user.uid);
+  const query = myRecipeRef.where("OwnerUid", "==", user.uid);
 
 
-  console.log('uid', context.user.uid)
+  console.log('uid', user.uid)
 
   useEffect(() => {
     query.get().then(snap => {

@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useContext, FormEvent } from "react";
 import { db } from "../services/Firebase";
 import { userContext } from "../context/UserContext";
-import { isEmpty } from "../utilites/Utilities";
+import { isEmpty, strToArr } from "../utilites/Utilities";
 import { Page } from "./styled/Page";
 
 export default function NewRecipe() {
@@ -15,19 +15,14 @@ export default function NewRecipe() {
   const [cookInstructions, setCookInstructions] = useState<string>("");
   const [ingredients, setIngredients] = useState<string>("");
 
-  const context = useContext(userContext);
+  const [user] = useContext(userContext);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const dirtyprepInstructionsArr = ingredients.split("\n");
-    const prepInstructionsArr = dirtyprepInstructionsArr.filter(Boolean);
-
-    const dirtycookInstructionsArr = ingredients.split("\n");
-    const cookInstructionsArr = dirtycookInstructionsArr.filter(Boolean);
-
-    const dirtyIngredientsArr = ingredients.split("\n");
-    const ingredientsArr = dirtyIngredientsArr.filter(Boolean);
+    const prepInstructionsArr = strToArr(prepInstructions);
+    const cookInstructionsArr = strToArr(cookInstructions);
+    const ingredientsArr = strToArr(ingredients);
 
     db
       .collection(`recipes`)
@@ -39,10 +34,10 @@ export default function NewRecipe() {
         prepInstructions: prepInstructionsArr,
         cookInstructions: cookInstructionsArr,
         ingredients: ingredientsArr,
-        OwnerUid: context.user.uid,
-        displayName: context.user.displayName,
+        OwnerUid: user.uid,
+        displayName: user.displayName,
         original: true,
-        creatorUid: context.user.uid,
+        creatorUid: user.uid,
         dateCreated: Date.now()
       })
       .then(function (docRef) {
@@ -60,7 +55,7 @@ export default function NewRecipe() {
       });
   };
 
-  if (isEmpty(context.user)) return <div>not signed in</div>;
+  if (isEmpty(user)) return <div>not signed in</div>;
 
   return (
     <Page>

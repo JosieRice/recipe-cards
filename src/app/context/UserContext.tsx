@@ -1,14 +1,21 @@
 import * as React from "react";
 import { UserObj } from "../types/UserObj";
+import { useState, Dispatch, SetStateAction } from "react";
 
 interface User {
   user: UserObj | null
 }
+type Context = Array<User | any>
 
-const userContext = React.createContext<User>({
-  user: null
-});
+const userContext = React.createContext<Context>([{user: null}, () => {}]);
+
+const UserContextProvider = (props: any) => {
+  const [user, setUser] = useState({user: null});
+  return (
+    <userContext.Provider value={[user, setUser]}>
+      {props.children}
+    </userContext.Provider>
+  );
+}
  
-const { Provider, Consumer } = userContext
- 
-export { userContext, Provider, Consumer };
+export { userContext, UserContextProvider };

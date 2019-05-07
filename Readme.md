@@ -18,4 +18,10 @@ To Deploy
 
 To Do
 
-design a database of recipes that can see the difference between copied recipes (only the difference of the current versions)
+make user login its own component
+show the full version of a saved recipe
+connect domain
+
+bugs to fix
+fix vs code wanting to auto add console.log imports
+routing bug, have to load root first or it shows `Cannot GET /myrecipes/`

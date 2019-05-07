@@ -9,7 +9,7 @@ export default function AllRecipes() {
 
   const myRecipeRef = db.collection('recipes');
   // query for all recipes in all uid's
-  const query = myRecipeRef.where("uid", ">", "0");
+  const query = myRecipeRef.where("OwnerUid", ">", "0");
 
   useEffect(() => {
     query.get().then(snap => {
@@ -26,7 +26,7 @@ export default function AllRecipes() {
 
   return (
     <Page>
-      <h1>My Recipes</h1>
+      <h1>All Recipes</h1>
       <ul>
         {recipes.map((recipe: { recipeName: string; }) => <li key={uuidv4()}>{recipe.recipeName}</li>)}
       </ul>
