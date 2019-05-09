@@ -1,21 +1,15 @@
 import * as React from "react";
-import { useState, useContext, useEffect } from "react";
-import { userContext } from "../context/UserContext";
+import { useState, useEffect } from "react";
 import { db } from "../services/Firebase";
 import { Page } from "./styled/Page";
 import uuidv4 = require('uuid/v4');
-// import console = require("console");
-// import console = require("console");
 
-export default function FullCard() {
+// @ts-ignore
+export default function FullCard({ match }) {
   const [recipe, setRecipe] = useState();
-  const [user] = useContext(userContext);
-
-  console.log('context', user)
-
 
   const myRecipeRef = db.collection('recipes');
-  const query = myRecipeRef.doc("70PuJVXXf9ccZBRpBPe4")
+  const query = myRecipeRef.doc(match.params.id)
 
   useEffect(() => {
     query.get().then(function (doc) {
@@ -31,8 +25,6 @@ export default function FullCard() {
       console.log("Error getting document:", error);
     });
   }, []);
-
-  const recipeLoaded = recipe && recipe.ingredients
 
   const listIngredients = recipe && recipe.ingredients.map((ingredient: any) =>
     <li key={uuidv4()}>{ingredient}</li>
