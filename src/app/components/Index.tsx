@@ -6,7 +6,7 @@ export default function Index() {
   return (
     <Page>
       <h1>Landing Page</h1>
-      {/* <FullCard /> */}
+      <FullCard />
     </Page>
   );
 };

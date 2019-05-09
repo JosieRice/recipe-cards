@@ -1,6 +1,6 @@
 import * as React from "react";
 import { UserObj } from "../types/UserObj";
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState } from "react";
 
 interface User {
   user: UserObj | null
