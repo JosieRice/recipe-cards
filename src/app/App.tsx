@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from "react-dom";
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
+import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom'
 import { UserContextProvider } from './context/UserContext';
 
 // Pages
@@ -11,10 +11,11 @@ import MyRecipes from './components/MyRecipes';
 import AllRecipes from './components/AllRecipes';
 import LoginLogout from './components/LoginLogout';
 import UserPhoto from './components/UserPhoto';
-import FullCard from './components/FullCard';
+import NoMatch from './components/NoMatch';
 
 // Style
 import { NavBar, UnorderedList, ListItem, LoginLI } from './components/styled/NavBar';
+
 
 const Routing = (
   <UserContextProvider>
@@ -26,19 +27,23 @@ const Routing = (
           </ListItem>
 
           <ListItem>
-            <Link to="/about">About</Link>
+            <Link to="/about/">About</Link>
           </ListItem>
 
           <ListItem>
-            <Link to="/newrecipe">New Recipe</Link>
+            <Link to="/newrecipe/">New Recipe</Link>
           </ListItem>
 
           <ListItem>
-            <Link to="/recipes">My Recipes</Link>
+            <Link to="/recipes/">My Recipes</Link>
           </ListItem>
 
           <ListItem>
-            <Link to="/allrecipes">All Recipes</Link>
+            <Link to="/allrecipes/">All Recipes</Link>
+          </ListItem>
+
+          <ListItem>
+            <Link to="/broken/">Broken</Link>
           </ListItem>
 
           <LoginLI>
@@ -53,13 +58,14 @@ const Routing = (
       </NavBar>
 
 
-      <div>
-        <Route exact path="/" component={Index} />
-        <Route path="/about" component={About} />
-        <Route path="/newrecipe" component={NewRecipe} />
-        <Route path="/recipes" component={MyRecipes} />
-        <Route path='/allrecipes' component={AllRecipes} />
-      </div>
+      <Switch>
+        <Route path="/" exact component={Index} />
+        <Route path="/about/" component={About} />
+        <Route path="/newrecipe/" component={NewRecipe} />
+        <Route path="/recipes/" component={MyRecipes} />
+        <Route path='/allrecipes/' component={AllRecipes} />
+        <Route component={NoMatch} />
+      </Switch>
     </Router>
   </UserContextProvider>
 )

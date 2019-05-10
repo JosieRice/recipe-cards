@@ -8,7 +8,8 @@ import uuidv4 = require('uuid/v4');
 import { userContext } from "../context/UserContext";
 import FullCard from "./FullCard";
 
-export default function MyRecipes(props: any) {
+export default function MyRecipes({ match }: any) {
+  console.log('match in my recipes', match)
   const [recipes, setRecipes] = useState([]);
   const [user] = useContext(userContext);
 
@@ -37,11 +38,11 @@ export default function MyRecipes(props: any) {
       <ul>
         {recipes.map((recipe: { recipeName: string; id: string; }) =>
           <li key={uuidv4()}>
-            <Link to={`/recipes/${recipe.id}`}>{recipe.recipeName}</Link> 
+            <Link to={`${match.url}${recipe.id}`}>{recipe.recipeName}</Link> 
           </li>)
         }
       </ul>
-      <Route path="/recipes/:id" component={FullCard} />
+      <Route path={`${match.path}:id`} component={FullCard} />
 
     </Page>
   );
