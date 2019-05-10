@@ -6,21 +6,21 @@
 #To Deploy
 
 `npm run build`<br>
-`firebasedeploy`<br>
+`firebase deploy --except functions`<br>
 
 
 #To Do
 
-setup production version of app
 connect domain
+set proper database security rules
+discover firebase functions
 
 
 #Bugs to Fix
 - fix vscode wanting to auto add console.log imports
-- routing bug, have to load root first or it shows `Cannot GET /myrecipes/` (setup server side routing)
 
 
-#Helpful articles
+#Historically helpful articles
 
 [React with typescript and webpack boilerplate](https://hackernoon.com/react-with-typescript-and-webpack-654f93f34db6)
 

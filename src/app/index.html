@@ -9,18 +9,25 @@
   <body>
     <div id="root"></div>
 
-    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#config-web-app -->
+
     <script>
-      // Initialize Firebase
-      var config = {
-        apiKey: "AIzaSyDBy1oIR-RTdseyC1uXLraVCy893j1T4N8",
-        authDomain: "recipecards-1.firebaseapp.com",
-        databaseURL: "https://recipecards-1.firebaseio.com",
-        projectId: "recipecards-1",
-        storageBucket: "recipecards-1.appspot.com",
-        messagingSenderId: "870947085364"
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyARAAlgdXzq6SXf-pHBLWcWo03cm-ujelU",
+        authDomain: "original-recipe.firebaseapp.com",
+        databaseURL: "https://original-recipe.firebaseio.com",
+        projectId: "original-recipe",
+        storageBucket: "original-recipe.appspot.com",
+        messagingSenderId: "844212639492",
+        appId: "1:844212639492:web:87be6f01dbf07f86"
       };
-      firebase.initializeApp(config);
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
     </script>
   </body>
 </html>

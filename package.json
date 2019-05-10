@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run build:dev && node server.js",
-    "build": "./node_modules/.bin/webpack --mode=production",
-    "build:dev": "./node_modules/.bin/webpack --mode=development"
+    "start": "npm run build && node server.js",
+    "build": "./node_modules/.bin/webpack"
   },
   "keywords": [],
   "author": "",
