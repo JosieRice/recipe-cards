@@ -7,22 +7,13 @@ import { db } from "../services/Firebase";
 import uuidv4 = require('uuid/v4');
 import { userContext } from "../context/UserContext";
 import FullCard from "./FullCard";
-// import console = require("console");
-
-
 
 export default function MyRecipes(props: any) {
-  console.log("props", props)
   const [recipes, setRecipes] = useState([]);
   const [user] = useContext(userContext);
 
-  // const { url } = props.match
-
   const myRecipeRef = db.collection('recipes');
   const query = myRecipeRef.where("OwnerUid", "==", user.uid);
-
-
-  console.log('uid', user.uid)
 
   useEffect(() => {
     query.get().then(snap => {
@@ -38,7 +29,6 @@ export default function MyRecipes(props: any) {
     });
   }, []);
 
-  console.log('recipes', recipes)
   if (recipes.length === 0) return (<Page>loading</Page>);
 
   return (

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from "react-dom";
-import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom'
+import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 import { UserContextProvider } from './context/UserContext';
 
 // Pages
@@ -12,7 +12,6 @@ import AllRecipes from './components/AllRecipes';
 import LoginLogout from './components/LoginLogout';
 import UserPhoto from './components/UserPhoto';
 import FullCard from './components/FullCard';
-// import NotFound from './components/NotFound';
 
 // Style
 import { NavBar, UnorderedList, ListItem, LoginLI } from './components/styled/NavBar';
@@ -60,7 +59,6 @@ const Routing = (
         <Route path="/newrecipe" component={NewRecipe} />
         <Route path="/recipes" component={MyRecipes} />
         <Route path='/allrecipes' component={AllRecipes} />
-        {/* <Route component={NotFound} /> */}
       </div>
     </Router>
   </UserContextProvider>

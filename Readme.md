@@ -11,9 +11,18 @@
 
 #To Do
 
+## Coding
+make a more useful list of recipes
+make a quick view of a recipe
+make a cook view of a recipe
+make an inline edit option for recipes
+make a one button copy of recipes from other peoples cards
+
+## Firebase Related
 connect domain
 set proper database security rules
 discover firebase functions
+
 
 
 #Bugs to Fix
