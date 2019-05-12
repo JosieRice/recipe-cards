@@ -38,7 +38,9 @@ export default function MyRecipes({ match }: any) {
       <ul>
         {recipes.map((recipe: { recipeName: string; id: string; }) =>
           <li key={uuidv4()}>
-            <Link to={`${match.url}${recipe.id}`}>{recipe.recipeName}</Link> 
+            <Link to={`${match.path}${recipe.id}`}>
+              {recipe.recipeName}
+            </Link> 
           </li>)
         }
       </ul>

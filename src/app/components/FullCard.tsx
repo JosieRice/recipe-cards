@@ -6,6 +6,7 @@ import uuidv4 = require('uuid/v4');
 
 // @ts-ignore
 export default function FullCard({ match }) {
+  console.log('full card')
   const [recipe, setRecipe] = useState();
 
   const myRecipeRef = db.collection('recipes');
@@ -35,14 +36,21 @@ export default function FullCard({ match }) {
   )
 
   const listCookInstructions = recipe && recipe.cookInstructions.map((instructions: any) =>
-  <li key={uuidv4()}>{instructions}</li>
-)
+    <li key={uuidv4()}>{instructions}</li>
+  )
+
+  const fullScreen = () => {
+    const elem = document.getElementById(match.params.id);
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    }
+  }
 
   console.log('recipe', recipe)
   if (!recipe) return (<Page>loading</Page>);
 
   return (
-    <Page>
+    <Page id={match.params.id}>
       <h1>Full Recipe</h1>
 
       Recipe Name: {recipe.recipeName}<br /><br />
@@ -52,6 +60,8 @@ export default function FullCard({ match }) {
       Ingredients: <ul>{listIngredients}</ul><br /><br />
       Prep Instructions: <ul>{listPrep}</ul><br /><br />
       Cooking Instructions: <ul>{listCookInstructions}</ul><br /><br />
+
+      <button onClick={fullScreen}>Cook now</button>
 
     </Page>
   );
