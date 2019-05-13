@@ -54,10 +54,10 @@ export default function FullCard({ match, history }) {
 
   return (
     <Modal>
-      <button onClick={back}>Back</button>
+      <button style={{position: 'absolute', right: '15px'}} onClick={back}>X</button>
       <RecipeCard id={match.params.id}>
 
-        <h1>{recipe.recipeName}</h1>
+        <h1 style={{margin: '0 0 5px 0'}}>{recipe.recipeName}</h1>
 
         Description: {recipe.description}<br /><br />
         Prep Time: {recipe.prepTime}<br /><br />
