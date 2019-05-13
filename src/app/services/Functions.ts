@@ -8,7 +8,6 @@ export const login = () => {
       this.setState({
         user
       });
-      console.log("LOGIN", user);
     });
   
 };

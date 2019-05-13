@@ -9,7 +9,6 @@ import { userContext } from "../context/UserContext";
 import FullCard from "./FullCard";
 
 export default function MyRecipes({ match }: any) {
-  console.log('match in my recipes', match)
   const [recipes, setRecipes] = useState([]);
   const [user] = useContext(userContext);
 
@@ -20,7 +19,6 @@ export default function MyRecipes({ match }: any) {
     query.get().then(snap => {
       let list: any = []
       snap.forEach(recipe => {
-        console.log('recipes in list', recipe.id)
         let recipeObj = recipe.data()
         recipeObj['id'] = recipe.id
 

@@ -1,12 +1,11 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { db } from "../services/Firebase";
-import { Page } from "./styled/Page";
+import { Modal, RecipeCard } from "./styled/Page";
 import uuidv4 = require('uuid/v4');
 
 // @ts-ignore
 export default function FullCard({ match, history }) {
-  console.log('full card')
   const [recipe, setRecipe] = useState();
 
   const myRecipeRef = db.collection('recipes');
@@ -51,49 +50,25 @@ export default function FullCard({ match, history }) {
     }
   }
 
-  console.log('recipe', recipe)
-  if (!recipe) return (<Page>loading</Page>);
+  if (!recipe) return (<div>loading</div>);
 
   return (
-    // <div
-    //   onClick={back}
-    //   style={{
-    //     position: "absolute",
-    //     top: 0,
-    //     left: 0,
-    //     bottom: 0,
-    //     right: 0,
-    //     background: "rgba(0, 0, 0, 0.15)"
-    //   }}
-    // >
-      <div
-        className="modal"
-        style={{
-          position: "absolute",
-          background: "#fff",
-          top: 25,
-          left: "10%",
-          right: "10%",
-          padding: 15,
-          border: "2px solid #444"
-        }}
-      >
+    <Modal>
       <button onClick={back}>Back</button>
-        <Page id={match.params.id}>
-          <h1>Full Recipe</h1>
+      <RecipeCard id={match.params.id}>
 
-          Recipe Name: {recipe.recipeName}<br /><br />
-          Description: {recipe.description}<br /><br />
-          Prep Time: {recipe.prepTime}<br /><br />
-          Cook Time: {recipe.cookTime}<br /><br />
-          Ingredients: <ul>{listIngredients}</ul><br /><br />
-          Prep Instructions: <ul>{listPrep}</ul><br /><br />
-          Cooking Instructions: <ul>{listCookInstructions}</ul><br /><br />
+        <h1>{recipe.recipeName}</h1>
 
-          <button onClick={fullScreen}>Cook now</button>
+        Description: {recipe.description}<br /><br />
+        Prep Time: {recipe.prepTime}<br /><br />
+        Cook Time: {recipe.cookTime}<br /><br />
+        Ingredients: <ul>{listIngredients}</ul><br /><br />
+        Prep Instructions: <ul>{listPrep}</ul><br /><br />
+        Cooking Instructions: <ul>{listCookInstructions}</ul><br /><br />
 
-        </Page>
-      </div>
-    // </div>
+        <button onClick={fullScreen}>Cook now</button>
+
+      </RecipeCard>
+    </Modal>
   );
 };

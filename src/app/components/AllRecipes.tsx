@@ -21,7 +21,6 @@ export default function AllRecipes() {
     });
   }, []);
 
-  console.log('recipes', recipes)
   if (recipes.length === 0) return (<Page>loading</Page>);
 
   return (

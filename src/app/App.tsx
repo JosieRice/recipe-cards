@@ -27,10 +27,6 @@ const Routing = (
           </ListItem>
 
           <ListItem>
-            <Link to="/about/">About</Link>
-          </ListItem>
-
-          <ListItem>
             <Link to="/newrecipe/">New Recipe</Link>
           </ListItem>
 
@@ -40,10 +36,6 @@ const Routing = (
 
           <ListItem>
             <Link to="/allrecipes/">All Recipes</Link>
-          </ListItem>
-
-          <ListItem>
-            <Link to="/broken/">Broken</Link>
           </ListItem>
 
           <LoginLI>
@@ -60,7 +52,6 @@ const Routing = (
 
       <Switch>
         <Route path="/" exact component={Index} />
-        <Route path="/about/" component={About} />
         <Route path="/newrecipe/" component={NewRecipe} />
         <Route path="/recipes/" component={MyRecipes} />
         <Route path='/allrecipes/' component={AllRecipes} />
