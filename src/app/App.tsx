@@ -5,7 +5,6 @@ import { UserContextProvider } from './context/UserContext';
 
 // Pages
 import Index from "./components/Index";
-import About from "./components/About";
 import NewRecipe from "./components/NewRecipe";
 import MyRecipes from './components/MyRecipes';
 import AllRecipes from './components/AllRecipes';

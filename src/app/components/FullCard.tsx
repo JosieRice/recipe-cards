@@ -1,8 +1,11 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { db } from "../services/Firebase";
-import { Modal, RecipeCard } from "./styled/Page";
 import uuidv4 = require('uuid/v4');
+
+// Style
+import { Modal, RecipeCard } from "./styled/Page";
+import { Ingredients, Instructions, Description } from "./styled/RecipeCard";
 
 // @ts-ignore
 export default function FullCard({ match, history }) {
@@ -54,17 +57,29 @@ export default function FullCard({ match, history }) {
 
   return (
     <Modal>
-      <button style={{position: 'absolute', right: '15px'}} onClick={back}>X</button>
+      <button style={{ position: 'absolute', right: '15px', top: '15px' }} onClick={back}>X</button>
       <RecipeCard id={match.params.id}>
 
-        <h1 style={{margin: '0 0 5px 0'}}>{recipe.recipeName}</h1>
+        <div style={{ margin: '0 0 10px 0' }}>
+          <h1 style={{ margin: '0 0 5px 0', fontSize: '4vmin' }}>{recipe.recipeName}</h1>
+          <Description>{recipe.description}</Description>
+        </div>
 
-        Description: {recipe.description}<br /><br />
-        Prep Time: {recipe.prepTime}<br /><br />
-        Cook Time: {recipe.cookTime}<br /><br />
-        Ingredients: <ul>{listIngredients}</ul><br /><br />
-        Prep Instructions: <ul>{listPrep}</ul><br /><br />
-        Cooking Instructions: <ul>{listCookInstructions}</ul><br /><br />
+        <div style={{ margin: "10px 0" }}>
+          Prep Time: {recipe.prepTime}
+          Cook Time: {recipe.cookTime}
+        </div>
+
+        <div style={{ display: 'flex' }}>
+          <Ingredients>
+            Ingredients: <ul>{listIngredients}</ul>
+          </Ingredients>
+
+          <Instructions>
+            Prep Instructions: <ol>{listPrep}</ol><br /><br />
+            Cooking Instructions: <ol>{listCookInstructions}</ol>
+          </Instructions>
+        </div>
 
         <button onClick={fullScreen}>Cook now</button>
 

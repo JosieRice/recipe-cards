@@ -11,10 +11,10 @@ export const Modal = styled.div`
   top: 25px;
   left: 10%;
   right: 10%;
-  padding: 15px;
   border: 2px solid #444;
 `
 
 export const RecipeCard = styled.div`
   background: #fff;
+  padding: 15px;
 `
