@@ -10,7 +10,8 @@ type Context = Array<User | any>
 const userContext = React.createContext<Context>([{user: null}, () => {}]);
 
 const UserContextProvider = (props: any) => {
-  const [user, setUser] = useState({user: null});
+  const [user, setUser] = useState(null);
+  
   return (
     <userContext.Provider value={[user, setUser]}>
       {props.children}
