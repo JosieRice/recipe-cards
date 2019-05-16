@@ -2,7 +2,6 @@ import * as React from "react";
 import { Page } from "./styled/Page";
 import { db } from "../services/Firebase";
 import { useState, useEffect } from "react";
-import uuidv4 = require('uuid/v4');
 
 export default function AllRecipes() {
   const [recipes, setRecipes] = useState([]);
@@ -27,7 +26,7 @@ export default function AllRecipes() {
     <Page>
       <h1>All Recipes</h1>
       <ul>
-        {recipes.map((recipe: { recipeName: string; }) => <li key={uuidv4()}>{recipe.recipeName}</li>)}
+        {recipes.map((recipe: { recipeName: string; }, index: number) => <li key={index}>{recipe.recipeName}</li>)}
       </ul>
 
     </Page>

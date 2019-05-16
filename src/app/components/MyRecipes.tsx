@@ -4,7 +4,6 @@ import { Route, Link } from 'react-router-dom'
 
 import { Page } from "./styled/Page";
 import { db } from "../services/Firebase";
-import uuidv4 = require('uuid/v4');
 import { userContext } from "../context/UserContext";
 import FullCard from "./FullCard";
 
@@ -35,7 +34,7 @@ export default function MyRecipes({ match }: any) {
       <h1>My Recipes</h1>
       <ul>
         {recipes.map((recipe: { recipeName: string; id: string; }) =>
-          <li key={uuidv4()}>
+          <li key={recipe.id}>
             <Link to={`${match.path}${recipe.id}`}>
               {recipe.recipeName}
             </Link> 

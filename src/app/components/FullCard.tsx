@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { db } from "../services/Firebase";
-import uuidv4 = require('uuid/v4');
 
 // Style
 import { Modal, RecipeCard } from "./styled/Page";
@@ -29,16 +28,16 @@ export default function FullCard({ match, history }) {
     });
   }, []);
 
-  const listIngredients = recipe && recipe.ingredients.map((ingredient: any) =>
-    <li key={uuidv4()}>{ingredient}</li>
+  const listIngredients = recipe && recipe.ingredients.map((ingredient: any, index: number) =>
+    <li key={index}>{ingredient}</li>
   );
 
-  const listPrep = recipe && recipe.prepInstructions.map((instructions: any) =>
-    <li key={uuidv4()}>{instructions}</li>
+  const listPrep = recipe && recipe.prepInstructions.map((instructions: any, index: number) =>
+    <li key={index}>{instructions}</li>
   )
 
-  const listCookInstructions = recipe && recipe.cookInstructions.map((instructions: any) =>
-    <li key={uuidv4()}>{instructions}</li>
+  const listCookInstructions = recipe && recipe.cookInstructions.map((instructions: any, index: number) =>
+    <li key={index}>{instructions}</li>
   )
 
   const back = (e: any) => {
