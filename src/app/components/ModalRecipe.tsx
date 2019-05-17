@@ -4,7 +4,8 @@ import { db } from "../services/Firebase";
 
 // Style
 import { Modal, RecipeCard } from "./styled/Page";
-import { Ingredients, Instructions, Description } from "./styled/RecipeCard";
+import { Ingredients } from "./styled/RecipeCard";
+import { Name, StyledTextArea, Time, Instructions } from "./styled/Modal";
 
 // @ts-ignore
 export default function ModalRecipe({ match, history }) {
@@ -17,6 +18,9 @@ export default function ModalRecipe({ match, history }) {
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [prepInstructions, setPrepInstructions] = useState<string[]>([])
   const [cookInstructions, setCookInstructions] = useState<string[]>([])
+
+
+  const [update, setUpdate] = useState<boolean>(false)
 
   const myRecipeRef = db.collection('recipes');
   const query = myRecipeRef.doc(match.params.id)
@@ -53,12 +57,14 @@ export default function ModalRecipe({ match, history }) {
     newList[index] = ingredient
     console.log('newList', newList)
     cb(newList)
+    setUpdate(true)
   }
 
   const listIngredients = recipe && ingredients.map((ingredient: any, index: number) =>
     <li key={index}>
-      <input
+      <StyledTextArea
         value={ingredient}
+        rows={1}
         onChange={e => handleArrayChange(index, ingredients, e.target.value, setIngredients)}
       />
     </li>
@@ -66,16 +72,16 @@ export default function ModalRecipe({ match, history }) {
 
   const listPrep = recipe && prepInstructions.map((prepInstruction: any, index: number) =>
     <li key={index}>
-    <input
-      value={prepInstruction}
-      onChange={e => handleArrayChange(index, prepInstructions, e.target.value, setPrepInstructions)}
-    />
+      <StyledTextArea
+        value={prepInstruction}
+        onChange={e => handleArrayChange(index, prepInstructions, e.target.value, setPrepInstructions)}
+      />
     </li>
   )
 
   const listCookInstructions = recipe && cookInstructions.map((cookInstruction: any, index: number) =>
     <li key={index}>
-      <input
+      <StyledTextArea
         value={cookInstruction}
         onChange={e => handleArrayChange(index, cookInstructions, e.target.value, setCookInstructions)}
       />
@@ -102,31 +108,44 @@ export default function ModalRecipe({ match, history }) {
       <RecipeCard id={match.params.id}>
 
         <div style={{ margin: '0 0 10px 0' }}>
-          <input
-            style={{ margin: '0 0 5px 0', fontSize: '4vmin', border: 'none' }}
+          <Name
             value={recipeName}
-            onChange={e => setRecipeName(e.target.value)}
+            onChange={e => {
+              setRecipeName(e.target.value)
+              setUpdate(true)
+            }}
           />
-          <input
+          <StyledTextArea
             value={description}
-            onChange={e => setDescription(e.target.value)}
+            onChange={e => {
+              setDescription(e.target.value)
+              setUpdate(true)
+            }}
           />
         </div>
 
         <div style={{ margin: "10px 0" }}>
           Prep Time:
-          <input
+          <Time
             value={prepTime}
-            onChange={e => setPrepTime(e.target.value)}
+            onChange={e => {
+              setPrepTime(e.target.value)
+              setUpdate(true)
+            }
+            }
           />
           Cook Time:
-          <input
+          <Time
             value={cookTime}
-            onChange={e => setCookTime(e.target.value)}
+            onChange={e => {
+              setCookTime(e.target.value)
+              setUpdate(true)
+            }
+            }
           />
         </div>
 
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', width: "100%" }}>
           <Ingredients>
             Ingredients: <ul>{listIngredients}</ul>
           </Ingredients>
@@ -137,6 +156,7 @@ export default function ModalRecipe({ match, history }) {
           </Instructions>
         </div>
 
+        {update && <p>updated</p>}
         <button onClick={fullScreen}>Cook now</button>
 
       </RecipeCard>

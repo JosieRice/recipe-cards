@@ -30,7 +30,7 @@ export const NavButton = styled.button`
   border-radius: 5px;
   padding: 5px 20px;
   background-color: #F5F1E3;
-  color: #050505
+  color: #050505;
   text-decoration: none;
 `;
 
