@@ -5,7 +5,7 @@ import { Route, Link } from 'react-router-dom'
 import { Page } from "./styled/Page";
 import { db } from "../services/Firebase";
 import { userContext } from "../context/UserContext";
-import FullCard from "./FullCard";
+import ModalRecipe from "./ModalRecipe";
 
 export default function MyRecipes({ match }: any) {
   const [recipes, setRecipes] = useState([]);
@@ -41,7 +41,7 @@ export default function MyRecipes({ match }: any) {
           </li>)
         }
       </ul>
-      <Route path={`${match.path}:id`} component={FullCard} />
+      <Route path={`${match.path}:id`} component={ModalRecipe} />
 
     </Page>
   );
