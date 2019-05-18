@@ -5,6 +5,7 @@ export const Name = styled.input`
   margin: 0 0 5px 0;
   font-size: 4vmin;
   border: none;
+  width: 90%;
 `
 
 export const StyledTextArea = styled(Textarea)`

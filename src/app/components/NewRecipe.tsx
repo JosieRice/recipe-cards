@@ -24,6 +24,7 @@ export default function NewRecipe() {
     const cookInstructionsArr = strToArr(cookInstructions);
     const ingredientsArr = strToArr(ingredients);
 
+    // Create Original Recipe
     db
       .collection(`recipes`)
       .add({
@@ -31,12 +32,45 @@ export default function NewRecipe() {
         description,
         prepTime,
         cookTime,
+        sourceUrl,
+        prepInstructions: prepInstructionsArr,
+        cookInstructions: cookInstructionsArr,
+        ingredients: ingredientsArr,
+        displayName: user.displayName,
+        original: true,
+        originalCreatorUid: user.uid,
+        creatorUid: user.uid,
+        dateCreated: Date.now()
+      })
+      .then(function (docRef) {
+        console.log("Document written with ID: ", docRef.id);
+        // setRecipeName("");
+        // setDescription("");
+        // setPrepTime("");
+        // setCookTime("");
+        // setPrepInstructions("");
+        // setCookInstructions("");
+        // setIngredients("");
+      })
+      .catch(function (error) {
+        console.error("Error adding document: ", error);
+      });
+
+      // Create your editable copy
+      db
+      .collection(`recipes`)
+      .add({
+        recipeName,
+        description,
+        prepTime,
+        cookTime,
+        sourceUrl,
         prepInstructions: prepInstructionsArr,
         cookInstructions: cookInstructionsArr,
         ingredients: ingredientsArr,
         OwnerUid: user.uid,
         displayName: user.displayName,
-        original: true,
+        original: false,
         creatorUid: user.uid,
         dateCreated: Date.now()
       })
@@ -53,6 +87,7 @@ export default function NewRecipe() {
       .catch(function (error) {
         console.error("Error adding document: ", error);
       });
+
   };
 
   if (isEmpty(user)) return <div>not signed in</div>;

@@ -1,11 +1,12 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { db } from "../services/Firebase";
 
 // Style
 import { Modal, RecipeCard } from "./styled/Page";
 import { Ingredients } from "./styled/RecipeCard";
 import { Name, StyledTextArea, Time, Instructions } from "./styled/Modal";
+import { userContext } from "../context/UserContext";
 
 // @ts-ignore
 export default function ModalRecipe({ match, history }) {
@@ -16,19 +17,30 @@ export default function ModalRecipe({ match, history }) {
   const [prepTime, setPrepTime] = useState<string>("");
   const [cookTime, setCookTime] = useState<string>("");
   const [ingredients, setIngredients] = useState<string[]>([]);
-  const [prepInstructions, setPrepInstructions] = useState<string[]>([])
-  const [cookInstructions, setCookInstructions] = useState<string[]>([])
-
+  const [prepInstructions, setPrepInstructions] = useState<string[]>([]);
+  const [cookInstructions, setCookInstructions] = useState<string[]>([]);
+  const [recipeID, setRecipeID] = useState<string>("");
+  const [sourceUrl, setSourceUrl] = useState<string>("");
 
   const [update, setUpdate] = useState<boolean>(false)
+  const [fullscreen, setFullscreen] = useState<boolean>(false);
+
+  const [user] = useContext(userContext);
 
   const myRecipeRef = db.collection('recipes');
   const query = myRecipeRef.doc(match.params.id)
 
   useEffect(() => {
+
+    document.addEventListener('fullscreenchange', exitHandler);
+    // document.addEventListener('webkitfullscreenchange', exitHandler);
+    // document.addEventListener('mozfullscreenchange', exitHandler);
+    // document.addEventListener('MSFullscreenChange', exitHandler);
+
     query.get().then(function (doc) {
       if (doc.exists) {
         console.log("Document data:", doc.data());
+        setRecipeID(doc.id);
         const data = doc.data()
 
         setRecipe(doc.data());
@@ -39,6 +51,7 @@ export default function ModalRecipe({ match, history }) {
         setIngredients(data.ingredients);
         setPrepInstructions(data.prepInstructions);
         setCookInstructions(data.cookInstructions);
+        setSourceUrl(data.setSourceUrl);
 
       } else {
         // doc.data() will be undefined in this case
@@ -49,13 +62,16 @@ export default function ModalRecipe({ match, history }) {
     });
   }, []);
 
+  const exitHandler = () => {
+    if (!document.fullscreenElement) {
+      setFullscreen(false)
+    }
+  }
 
   const handleArrayChange = (index: number, array: any, ingredient: string, cb: any) => {
-    console.log('index', index)
-    console.log('ingred', ingredient)
     let newList = [...array]
     newList[index] = ingredient
-    console.log('newList', newList)
+
     cb(newList)
     setUpdate(true)
   }
@@ -63,6 +79,7 @@ export default function ModalRecipe({ match, history }) {
   const listIngredients = recipe && ingredients.map((ingredient: any, index: number) =>
     <li key={index}>
       <StyledTextArea
+        disabled={fullscreen}
         value={ingredient}
         rows={1}
         onChange={e => handleArrayChange(index, ingredients, e.target.value, setIngredients)}
@@ -73,6 +90,7 @@ export default function ModalRecipe({ match, history }) {
   const listPrep = recipe && prepInstructions.map((prepInstruction: any, index: number) =>
     <li key={index}>
       <StyledTextArea
+        disabled={fullscreen}
         value={prepInstruction}
         onChange={e => handleArrayChange(index, prepInstructions, e.target.value, setPrepInstructions)}
       />
@@ -82,6 +100,7 @@ export default function ModalRecipe({ match, history }) {
   const listCookInstructions = recipe && cookInstructions.map((cookInstruction: any, index: number) =>
     <li key={index}>
       <StyledTextArea
+        disabled={fullscreen}
         value={cookInstruction}
         onChange={e => handleArrayChange(index, cookInstructions, e.target.value, setCookInstructions)}
       />
@@ -93,11 +112,44 @@ export default function ModalRecipe({ match, history }) {
     history.goBack();
   };
 
+  // const elem = document.getElementById(match.params.id);
+
+  // console.log(elem.addEventListener("fullscreenchange", function() { console.log('hi') }));
+
   const fullScreen = () => {
     const elem = document.getElementById(match.params.id);
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
     }
+    setFullscreen(true)
+  }
+
+  const handleUpdate = (e: any) => {
+    e.preventDefault();
+    console.log('handle update')
+
+    db
+      .collection(`recipes`)
+      .doc(recipeID).update({
+        recipeName,
+        description,
+        prepTime,
+        cookTime,
+        prepInstructions,
+        cookInstructions,
+        ingredients,
+        OwnerUid: user.uid,
+        displayName: user.displayName,
+        original: false,
+        sourceUrl,
+        dateUpdated: Date.now()
+      })
+      .then(function () {
+        console.log("Document updated");
+      })
+      .catch(function (error) {
+        console.error("Error adding document: ", error);
+      });
   }
 
   if (!recipe) return (<div>loading</div>);
@@ -109,6 +161,7 @@ export default function ModalRecipe({ match, history }) {
 
         <div style={{ margin: '0 0 10px 0' }}>
           <Name
+            disabled={fullscreen}
             value={recipeName}
             onChange={e => {
               setRecipeName(e.target.value)
@@ -116,6 +169,7 @@ export default function ModalRecipe({ match, history }) {
             }}
           />
           <StyledTextArea
+            disabled={fullscreen}
             value={description}
             onChange={e => {
               setDescription(e.target.value)
@@ -127,6 +181,7 @@ export default function ModalRecipe({ match, history }) {
         <div style={{ margin: "10px 0" }}>
           Prep Time:
           <Time
+            disabled={fullscreen}
             value={prepTime}
             onChange={e => {
               setPrepTime(e.target.value)
@@ -136,6 +191,7 @@ export default function ModalRecipe({ match, history }) {
           />
           Cook Time:
           <Time
+            disabled={fullscreen}
             value={cookTime}
             onChange={e => {
               setCookTime(e.target.value)
@@ -156,8 +212,9 @@ export default function ModalRecipe({ match, history }) {
           </Instructions>
         </div>
 
-        {update && <p>updated</p>}
-        <button onClick={fullScreen}>Cook now</button>
+        {update && <button onClick={handleUpdate}>update</button>}
+        <a href={sourceUrl}>Original Source</a>
+        {!fullscreen && <button onClick={fullScreen}>Cook now</button>}
 
       </RecipeCard>
     </Modal>
