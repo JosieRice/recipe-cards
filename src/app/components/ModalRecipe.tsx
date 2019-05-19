@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import { db } from "../services/Firebase";
 
 // Style
-import { Modal, RecipeCard } from "./styled/Page";
+import { Modal, RecipeCard, GlobalStyle } from "./styled/Page";
 import { Ingredients } from "./styled/RecipeCard";
 import { Name, StyledTextArea, Time, Instructions } from "./styled/Modal";
 import { userContext } from "../context/UserContext";
@@ -156,6 +156,7 @@ export default function ModalRecipe({ match, history }) {
 
   return (
     <Modal>
+      <GlobalStyle />
       <button style={{ position: 'absolute', right: '15px', top: '15px' }} onClick={back}>X</button>
       <RecipeCard id={match.params.id}>
 
