@@ -1,12 +1,4 @@
 import styled from "styled-components";
-import { createGlobalStyle } from 'styled-components'
-
-export const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css?family=Sriracha&display=swap');
-  body {
-    font-family: 'Sriracha', cursive;
-  }
-`
 
 export const Page = styled.div`
   background-color: #fff;

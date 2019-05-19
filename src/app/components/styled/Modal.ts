@@ -2,6 +2,8 @@ import styled from "styled-components";
 import Textarea from 'react-textarea-autosize';
 
 export const Name = styled.input`
+  @import url('https://fonts.googleapis.com/css?family=Sriracha&display=swap');
+  font-family: 'Sriracha', cursive;
   margin: 0 0 5px 0;
   font-size: 4vmin;
   border: none;
