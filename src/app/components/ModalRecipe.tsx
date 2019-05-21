@@ -207,7 +207,7 @@ export default function ModalRecipe({ match, history }) {
         </div>
 
         {update && <button onClick={handleUpdate}>update</button>}
-        <a href={sourceUrl}>Original Source</a>
+        {!fullscreen && <a href={sourceUrl} target="_blank">Original Source</a>}
         {!fullscreen && <button onClick={fullScreen}>Cook now</button>}
 
       </RecipeCard>

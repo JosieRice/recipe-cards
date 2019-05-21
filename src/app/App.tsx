@@ -13,14 +13,14 @@ import UserPhoto from './components/UserPhoto';
 import NoMatch from './components/NoMatch';
 
 // Style
-import { NavBar, UnorderedList, ListItem, LoginLI } from './components/styled/NavBar';
+import { NavBar, UL, ListItem, LoginLI } from './components/styled/NavBar';
 
 
 const Routing = (
   <UserContextProvider>
     <Router>
       <NavBar>
-        <UnorderedList>
+        <UL>
           <ListItem>
             <Link to="/">Home</Link>
           </ListItem>
@@ -45,7 +45,7 @@ const Routing = (
             <UserPhoto />
           </LoginLI>
 
-        </UnorderedList>
+        </UL>
       </NavBar>
 
 

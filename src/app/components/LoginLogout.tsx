@@ -31,7 +31,7 @@ export default function LoginLogout() {
   }
 
   return (
-    <div>
+    <div style={{marginRight: '40px'}}>
       {!user ? (
         <NavButton onClick={() => login()}>Log In</NavButton>
       ) : (

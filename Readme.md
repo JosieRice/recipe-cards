@@ -12,8 +12,12 @@
 #To Do
 
 ## Coding
+style and place source url in recipe card
+give alternate options for source of recipes in new recipe form
+style new recipe form
+style buttons on modal recipe
+make a logo for the site
 add more than just recipe name to the list of recipes
-design a useful full screen cook view of a recipe
 make a one button copy of recipes from other peoples cards
 
 ## Firebase Related

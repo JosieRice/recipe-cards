@@ -8,16 +8,35 @@ export const NavBar = styled.nav`
   width: 100%;
   top: 0px;
   left: 0px;
-  height: 60px;
+  height: 52px;
 `;
 
-export const UnorderedList = styled.ul`
+export const UL = styled.ul`
   list-style: none;
+  padding-inline-start: 0;
 `;
 
 export const ListItem = styled.li`
   display: inline-block;
   padding: 0 10px;
+  a {
+    font-family: 'Exo', Arial Black, sans-serif;
+    color: #FFF;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  a:active {
+    color: #FFF;
+  }
+
+  a:visited {
+    color: #FFF;
+  }
 `;
 
 export const LoginLI = styled(ListItem)`
@@ -35,6 +54,10 @@ export const NavButton = styled.button`
 `;
 
 export const ProfilePhoto = styled.img`
-  height: 35px;
-  border-radius: 50px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid #5C6274;
+  position: absolute;
+  top: 13px;
+  right: 48px;
 `;
