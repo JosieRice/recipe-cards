@@ -3,8 +3,9 @@ import { useState, useEffect } from "react";
 import { db } from "../services/Firebase";
 
 // Style
-import { Modal, RecipeCard } from "./styled/Page";
+import { RecipeCard } from "./styled/Page";
 import { Ingredients, Instructions, Description } from "./styled/RecipeCard";
+import { Modal } from "./styled/Modal";
 
 // @ts-ignore
 export default function FullScreen({ match, history }) {

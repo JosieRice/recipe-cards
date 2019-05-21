@@ -3,9 +3,9 @@ import { useState, useEffect, useContext } from "react";
 import { db } from "../services/Firebase";
 
 // Style
-import { Modal, RecipeCard } from "./styled/Page";
+import { RecipeCard } from "./styled/Page";
 import { Ingredients } from "./styled/RecipeCard";
-import { Name, StyledTextArea, Time, Instructions } from "./styled/Modal";
+import { Modal, Name, StyledTextArea, Time, Instructions, Label, UL, OL } from "./styled/Modal";
 import { userContext } from "../context/UserContext";
 
 // @ts-ignore
@@ -112,10 +112,6 @@ export default function ModalRecipe({ match, history }) {
     history.goBack();
   };
 
-  // const elem = document.getElementById(match.params.id);
-
-  // console.log(elem.addEventListener("fullscreenchange", function() { console.log('hi') }));
-
   const fullScreen = () => {
     const elem = document.getElementById(match.params.id);
     if (elem.requestFullscreen) {
@@ -156,7 +152,6 @@ export default function ModalRecipe({ match, history }) {
 
   return (
     <Modal>
-      {/* <GlobalStyle /> */}
       <button style={{ position: 'absolute', right: '15px', top: '15px' }} onClick={back}>X</button>
       <RecipeCard id={match.params.id}>
 
@@ -179,9 +174,14 @@ export default function ModalRecipe({ match, history }) {
           />
         </div>
 
-        <div style={{ margin: "10px 0" }}>
-          Prep Time:
-          <Time
+        <div style={{ display: 'flex', width: "100%" }}>
+          <Ingredients>
+            <Label>Ingredients: </Label><UL>{listIngredients}</UL>
+          </Ingredients>
+
+          <Instructions>
+            <Label>Prep Time: </Label>
+            <Time
             disabled={fullscreen}
             value={prepTime}
             onChange={e => {
@@ -190,8 +190,9 @@ export default function ModalRecipe({ match, history }) {
             }
             }
           />
-          Cook Time:
-          <Time
+            <OL>{listPrep}</OL><br />
+            <Label>Cook Time: </Label>
+            <Time
             disabled={fullscreen}
             value={cookTime}
             onChange={e => {
@@ -200,16 +201,7 @@ export default function ModalRecipe({ match, history }) {
             }
             }
           />
-        </div>
-
-        <div style={{ display: 'flex', width: "100%" }}>
-          <Ingredients>
-            Ingredients: <ul>{listIngredients}</ul>
-          </Ingredients>
-
-          <Instructions>
-            Prep Instructions: <ol>{listPrep}</ol><br /><br />
-            Cooking Instructions: <ol>{listCookInstructions}</ol>
+            <OL>{listCookInstructions}</OL>
           </Instructions>
         </div>
 

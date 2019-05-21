@@ -1,9 +1,10 @@
 import styled from "styled-components";
 
 export const Ingredients = styled.div`
-  padding-right: 40px;
+  width: 42vmin;
+  padding-right: 4vmin;
   border-right: 1px solid;
-  margin-right: 40px;
+  margin-right: 4vmin;
   font-size: 2.5vmin;
 `
 

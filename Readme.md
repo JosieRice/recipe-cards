@@ -14,7 +14,6 @@
 ## Coding
 add more than just recipe name to the list of recipes
 design a useful full screen cook view of a recipe
-make an inline edit option for recipes in modal view
 make a one button copy of recipes from other peoples cards
 
 ## Firebase Related
