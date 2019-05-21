@@ -51,7 +51,7 @@ export default function ModalRecipe({ match, history }) {
         setIngredients(data.ingredients);
         setPrepInstructions(data.prepInstructions);
         setCookInstructions(data.cookInstructions);
-        setSourceUrl(data.setSourceUrl);
+        setSourceUrl(data.sourceUrl);
 
       } else {
         // doc.data() will be undefined in this case
@@ -80,6 +80,7 @@ export default function ModalRecipe({ match, history }) {
     <li key={index}>
       <StyledTextArea
         disabled={fullscreen}
+        spellCheck={false}
         value={ingredient}
         rows={1}
         onChange={e => handleArrayChange(index, ingredients, e.target.value, setIngredients)}

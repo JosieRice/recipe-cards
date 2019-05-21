@@ -12,8 +12,10 @@ export const RecipeCard = styled.div`
 
 export const H1 = styled.h1`
   font-family: 'Exo', Arial Black, sans-serif;
+  color: #5C6274;
 `
 
 export const P = styled.p`
   font-family: 'Palanquin', 'Trebuchet MS', sans-serif;
+  color: #5C6274;
 `

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const NavBar = styled.nav`
-  background: #1b9aaa;
+  background: #3772FF;
   position: absolute;
   margin: 0;
   padding: 0 20px;
@@ -38,9 +38,3 @@ export const ProfilePhoto = styled.img`
   height: 35px;
   border-radius: 50px;
 `;
-
-// #050505
-// #1B9AAA
-// #DDDBCB
-// #F5F1E3
-// #FFCDB2

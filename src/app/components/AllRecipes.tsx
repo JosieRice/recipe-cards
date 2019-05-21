@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Page } from "./styled/Page";
+import { Page, H1 } from "./styled/Page";
 import { db } from "../services/Firebase";
 import { useState, useEffect } from "react";
 
@@ -24,7 +24,7 @@ export default function AllRecipes() {
 
   return (
     <Page>
-      <h1>All Recipes</h1>
+      <H1>All Recipes</H1>
       <ul>
         {recipes.map((recipe: { recipeName: string; }, index: number) => <li key={index}>{recipe.recipeName}</li>)}
       </ul>

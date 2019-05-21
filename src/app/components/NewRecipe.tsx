@@ -3,7 +3,7 @@ import { useState, useContext, FormEvent } from "react";
 import { db } from "../services/Firebase";
 import { userContext } from "../context/UserContext";
 import { isEmpty, strToArr } from "../utilites/Utilities";
-import { Page } from "./styled/Page";
+import { Page, H1 } from "./styled/Page";
 
 export default function NewRecipe() {
   const [recipeName, setRecipeName] = useState<string>("");
@@ -44,13 +44,6 @@ export default function NewRecipe() {
       })
       .then(function (docRef) {
         console.log("Document written with ID: ", docRef.id);
-        // setRecipeName("");
-        // setDescription("");
-        // setPrepTime("");
-        // setCookTime("");
-        // setPrepInstructions("");
-        // setCookInstructions("");
-        // setIngredients("");
       })
       .catch(function (error) {
         console.error("Error adding document: ", error);
@@ -94,6 +87,7 @@ export default function NewRecipe() {
 
   return (
     <Page>
+      <H1>New Recipie</H1>
       <form onSubmit={handleSubmit} id="recipeForm">
 
         <input

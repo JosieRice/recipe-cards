@@ -2,7 +2,6 @@ import styled from "styled-components";
 import Textarea from 'react-textarea-autosize';
 
 export const Modal = styled.div`
-  background-color: #F2EECB;
   position: absolute;
   background: #fff;
   top: 25px;
@@ -20,6 +19,7 @@ export const Name = styled.input`
   border: none;
   width: 90%;
   background: transparent;
+  color: #444;
 `
 
 export const StyledTextArea = styled(Textarea)`
@@ -32,6 +32,7 @@ export const StyledTextArea = styled(Textarea)`
   line-height: 2.5vmin;
   resize: none;
   background: transparent;
+  color: #444;
 `
 
 export const Time = styled.input`
@@ -41,6 +42,7 @@ export const Time = styled.input`
   line-height: 2.5vmin;
   border: none;
   background: transparent;
+  color: #444;
 `
 
 export const Instructions = styled.div`
@@ -50,21 +52,25 @@ export const Instructions = styled.div`
   line-height: 2.5vmin;
   width: 100%;
   background: transparent;
+  color: #444;
 `
 
 export const Label = styled.span`
   font-family: 'Exo', Arial Black, sans-serif;
   font-size: 2.5vmin;
+  color: #444;
 `
 
 export const UL = styled.ul`
   padding-inline-start: 2.6vmin;
   margin-block-start: 0.8vmin;
   margin-block-end: 0.8vmin;
+  color: #444;
 `
 
 export const OL = styled.ol`
   padding-inline-start: 2.6vmin;
   margin-block-start: 0.8vmin;
   margin-block-end: 0.8vmin;
+  color: #444;
 `

@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useEffect, useContext } from "react";
 import { Route, Link } from 'react-router-dom'
 
-import { Page } from "./styled/Page";
+import { Page, H1 } from "./styled/Page";
 import { db } from "../services/Firebase";
 import { userContext } from "../context/UserContext";
 import ModalRecipe from "./ModalRecipe";
@@ -31,7 +31,7 @@ export default function MyRecipes({ match }: any) {
 
   return (
     <Page>
-      <h1>My Recipes</h1>
+      <H1>My Recipes</H1>
       <ul>
         {recipes.map((recipe: { recipeName: string; id: string; }) =>
           <li key={recipe.id}>
