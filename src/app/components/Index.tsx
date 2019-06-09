@@ -5,7 +5,7 @@ export default function Index() {
   return (
     <Page>
       <H1>Home Page</H1>
-      <P>Original Recipe helps you manage your digital recipe portfolio and make cooking easier.</P>
+      <P>Currently, just a spot that I'm keeping all my favourite recipes. Soon to be a great site for anyone to keep their recipes.</P>
     </Page>
   );
 };

@@ -3,7 +3,7 @@ import { useState, useContext, FormEvent } from "react";
 import { db } from "../services/Firebase";
 import { userContext } from "../context/UserContext";
 import { isEmpty, strToArr } from "../utilites/Utilities";
-import { Page, H1 } from "./styled/Page";
+import { Page, H1, Label, Input, TextArea } from "./styled/Page";
 
 export default function NewRecipe() {
   const [recipeName, setRecipeName] = useState<string>("");
@@ -49,8 +49,8 @@ export default function NewRecipe() {
         console.error("Error adding document: ", error);
       });
 
-      // Create your editable copy
-      db
+    // Create your editable copy
+    db
       .collection(`recipes`)
       .add({
         recipeName,
@@ -87,78 +87,100 @@ export default function NewRecipe() {
 
   return (
     <Page>
-      <H1>New Recipie</H1>
+      <H1>New Recipe</H1>
       <form onSubmit={handleSubmit} id="recipeForm">
 
-        <input
+        <Label>Recipe Name</Label>
+        <Input
           type="text"
           name="recipeName"
-          placeholder="Recipe Name"
+          placeholder=""
           value={recipeName}
           onChange={e => setRecipeName(e.target.value)}
         />
 
-        <input
+
+        <br />
+
+        <Label>Description:</Label>
+        <Input
           type="text"
           name="description"
-          placeholder="Description"
+          placeholder=""
           value={description}
           onChange={e => setDescription(e.target.value)}
         />
+        <br />
 
-        <input
+        <Label>Prep Time:</Label>
+        <Input
           type="text"
           name="prepTime"
-          placeholder="Prep Time"
+          placeholder=""
           value={prepTime}
           onChange={e => setPrepTime(e.target.value)}
         />
+        <br />
 
-        <input
+        <Label>Cook Time:</Label>
+        <Input
           type="text"
           name="cookTime"
-          placeholder="Cooking Time"
+          placeholder=""
           value={cookTime}
           onChange={e => setCookTime(e.target.value)}
         />
+        <br />
 
-         <input
+        <Label>Recipe Source:</Label>
+        <Input
           type="text"
           name="sourceUrl"
-          placeholder="Recipe Source"
+          placeholder=""
           value={sourceUrl}
           onChange={e => setSourceUrl(e.target.value)}
-        /><br /><br />
-
-        <textarea
-          form="recipeForm"
-          rows={20}
-          cols={33}
-          name="prepInstructions"
-          placeholder="Prep Instructions"
-          value={prepInstructions}
-          onChange={e => setPrepInstructions(e.target.value)}
         />
+        <br />
 
-        <textarea
-          form="recipeForm"
-          rows={20}
-          cols={33}
-          name="cookInstructions"
-          placeholder="Cooking Instructions"
-          value={cookInstructions}
-          onChange={e => setCookInstructions(e.target.value)}
-        />
+        <br /><br />
 
-        <textarea
+        <Label>Ingredients:</Label>
+        <TextArea
           form="recipeForm"
           rows={20}
           cols={33}
           name="currentItem"
-          placeholder="Ingredients"
+          placeholder=""
           value={ingredients}
           onChange={e => setIngredients(e.target.value)}
-        /><br /><br />
+        />
+        <br />
+
+        <Label>Prep Instructions:</Label>
+        <TextArea
+          form="recipeForm"
+          rows={20}
+          cols={33}
+          name="prepInstructions"
+          placeholder=""
+          value={prepInstructions}
+          onChange={e => setPrepInstructions(e.target.value)}
+        />
+        <br />
+
+        <Label>Cooking Instructions:</Label>
+        <TextArea
+          form="recipeForm"
+          rows={20}
+          cols={33}
+          name="cookInstructions"
+          placeholder=""
+          value={cookInstructions}
+          onChange={e => setCookInstructions(e.target.value)}
+        />
+
+
+        <br /><br />
 
         <button>Add Recipe</button>
       </form>
