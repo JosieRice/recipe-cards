@@ -20,7 +20,6 @@ export default function MyRecipes({ match }: any) {
       snap.forEach(recipe => {
         // Adds recipe id's onto the recipe object
         let recipeObj = recipe.data()
-        console.log("recipeOBJ MY recipes", recipeObj)
         recipeObj['id'] = recipe.id
 
         list = [...list, recipeObj]

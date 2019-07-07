@@ -43,7 +43,7 @@ export default function ModalRecipe({ match, history }) {
         setRecipeID(doc.id);
         const data = doc.data()
 
-        setRecipe(doc.data());
+        setRecipe(data);
         setRecipeName(data.recipeName);
         setDescription(data.description);
         setPrepTime(data.prepTime);
@@ -113,7 +113,7 @@ export default function ModalRecipe({ match, history }) {
     history.goBack();
   };
 
-  const fullScreen = () => {
+  const startFullScreen = () => {
     const elem = document.getElementById(match.params.id);
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
@@ -124,6 +124,12 @@ export default function ModalRecipe({ match, history }) {
   const handleUpdate = (e: any) => {
     e.preventDefault();
     console.log('handle update')
+
+    if (user.uid !== recipe.OwnerUid) {
+      // TODO: add a notification of what happened, and make it automatically add this recipe your your book and copy it.
+      console.log('you dont have permission')
+      return
+    }
 
     db
       .collection(`recipes`)
@@ -142,9 +148,11 @@ export default function ModalRecipe({ match, history }) {
         dateUpdated: Date.now()
       })
       .then(function () {
+        // TODO: add feedback that it's been saved
         console.log("Document updated");
       })
       .catch(function (error) {
+        // TODO: add feeback that it didn't save.
         console.error("Error adding document: ", error);
       });
   }
@@ -208,7 +216,7 @@ export default function ModalRecipe({ match, history }) {
 
         {update && <button onClick={handleUpdate}>update</button>}
         {!fullscreen && <a href={sourceUrl} target="_blank">Original Source</a>}
-        {!fullscreen && <button onClick={fullScreen}>Cook now</button>}
+        {!fullscreen && <button onClick={startFullScreen}>Cook now</button>}
 
       </RecipeCard>
     </Modal>
