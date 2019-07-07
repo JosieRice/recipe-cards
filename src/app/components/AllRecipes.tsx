@@ -2,8 +2,10 @@ import * as React from "react";
 import { Page, H1, LI } from "./styled/Page";
 import { db } from "../services/Firebase";
 import { useState, useEffect } from "react";
+import { Link, Route } from "react-router-dom";
+import ModalRecipe from "./ModalRecipe";
 
-export default function AllRecipes() {
+export default function AllRecipes({ match }: any) {
   const [recipes, setRecipes] = useState([]);
 
   const myRecipeRef = db.collection('recipes');
@@ -14,7 +16,12 @@ export default function AllRecipes() {
     query.get().then(snap => {
       let list: any = []
       snap.forEach(recipe => {
-        list = [...list, recipe.data()]
+        // Adds recipe id's onto the recipe object
+        let recipeObj = recipe.data()
+        console.log("recipeOBJ All recipes", recipeObj)
+        recipeObj['id'] = recipe.id
+
+        list = [...list, recipeObj]
       })
       setRecipes(list);
     });
@@ -22,12 +29,21 @@ export default function AllRecipes() {
 
   if (recipes.length === 0) return (<Page>loading</Page>);
 
-  return (
+  {console.log('recipes', recipes)}
+  
+  return (  
     <Page>
       <H1>All Recipes</H1>
       <ul>
-        {recipes.map((recipe: { recipeName: string; }, index: number) => <LI key={index}>{recipe.recipeName}</LI>)}
+        {recipes.map((recipe: { recipeName: string; id: string }, index: number) =>
+          <LI key={index}>
+            <Link to={`${match.path}${recipe.id}`}>
+              {recipe.recipeName}
+            </Link>
+          </LI>
+        )}
       </ul>
+      <Route path={`${match.path}:id`} component={ModalRecipe} />
 
     </Page>
   );

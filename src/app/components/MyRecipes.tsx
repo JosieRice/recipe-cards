@@ -18,7 +18,9 @@ export default function MyRecipes({ match }: any) {
     query.get().then(snap => {
       let list: any = []
       snap.forEach(recipe => {
+        // Adds recipe id's onto the recipe object
         let recipeObj = recipe.data()
+        console.log("recipeOBJ MY recipes", recipeObj)
         recipeObj['id'] = recipe.id
 
         list = [...list, recipeObj]
@@ -28,6 +30,8 @@ export default function MyRecipes({ match }: any) {
   }, []);
 
   if (recipes.length === 0) return (<Page>loading</Page>);
+
+  {console.log('MY recipes', recipes)}
 
   return (
     <Page>
