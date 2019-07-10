@@ -25,6 +25,7 @@
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
     "react-textarea-autosize": "^7.1.0",
+    "react-toast-notifications": "^2.1.0",
     "styled-components": "^4.2.0",
     "typescript": "^3.4.3"
   },

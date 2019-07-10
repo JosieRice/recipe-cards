@@ -2,6 +2,8 @@ import * as React from 'react'
 import * as ReactDOM from "react-dom";
 import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom'
 import { UserContextProvider } from './context/UserContext';
+// @ts-ignore
+import { ToastProvider } from 'react-toast-notifications'
 
 // Pages
 import Index from "./components/Index";
@@ -18,45 +20,47 @@ import { NavBar, UL, ListItem, LoginLI } from './components/styled/NavBar';
 
 const Routing = (
   <UserContextProvider>
-    <Router>
-      <NavBar>
-        <UL>
-          <ListItem>
-            <Link to="/">Home</Link>
-          </ListItem>
+    <ToastProvider placement='bottom-center' autoDismissTimeout='4000'>
+      <Router>
+        <NavBar>
+          <UL>
+            <ListItem>
+              <Link to="/">Home</Link>
+            </ListItem>
 
-          <ListItem>
-            <Link to="/newrecipe/">New Recipe</Link>
-          </ListItem>
+            <ListItem>
+              <Link to="/newrecipe/">New Recipe</Link>
+            </ListItem>
 
-          <ListItem>
-            <Link to="/recipes/">My Recipes</Link>
-          </ListItem>
+            <ListItem>
+              <Link to="/recipes/">My Recipes</Link>
+            </ListItem>
 
-          <ListItem>
-            <Link to="/allrecipes/">All Recipes</Link>
-          </ListItem>
+            <ListItem>
+              <Link to="/allrecipes/">All Recipes</Link>
+            </ListItem>
 
-          <LoginLI>
-            <LoginLogout />
-          </LoginLI>
+            <LoginLI>
+              <LoginLogout />
+            </LoginLI>
 
-          <LoginLI>
-            <UserPhoto />
-          </LoginLI>
+            <LoginLI>
+              <UserPhoto />
+            </LoginLI>
 
-        </UL>
-      </NavBar>
+          </UL>
+        </NavBar>
 
 
-      <Switch>
-        <Route path="/" exact component={Index} />
-        <Route path="/newrecipe/" component={NewRecipe} />
-        <Route path="/recipes/" component={MyRecipes} />
-        <Route path='/allrecipes/' component={AllRecipes} />
-        <Route component={NoMatch} />
-      </Switch>
-    </Router>
+        <Switch>
+          <Route path="/" exact component={Index} />
+          <Route path="/newrecipe/" component={NewRecipe} />
+          <Route path="/recipes/" component={MyRecipes} />
+          <Route path='/allrecipes/' component={AllRecipes} />
+          <Route component={NoMatch} />
+        </Switch>
+      </Router>
+    </ToastProvider>
   </UserContextProvider>
 )
 

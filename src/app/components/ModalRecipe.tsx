@@ -1,6 +1,8 @@
 import * as React from "react";
 import { useState, useEffect, useContext } from "react";
 import { db } from "../services/Firebase";
+// @ts-ignore
+import { useToasts } from 'react-toast-notifications';
 
 // Style
 import { RecipeCard } from "./styled/Page";
@@ -62,6 +64,8 @@ export default function ModalRecipe({ match, history }) {
     });
   }, []);
 
+  const { addToast } = useToasts()
+
   const exitHandler = () => {
     if (!document.fullscreenElement) {
       setFullscreen(false)
@@ -110,6 +114,7 @@ export default function ModalRecipe({ match, history }) {
 
   const back = (e: any) => {
     e.stopPropagation();
+    if (update) handleUpdate(e);
     history.goBack();
   };
 
@@ -148,11 +153,15 @@ export default function ModalRecipe({ match, history }) {
         dateUpdated: Date.now()
       })
       .then(function () {
-        // TODO: add feedback that it's been saved
+        // TODO: add feedback that it's been saved, use third arguement of optional cb to close modal
+        addToast('Updated Successfully', { appearance: 'info', autoDismiss: true,
+        pauseOnHover: true })
+        setUpdate(false);
         console.log("Document updated");
       })
       .catch(function (error) {
         // TODO: add feeback that it didn't save.
+        addToast(`Unable to Update because ${error}, try again later`, { appearance: 'error', autoDismiss: true, pauseOnHover: true })
         console.error("Error adding document: ", error);
       });
   }
