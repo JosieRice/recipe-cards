@@ -12,8 +12,8 @@
 #Product Goals
 
 ## Start to add users
-1. Allow other users to make a copy of a different users recipe.
-2. Make editing another users recipe automatically copy it to your recipes.
+1. Allow other users to make a copy of a different users recipe. (and have feedback to show what happened)
+2. Make editing another users recipe automatically copy it to your recipes (and have feedback).
 3. Change what is available when you're not logged in to view, homepage etc.
 
 ## Improve UX of recipe editing

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { UserObj } from "../types/UserObj";
+import { UserObj } from "../types/Globals";
 import { useState } from "react";
 
 interface User {

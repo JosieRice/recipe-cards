@@ -1,7 +1,7 @@
 import * as React from "react";
 import { NavButton } from "./styled/NavBar";
 import { auth, provider } from "../services/Firebase";
-import { UserObj } from "../types/UserObj";
+import { UserObj } from "../types/Globals";
 import { useEffect, useContext } from "react";
 import { userContext } from "../context/UserContext";
 
@@ -13,6 +13,11 @@ export default function LoginLogout() {
     auth.onAuthStateChanged((user: UserObj) => {
       if (user) {
         setUser(user);
+        // identify user to FullStory
+        window.FS.identify(user.uid, {
+          displayName: user.displayName,
+          email: user.email
+        });
       }
     });
   }, []);
@@ -21,12 +26,18 @@ export default function LoginLogout() {
     auth.signInWithPopup(provider).then(result => {
       const user: UserObj = result.user;
       setUser(user);
+      // identify user to FullStory
+      window.FS.identify(user.uid, {
+        displayName: user.displayName,
+        email: user.email
+      });
     });
   }
 
   function logout() {
     auth.signOut().then(() => {
       setUser(null);
+      window.FS.identify(false);
     });
   }
 
