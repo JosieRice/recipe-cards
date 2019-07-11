@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useState, useEffect, useContext } from "react";
 import { db } from "../services/Firebase";
-// @ts-ignore
 import { useToasts } from 'react-toast-notifications';
 
 // Style
@@ -30,7 +29,7 @@ export default function ModalRecipe({ match, history }) {
   const [user] = useContext(userContext);
 
   const myRecipeRef = db.collection('recipes');
-  const query = myRecipeRef.doc(match.params.id)
+  const query = myRecipeRef.doc(match.params.id);
 
   useEffect(() => {
 
@@ -126,13 +125,49 @@ export default function ModalRecipe({ match, history }) {
     setFullscreen(true)
   }
 
+  const copyRecipe = (e: any) => {
+    e.preventDefault();
+    console.log('copy recipe')
+
+    db
+      .collection(`recipes`)
+      .add({
+        recipeName,
+        description,
+        prepTime,
+        cookTime,
+        prepInstructions,
+        cookInstructions,
+        ingredients,
+        OwnerUid: user.uid,
+        displayName: user.displayName,
+        original: false,
+        sourceUrl,
+        creatorUid: recipe.creatorUid,
+        dateUpdated: Date.now()
+      })
+      .then(function () {
+        addToast('Recipe Copied into your recipes.', {
+          appearance: 'info', autoDismiss: true,
+          pauseOnHover: true
+        })
+        setUpdate(false);
+        console.log("Document updated");
+      })
+      .catch(function (error) {
+        // TODO: add feeback that it didn't save.
+        addToast(`Unable to copy recipe because ${error}, try again later`, { appearance: 'error', autoDismiss: true, pauseOnHover: true })
+        console.error("Error adding document: ", error);
+      });
+  }
+
   const handleUpdate = (e: any) => {
     e.preventDefault();
     console.log('handle update')
 
     if (user.uid !== recipe.OwnerUid) {
-      // TODO: add a notification of what happened, and make it automatically add this recipe your your book and copy it.
-      console.log('you dont have permission')
+      copyRecipe(e)
+      console.log('copied recipe')
       return
     }
 
@@ -154,8 +189,10 @@ export default function ModalRecipe({ match, history }) {
       })
       .then(function () {
         // TODO: add feedback that it's been saved, use third arguement of optional cb to close modal
-        addToast('Updated Successfully', { appearance: 'info', autoDismiss: true,
-        pauseOnHover: true })
+        addToast('Updated Successfully', {
+          appearance: 'info', autoDismiss: true,
+          pauseOnHover: true
+        })
         setUpdate(false);
         console.log("Document updated");
       })
@@ -200,29 +237,30 @@ export default function ModalRecipe({ match, history }) {
           <Instructions>
             <Label>Prep Time: </Label>
             <Time
-            disabled={fullscreen}
-            value={prepTime}
-            onChange={e => {
-              setPrepTime(e.target.value)
-              setUpdate(true)
-            }
-            }
-          />
+              disabled={fullscreen}
+              value={prepTime}
+              onChange={e => {
+                setPrepTime(e.target.value)
+                setUpdate(true)
+              }
+              }
+            />
             <OL>{listPrep}</OL><br />
             <Label>Cook Time: </Label>
             <Time
-            disabled={fullscreen}
-            value={cookTime}
-            onChange={e => {
-              setCookTime(e.target.value)
-              setUpdate(true)
-            }
-            }
-          />
+              disabled={fullscreen}
+              value={cookTime}
+              onChange={e => {
+                setCookTime(e.target.value)
+                setUpdate(true)
+              }
+              }
+            />
             <OL>{listCookInstructions}</OL>
           </Instructions>
         </div>
 
+        {user.uid !== recipe.OwnerUid && <button onClick={copyRecipe}>Add to my recipes</button>}
         {update && <button onClick={handleUpdate}>update</button>}
         {!fullscreen && <a href={sourceUrl} target="_blank">Original Source</a>}
         {!fullscreen && <button onClick={startFullScreen}>Cook now</button>}

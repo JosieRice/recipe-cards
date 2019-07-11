@@ -2,7 +2,6 @@ import * as React from 'react'
 import * as ReactDOM from "react-dom";
 import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom'
 import { UserContextProvider } from './context/UserContext';
-// @ts-ignore
 import { ToastProvider } from 'react-toast-notifications'
 
 // Pages

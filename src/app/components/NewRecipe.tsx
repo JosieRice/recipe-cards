@@ -5,6 +5,8 @@ import { userContext } from "../context/UserContext";
 import { isEmpty, strToArr } from "../utilites/Utilities";
 import { Page, H1, Label, Input, TextArea } from "./styled/Page";
 
+import { useToasts } from 'react-toast-notifications';
+
 export default function NewRecipe() {
   const [recipeName, setRecipeName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -16,6 +18,8 @@ export default function NewRecipe() {
   const [ingredients, setIngredients] = useState<string>("");
 
   const [user] = useContext(userContext);
+
+  const { addToast } = useToasts()
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,9 +47,12 @@ export default function NewRecipe() {
         dateCreated: Date.now()
       })
       .then(function (docRef) {
+        addToast('Recipe Saved', { appearance: 'info', autoDismiss: true,
+        pauseOnHover: true })  
         console.log("Document written with ID: ", docRef.id);
       })
       .catch(function (error) {
+        addToast(`Unable to save because ${error}, try again later`, { appearance: 'error', autoDismiss: true, pauseOnHover: true })
         console.error("Error adding document: ", error);
       });
 

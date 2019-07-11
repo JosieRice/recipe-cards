@@ -1,6 +1,6 @@
 #To Develop
 
-`npm run start`
+`npm run dev`
 
 
 #To Deploy
