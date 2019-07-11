@@ -231,7 +231,9 @@ export default function ModalRecipe({ match, history }) {
 
         <div style={{ display: 'flex', width: "100%" }}>
           <Ingredients>
-            <Label>Ingredients: </Label><UL>{listIngredients}</UL>
+            <Label>Ingredients: </Label>
+            <UL>{listIngredients}</UL>
+            <button onClick={() => setIngredients([...ingredients, ""])}>+</button>
           </Ingredients>
 
           <Instructions>
@@ -245,7 +247,9 @@ export default function ModalRecipe({ match, history }) {
               }
               }
             />
-            <OL>{listPrep}</OL><br />
+            <OL>{listPrep}</OL>
+            <button onClick={() => setPrepInstructions([...prepInstructions, ""])}>+</button>
+            <br />
             <Label>Cook Time: </Label>
             <Time
               disabled={fullscreen || !user}
@@ -257,6 +261,7 @@ export default function ModalRecipe({ match, history }) {
               }
             />
             <OL>{listCookInstructions}</OL>
+            <button onClick={() => setCookInstructions([...cookInstructions, ""])}>+</button>
           </Instructions>
         </div>
 

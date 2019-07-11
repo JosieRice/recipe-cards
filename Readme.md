@@ -8,9 +8,10 @@
 #Product Goals
 
 ## Improve UX of recipe editing
-1. Allow addition of ingredients
-2. Allow addition of steps
-3. Allow users to reorder ingredients and steps.
+1. Allow users to reorder ingredients and steps.
+
+## Multiple User Updates
+1. Filter out duplicate recipes in the all recipes view
 
 ## Improve Recipe Adding UX
 1. Link to URL's and to books on Amazon
@@ -18,8 +19,8 @@
 ## Revenue Goals
 1. Links to books on Amazon should be linked to a company Amazon account.
 
-## Data Upgrades
-1. Track different versions of the software.
+## UX Upgrades
+1. Make screen not sleep in full screen mode.
 
 ## From User Testing
 1. Make the recipes easier to enter (copy the link and have it auto fill)
