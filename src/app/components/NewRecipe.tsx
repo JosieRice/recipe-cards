@@ -90,7 +90,7 @@ export default function NewRecipe() {
 
   };
 
-  if (isEmpty(user)) return <div>not signed in</div>;
+  if (isEmpty(user)) return <Page>Login to See</Page>;
 
   return (
     <Page>

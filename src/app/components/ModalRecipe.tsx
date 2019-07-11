@@ -82,7 +82,7 @@ export default function ModalRecipe({ match, history }) {
   const listIngredients = recipe && ingredients.map((ingredient: any, index: number) =>
     <li key={index}>
       <StyledTextArea
-        disabled={fullscreen}
+        disabled={fullscreen || !user}
         spellCheck={false}
         value={ingredient}
         rows={1}
@@ -94,7 +94,7 @@ export default function ModalRecipe({ match, history }) {
   const listPrep = recipe && prepInstructions.map((prepInstruction: any, index: number) =>
     <li key={index}>
       <StyledTextArea
-        disabled={fullscreen}
+        disabled={fullscreen || !user}
         value={prepInstruction}
         onChange={e => handleArrayChange(index, prepInstructions, e.target.value, setPrepInstructions)}
       />
@@ -104,7 +104,7 @@ export default function ModalRecipe({ match, history }) {
   const listCookInstructions = recipe && cookInstructions.map((cookInstruction: any, index: number) =>
     <li key={index}>
       <StyledTextArea
-        disabled={fullscreen}
+        disabled={fullscreen || !user}
         value={cookInstruction}
         onChange={e => handleArrayChange(index, cookInstructions, e.target.value, setCookInstructions)}
       />
@@ -212,7 +212,7 @@ export default function ModalRecipe({ match, history }) {
 
         <div style={{ margin: '0 0 10px 0' }}>
           <Name
-            disabled={fullscreen}
+            disabled={fullscreen || !user}
             value={recipeName}
             onChange={e => {
               setRecipeName(e.target.value)
@@ -220,7 +220,7 @@ export default function ModalRecipe({ match, history }) {
             }}
           />
           <StyledTextArea
-            disabled={fullscreen}
+            disabled={fullscreen || !user}
             value={description}
             onChange={e => {
               setDescription(e.target.value)
@@ -237,7 +237,7 @@ export default function ModalRecipe({ match, history }) {
           <Instructions>
             <Label>Prep Time: </Label>
             <Time
-              disabled={fullscreen}
+              disabled={fullscreen || !user}
               value={prepTime}
               onChange={e => {
                 setPrepTime(e.target.value)
@@ -248,7 +248,7 @@ export default function ModalRecipe({ match, history }) {
             <OL>{listPrep}</OL><br />
             <Label>Cook Time: </Label>
             <Time
-              disabled={fullscreen}
+              disabled={fullscreen || !user}
               value={cookTime}
               onChange={e => {
                 setCookTime(e.target.value)
@@ -260,7 +260,7 @@ export default function ModalRecipe({ match, history }) {
           </Instructions>
         </div>
 
-        {user.uid !== recipe.OwnerUid && <button onClick={copyRecipe}>Add to my recipes</button>}
+        {user && user.uid !== recipe.OwnerUid && <button onClick={copyRecipe}>Add to my recipes</button>}
         {update && <button onClick={handleUpdate}>update</button>}
         {!fullscreen && <a href={sourceUrl} target="_blank">Original Source</a>}
         {!fullscreen && <button onClick={startFullScreen}>Cook now</button>}

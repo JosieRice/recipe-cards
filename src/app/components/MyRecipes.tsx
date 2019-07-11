@@ -6,10 +6,13 @@ import { Page, H1, LI } from "./styled/Page";
 import { db } from "../services/Firebase";
 import { userContext } from "../context/UserContext";
 import ModalRecipe from "./ModalRecipe";
+import { isEmpty } from "../utilites/Utilities";
 
 export default function MyRecipes({ match }: any) {
   const [recipes, setRecipes] = useState([]);
   const [user] = useContext(userContext);
+
+  if (isEmpty(user)) return (<Page>Login to See</Page>);
 
   const myRecipeRef = db.collection('recipes');
   const query = myRecipeRef.where("OwnerUid", "==", user.uid);

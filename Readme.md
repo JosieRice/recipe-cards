@@ -1,20 +1,11 @@
 #To Develop
-
 `npm run dev`
 
-
 #To Deploy
-
 `npm run build`<br>
 `firebase deploy --except functions`<br>
 
-
 #Product Goals
-
-## Start to add users
-1. Allow other users to make a copy of a different users recipe. (and have feedback to show what happened)
-2. Make editing another users recipe automatically copy it to your recipes (and have feedback).
-3. Change what is available when you're not logged in to view, homepage etc.
 
 ## Improve UX of recipe editing
 1. Allow addition of ingredients
@@ -38,17 +29,13 @@
 ## Increase Addictiveness of OR
 1. Add a point system for how many users have a copy of your recipe, extra points if it's unchanged, and extra points if the recipe has been cooked many times.
 
-
 #To Do
 
 ## Coding
-- style and place source url in recipe card
 - give alternate options for source of recipes in new recipe form
-- style new recipe form
 - style buttons on modal recipe
 - make a logo for the site
 - add more than just recipe name to the list of recipes
-- make a one button copy of recipes from other peoples cards
 
 ## Firebase Related
 - set proper database security rules
@@ -57,6 +44,10 @@
 
 #Bugs to Fix
 - Full screen view while cooking allows screen to go to sleep
+
+# Developement improvement
+- https://stackoverflow.com/questions/27928372/react-router-urls-dont-work-when-refreshing-or-writing-manually
+- https://codeburst.io/getting-started-with-react-router-5c978f70df91
 
 
 #Historically helpful articles

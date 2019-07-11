@@ -72,9 +72,3 @@ ReactDOM.render(Routing, document.getElementById("root"));
 if (module.hot) {
   module.hot.accept();
 }
-
-// TODO: 
-
-// https://stackoverflow.com/questions/27928372/react-router-urls-dont-work-when-refreshing-or-writing-manually
-
-// https://codeburst.io/getting-started-with-react-router-5c978f70df91
