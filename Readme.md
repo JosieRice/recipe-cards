@@ -9,6 +9,8 @@
 
 ## Improve UX of recipe editing
 1. Allow users to reorder ingredients and steps.
+2. Removed empty steps and ingredients from array
+3. Make a list component for all editable / reorderable lists
 
 ## Multiple User Updates
 1. Filter out duplicate recipes in the all recipes view
@@ -24,8 +26,6 @@
 
 ## From User Testing
 1. Make the recipes easier to enter (copy the link and have it auto fill)
-2. Need feedback that the recipe was added successfully (and take you to that recipe right away).
-3. Need feedback that the recipe has been updated and saved.
 
 ## Increase Addictiveness of OR
 1. Add a point system for how many users have a copy of your recipe, extra points if it's unchanged, and extra points if the recipe has been cooked many times.
