@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import { db } from "../services/Firebase";
 import { useToasts } from 'react-toast-notifications';
 
@@ -8,6 +8,7 @@ import { RecipeCard } from "./styled/Page";
 import { Ingredients } from "./styled/RecipeCard";
 import { Modal, Name, StyledTextArea, Time, Instructions, Label, UL, OL } from "./styled/Modal";
 import { userContext } from "../context/UserContext";
+import { Droppable, DroppableProvided, DroppableStateSnapshot, Draggable, DragDropContext } from "react-beautiful-dnd";
 
 // @ts-ignore
 export default function ModalRecipe({ match, history }) {
@@ -30,6 +31,11 @@ export default function ModalRecipe({ match, history }) {
 
   const myRecipeRef = db.collection('recipes');
   const query = myRecipeRef.doc(match.params.id);
+
+  const onDragEnd = useCallback((result) => {
+    console.log('dragged', result)
+    // TODO: add state update for for dragging action
+  }, []);
 
   useEffect(() => {
 
@@ -80,16 +86,43 @@ export default function ModalRecipe({ match, history }) {
   }
 
   const listIngredients = recipe && ingredients.map((ingredient: any, index: number) =>
-    <li key={index}>
-      <StyledTextArea
-        disabled={fullscreen || !user}
-        spellCheck={false}
-        value={ingredient}
-        rows={1}
-        onChange={e => handleArrayChange(index, ingredients, e.target.value, setIngredients)}
-      />
-    </li>
+    <Draggable draggableId={index.toString()} index={index} key={index} disableInteractiveElementBlocking>
+      {(provided, snapshot) => (
+        <li
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          <StyledTextArea
+            disabled={fullscreen || !user}
+            spellCheck={false}
+            value={ingredient}
+            rows={1}
+            onChange={e => handleArrayChange(index, ingredients, e.target.value, setIngredients)}
+          />
+        </li>
+      )}
+    </Draggable>
   );
+
+  const IngredientsSection = () => {
+    return (
+      <Ingredients>
+        <Label>Ingredients: </Label>
+        <Droppable droppableId="ingredients">
+          {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
+            <UL
+              ref={provided.innerRef}
+            >
+              {listIngredients}
+              {provided.placeholder}
+            </UL>
+          )}
+        </Droppable>
+        <button onClick={() => setIngredients([...ingredients, ""])}>+</button>
+      </Ingredients>
+    )
+  }
 
   const listPrep = recipe && prepInstructions.map((prepInstruction: any, index: number) =>
     <li key={index}>
@@ -208,69 +241,66 @@ export default function ModalRecipe({ match, history }) {
   return (
     <Modal>
       <button style={{ position: 'absolute', right: '15px', top: '15px' }} onClick={back}>X</button>
-      <RecipeCard id={match.params.id}>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <RecipeCard id={match.params.id}>
 
-        <div style={{ margin: '0 0 10px 0' }}>
-          <Name
-            disabled={fullscreen || !user}
-            value={recipeName}
-            onChange={e => {
-              setRecipeName(e.target.value)
-              setUpdate(true)
-            }}
-          />
-          <StyledTextArea
-            disabled={fullscreen || !user}
-            value={description}
-            onChange={e => {
-              setDescription(e.target.value)
-              setUpdate(true)
-            }}
-          />
-        </div>
-
-        <div style={{ display: 'flex', width: "100%" }}>
-          <Ingredients>
-            <Label>Ingredients: </Label>
-            <UL>{listIngredients}</UL>
-            <button onClick={() => setIngredients([...ingredients, ""])}>+</button>
-          </Ingredients>
-
-          <Instructions>
-            <Label>Prep Time: </Label>
-            <Time
+          <div style={{ margin: '0 0 10px 0' }}>
+            <Name
               disabled={fullscreen || !user}
-              value={prepTime}
+              value={recipeName}
               onChange={e => {
-                setPrepTime(e.target.value)
+                setRecipeName(e.target.value)
                 setUpdate(true)
-              }
-              }
+              }}
             />
-            <OL>{listPrep}</OL>
-            <button onClick={() => setPrepInstructions([...prepInstructions, ""])}>+</button>
-            <br />
-            <Label>Cook Time: </Label>
-            <Time
+            <StyledTextArea
               disabled={fullscreen || !user}
-              value={cookTime}
+              value={description}
               onChange={e => {
-                setCookTime(e.target.value)
+                setDescription(e.target.value)
                 setUpdate(true)
-              }
-              }
+              }}
             />
-            <OL>{listCookInstructions}</OL>
-            <button onClick={() => setCookInstructions([...cookInstructions, ""])}>+</button>
-          </Instructions>
-        </div>
+          </div>
 
-        {user && user.uid !== recipe.OwnerUid && <button onClick={copyRecipe}>Add to my recipes</button>}
-        {update && <button onClick={handleUpdate}>update</button>}
-        {!fullscreen && <a href={sourceUrl} target="_blank">Original Source</a>}
-        {!fullscreen && <button onClick={startFullScreen}>Cook now</button>}
+          <div style={{ display: 'flex', width: "100%" }}>
+            <IngredientsSection />
 
-      </RecipeCard>
+            <Instructions>
+              <Label>Prep Time: </Label>
+              <Time
+                disabled={fullscreen || !user}
+                value={prepTime}
+                onChange={e => {
+                  setPrepTime(e.target.value)
+                  setUpdate(true)
+                }
+                }
+              />
+              <OL>{listPrep}</OL>
+              <button onClick={() => setPrepInstructions([...prepInstructions, ""])}>+</button>
+              <br />
+              <Label>Cook Time: </Label>
+              <Time
+                disabled={fullscreen || !user}
+                value={cookTime}
+                onChange={e => {
+                  setCookTime(e.target.value)
+                  setUpdate(true)
+                }}
+              />
+              <OL>{listCookInstructions}</OL>
+              <button onClick={() => setCookInstructions([...cookInstructions, ""])}>+</button>
+            </Instructions>
+          </div>
+
+          {user && user.uid !== recipe.OwnerUid && <button onClick={copyRecipe}>Add to my recipes</button>}
+          {update && <button onClick={handleUpdate}>update</button>}
+          {!fullscreen && <a href={sourceUrl} target="_blank">Original Source</a>}
+          {!fullscreen && <button onClick={startFullScreen}>Cook now</button>}
+
+        </RecipeCard>
+      </DragDropContext>
     </Modal>
   );
 };
