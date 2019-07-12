@@ -11,6 +11,7 @@
 1. Allow users to reorder ingredients and steps.
 2. Removed empty steps and ingredients from array
 3. Make a list component for all editable / reorderable lists
+4. Make a cancel updates option
 
 ## Multiple User Updates
 1. Filter out duplicate recipes in the all recipes view

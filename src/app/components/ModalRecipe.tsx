@@ -9,6 +9,7 @@ import { Ingredients } from "./styled/RecipeCard";
 import { Modal, Name, StyledTextArea, Time, Instructions, Label, UL, OL } from "./styled/Modal";
 import { userContext } from "../context/UserContext";
 import { Droppable, DroppableProvided, DroppableStateSnapshot, Draggable, DragDropContext } from "react-beautiful-dnd";
+import { DragResult } from "../types/Globals";
 
 // @ts-ignore
 export default function ModalRecipe({ match, history }) {
@@ -32,10 +33,6 @@ export default function ModalRecipe({ match, history }) {
   const myRecipeRef = db.collection('recipes');
   const query = myRecipeRef.doc(match.params.id);
 
-  const onDragEnd = useCallback((result) => {
-    console.log('dragged', result)
-    // TODO: add state update for for dragging action
-  }, []);
 
   useEffect(() => {
 
@@ -69,7 +66,41 @@ export default function ModalRecipe({ match, history }) {
     });
   }, []);
 
-  const { addToast } = useToasts()
+  const { addToast } = useToasts();
+
+  const onDragEnd = (result: DragResult) => {
+    const { destination, source, draggableId } = result;
+    const sameListSameSpot = destination.droppableId === source.droppableId && destination.index === source.index;
+
+    if (!destination) {
+      return;
+    }
+
+    if (sameListSameSpot) {
+      return;
+    }
+
+    if (source.droppableId !== destination.droppableId) {
+      return;
+    }
+
+    // TODO: Update State
+    // https://github.com/atlassian/react-beautiful-dnd
+    // https://codesandbox.io/s/9z7qwmmr7r
+    // https://egghead.io/lessons/react-persist-list-reordering-with-react-beautiful-dnd-using-the-ondragend-callback
+    // https://itnext.io/dynamically-update-positions-during-drag-using-react-beautiful-dnd-4a986d704c2e
+    console.log('destination', destination.index);
+    console.log('source', source.index);
+    console.log('ingredients', ingredients);
+
+    let newArr = Array.from(ingredients)
+    newArr.splice(source.index, 1);
+    newArr.splice(destination.index, 0, ingredients[parseInt(draggableId)]);
+
+    console.log('newArrOrder', newArr)
+
+    setIngredients(newArr);
+  }
 
   const exitHandler = () => {
     if (!document.fullscreenElement) {
