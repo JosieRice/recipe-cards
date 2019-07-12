@@ -32,10 +32,6 @@ export default function ModalRecipe({ match, history }) {
   const myRecipeRef = db.collection('recipes');
   const query = myRecipeRef.doc(match.params.id);
 
-  const onDragEnd = useCallback((result) => {
-    console.log('dragged', result)
-    // TODO: add state update for for dragging action
-  }, []);
 
   useEffect(() => {
 
@@ -69,7 +65,31 @@ export default function ModalRecipe({ match, history }) {
     });
   }, []);
 
-  const { addToast } = useToasts()
+  const { addToast } = useToasts();
+
+  const onDragEnd = useCallback((result) => {
+
+    const { destination, source, draggableId } = result;
+    const sameListSameSpot = destination.droppableId === source.droppableId && destination.index === source.index;
+
+    if (!destination) {
+      return;
+    }
+
+    if (sameListSameSpot) {
+      return;
+    }
+
+    if (source.droppableId !== destination.droppableId) {
+      console.log('Different List');
+      return;
+    }
+
+    console.log('destination', destination.index);
+    console.log('source', source.index);
+    console.log('ingredients', ingredients);
+
+  }, []);
 
   const exitHandler = () => {
     if (!document.fullscreenElement) {
