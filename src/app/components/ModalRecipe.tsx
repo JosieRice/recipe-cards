@@ -27,6 +27,7 @@ export default function ModalRecipe({ match, history }) {
 
   const [update, setUpdate] = useState<boolean>(false)
   const [fullscreen, setFullscreen] = useState<boolean>(false);
+  const [reorder, setReorder] = useState<boolean>(false);
 
   const [user] = useContext(userContext);
 
@@ -71,6 +72,7 @@ export default function ModalRecipe({ match, history }) {
   const onDragEnd = (result: DragResult) => {
     const { destination, source, draggableId } = result;
     const sameListSameSpot = destination.droppableId === source.droppableId && destination.index === source.index;
+    const differentList = source.droppableId !== destination.droppableId
 
     if (!destination) {
       return;
@@ -80,26 +82,16 @@ export default function ModalRecipe({ match, history }) {
       return;
     }
 
-    if (source.droppableId !== destination.droppableId) {
+    if (differentList) {
       return;
     }
-
-    // TODO: Update State
-    // https://github.com/atlassian/react-beautiful-dnd
-    // https://codesandbox.io/s/9z7qwmmr7r
-    // https://egghead.io/lessons/react-persist-list-reordering-with-react-beautiful-dnd-using-the-ondragend-callback
-    // https://itnext.io/dynamically-update-positions-during-drag-using-react-beautiful-dnd-4a986d704c2e
-    console.log('destination', destination.index);
-    console.log('source', source.index);
-    console.log('ingredients', ingredients);
 
     let newArr = Array.from(ingredients)
     newArr.splice(source.index, 1);
     newArr.splice(destination.index, 0, ingredients[parseInt(draggableId)]);
 
-    console.log('newArrOrder', newArr)
-
     setIngredients(newArr);
+    setUpdate(true);
   }
 
   const exitHandler = () => {
@@ -112,29 +104,34 @@ export default function ModalRecipe({ match, history }) {
     let newList = [...array]
     newList[index] = ingredient
 
-    cb(newList)
-    setUpdate(true)
+    cb(newList);
+    setUpdate(true);
   }
 
-  const listIngredients = recipe && ingredients.map((ingredient: any, index: number) =>
-    <Draggable draggableId={index.toString()} index={index} key={index} disableInteractiveElementBlocking>
-      {(provided, snapshot) => (
-        <li
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          <StyledTextArea
-            disabled={fullscreen || !user}
-            spellCheck={false}
-            value={ingredient}
-            rows={1}
-            onChange={e => handleArrayChange(index, ingredients, e.target.value, setIngredients)}
-          />
-        </li>
-      )}
-    </Draggable>
-  );
+  const listIngredients = () => {
+    return (
+      recipe && ingredients.map((ingredient: any, index: number) =>
+        <Draggable draggableId={index.toString()} index={index} key={index} disableInteractiveElementBlocking={reorder}>
+          {(provided, snapshot) => (
+            <li
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+            >
+              <StyledTextArea
+                disabled={fullscreen || !user}
+                spellCheck={false}
+                value={ingredient}
+                rows={1}
+                onChange={e => handleArrayChange(index, ingredients, e.target.value, setIngredients)}
+              />
+            </li>
+          )}
+        </Draggable>
+      )
+    )
+
+  }
 
   const IngredientsSection = () => {
     return (
@@ -145,7 +142,7 @@ export default function ModalRecipe({ match, history }) {
             <UL
               ref={provided.innerRef}
             >
-              {listIngredients}
+              {listIngredients()}
               {provided.placeholder}
             </UL>
           )}
@@ -325,9 +322,16 @@ export default function ModalRecipe({ match, history }) {
             </Instructions>
           </div>
 
+          {/* BUTTON TOWN */}
+
+          {reorder ? <button onClick={() => setReorder(false)}>turn reorder off</button> : <button onClick={() => setReorder(true)}>turn reorder on</button>}
+
           {user && user.uid !== recipe.OwnerUid && <button onClick={copyRecipe}>Add to my recipes</button>}
+
           {update && <button onClick={handleUpdate}>update</button>}
+
           {!fullscreen && <a href={sourceUrl} target="_blank">Original Source</a>}
+
           {!fullscreen && <button onClick={startFullScreen}>Cook now</button>}
 
         </RecipeCard>
