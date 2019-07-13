@@ -6,6 +6,7 @@ import { isEmpty, strToArr } from "../utilites/Utilities";
 import { Page, H1, Label, Input, TextArea } from "../components/styled/Page";
 
 import { useToasts } from 'react-toast-notifications';
+import { NotLoggedIn } from "../components/LoginLogout";
 
 export default function NewRecipe() {
   const [recipeName, setRecipeName] = useState<string>("");
@@ -90,7 +91,7 @@ export default function NewRecipe() {
 
   };
 
-  if (isEmpty(user)) return <Page>Login to See</Page>;
+  if (isEmpty(user)) return <NotLoggedIn />;
 
   return (
     <Page>
