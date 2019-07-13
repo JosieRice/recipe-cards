@@ -1,9 +1,11 @@
 import * as React from "react";
-import { Page, H1, LI } from "./styled/Page";
+import { Page, H1 } from "../components/styled/Page";
 import { db } from "../services/Firebase";
 import { useState, useEffect } from "react";
-import { Link, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import ModalRecipe from "./ModalRecipe";
+import Loading from "../components/Loading";
+import RecipeList from "../components/RecipeList";
 
 export default function AllRecipes({ match }: any) {
   const [recipes, setRecipes] = useState([]);
@@ -26,22 +28,17 @@ export default function AllRecipes({ match }: any) {
     });
   }, []);
 
-  if (recipes.length === 0) return (<Page>loading</Page>);
+  if (recipes.length === 0) return <Loading />;
 
-  {console.log('recipes', recipes)}
-  
-  return (  
+  return (
     <Page>
       <H1>All Recipes</H1>
-      <ul>
-        {recipes.map((recipe: { recipeName: string; id: string }, index: number) =>
-          <LI key={index}>
-            <Link to={`${match.path}${recipe.id}`}>
-              {recipe.recipeName}
-            </Link>
-          </LI>
-        )}
-      </ul>
+
+      <RecipeList
+        recipes={recipes}
+        match={match}
+      />
+
       <Route path={`${match.path}:id`} component={ModalRecipe} />
 
     </Page>

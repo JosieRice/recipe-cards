@@ -4,10 +4,17 @@ import { db } from "../services/Firebase";
 import { useToasts } from 'react-toast-notifications';
 
 // Style
-import { RecipeCard } from "./styled/Page";
-import { Ingredients } from "./styled/RecipeCard";
-import { Modal, Name, StyledTextArea, Time, Instructions, Label, UL, OL } from "./styled/Modal";
+import { RecipeCard } from "../components/styled/Page";
+import { Modal, Instructions, Label } from "../components/styled/Modal";
 import { userContext } from "../context/UserContext";
+import { DragDropContext } from "react-beautiful-dnd";
+import { DragResult } from "../types/Globals";
+import Loading from "../components/Loading";
+import Name from "../components/modalComponents/Name";
+import Description from "../components/modalComponents/Description";
+import List from "../components/modalComponents/List";
+import Time from "../components/modalComponents/Time";
+import { Ingredients } from "../components/styled/RecipeCard";
 
 // @ts-ignore
 export default function ModalRecipe({ match, history }) {
@@ -25,14 +32,15 @@ export default function ModalRecipe({ match, history }) {
 
   const [update, setUpdate] = useState<boolean>(false)
   const [fullscreen, setFullscreen] = useState<boolean>(false);
+  const [reorder, setReorder] = useState<boolean>(false);
 
   const [user] = useContext(userContext);
 
   const myRecipeRef = db.collection('recipes');
   const query = myRecipeRef.doc(match.params.id);
 
-  useEffect(() => {
 
+  useEffect(() => {
     document.addEventListener('fullscreenchange', exitHandler);
     // document.addEventListener('webkitfullscreenchange', exitHandler);
     // document.addEventListener('mozfullscreenchange', exitHandler);
@@ -63,7 +71,55 @@ export default function ModalRecipe({ match, history }) {
     });
   }, []);
 
-  const { addToast } = useToasts()
+  const { addToast } = useToasts();
+
+  const onDragEnd = (result: DragResult) => {
+    const { destination, source } = result;
+
+    let sameListSameSpot;
+    let differentList;
+
+    if (destination) {
+      sameListSameSpot = destination.droppableId === source.droppableId && destination.index === source.index;
+
+      differentList = source.droppableId !== destination.droppableId;
+    }
+
+    if (!destination) {
+      return;
+    } else if (!destination.droppableId) {
+      return;
+    } else if (differentList) {
+      return;
+    } else if (sameListSameSpot) {
+      return;
+    } else {
+
+      if (source.droppableId === 'ingredients') {
+        arrayReorder(result, ingredients, setIngredients);
+      }
+
+      if (source.droppableId === 'prepInstructions') {
+        arrayReorder(result, prepInstructions, setPrepInstructions);
+      }
+
+      if (source.droppableId === 'cookInstructions') {
+        arrayReorder(result, cookInstructions, setCookInstructions);
+      }
+
+    }
+  }
+
+  const arrayReorder = (result: DragResult, array: Array<string>, setState: any) => {
+    const { destination, source } = result;
+
+    let newArr = Array.from(array);
+    newArr.splice(source.index, 1);
+    newArr.splice(destination.index, 0, array[source.index]);
+
+    setState(newArr);
+    setUpdate(true);
+  }
 
   const exitHandler = () => {
     if (!document.fullscreenElement) {
@@ -75,41 +131,9 @@ export default function ModalRecipe({ match, history }) {
     let newList = [...array]
     newList[index] = ingredient
 
-    cb(newList)
-    setUpdate(true)
+    cb(newList);
+    setUpdate(true);
   }
-
-  const listIngredients = recipe && ingredients.map((ingredient: any, index: number) =>
-    <li key={index}>
-      <StyledTextArea
-        disabled={fullscreen || !user}
-        spellCheck={false}
-        value={ingredient}
-        rows={1}
-        onChange={e => handleArrayChange(index, ingredients, e.target.value, setIngredients)}
-      />
-    </li>
-  );
-
-  const listPrep = recipe && prepInstructions.map((prepInstruction: any, index: number) =>
-    <li key={index}>
-      <StyledTextArea
-        disabled={fullscreen || !user}
-        value={prepInstruction}
-        onChange={e => handleArrayChange(index, prepInstructions, e.target.value, setPrepInstructions)}
-      />
-    </li>
-  )
-
-  const listCookInstructions = recipe && cookInstructions.map((cookInstruction: any, index: number) =>
-    <li key={index}>
-      <StyledTextArea
-        disabled={fullscreen || !user}
-        value={cookInstruction}
-        onChange={e => handleArrayChange(index, cookInstructions, e.target.value, setCookInstructions)}
-      />
-    </li>
-  )
 
   const back = (e: any) => {
     e.stopPropagation();
@@ -203,74 +227,100 @@ export default function ModalRecipe({ match, history }) {
       });
   }
 
-  if (!recipe) return (<div>loading</div>);
+  if (!recipe) return (<Loading />);
 
   return (
     <Modal>
       <button style={{ position: 'absolute', right: '15px', top: '15px' }} onClick={back}>X</button>
-      <RecipeCard id={match.params.id}>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <RecipeCard id={match.params.id}>
 
-        <div style={{ margin: '0 0 10px 0' }}>
-          <Name
-            disabled={fullscreen || !user}
-            value={recipeName}
-            onChange={e => {
-              setRecipeName(e.target.value)
-              setUpdate(true)
-            }}
-          />
-          <StyledTextArea
-            disabled={fullscreen || !user}
-            value={description}
-            onChange={e => {
-              setDescription(e.target.value)
-              setUpdate(true)
-            }}
-          />
-        </div>
+          <div style={{ margin: '0 0 10px 0' }}>
 
-        <div style={{ display: 'flex', width: "100%" }}>
-          <Ingredients>
-            <Label>Ingredients: </Label>
-            <UL>{listIngredients}</UL>
-            <button onClick={() => setIngredients([...ingredients, ""])}>+</button>
-          </Ingredients>
-
-          <Instructions>
-            <Label>Prep Time: </Label>
-            <Time
-              disabled={fullscreen || !user}
-              value={prepTime}
-              onChange={e => {
-                setPrepTime(e.target.value)
-                setUpdate(true)
-              }
-              }
+            <Name
+              fullscreen={fullscreen}
+              value={recipeName}
+              setValue={setRecipeName}
+              setUpdate={setUpdate}
             />
-            <OL>{listPrep}</OL>
-            <button onClick={() => setPrepInstructions([...prepInstructions, ""])}>+</button>
-            <br />
-            <Label>Cook Time: </Label>
-            <Time
-              disabled={fullscreen || !user}
+
+            <Description
+              fullscreen={fullscreen}
+              value={description}
+              setValue={setDescription}
+              setUpdate={setUpdate}
+            />
+
+          </div>
+
+          <div style={{ display: 'flex', width: "100%" }}>
+
+            <Ingredients>
+              <Label>Ingredients: </Label>
+              <List
+                listId="ingredients"
+                recipe={recipe}
+                array={ingredients}
+                setArray={setIngredients}
+                fullscreen={fullscreen}
+                onChange={handleArrayChange}
+                reorder={reorder}
+              />
+            </Ingredients>
+
+            <Instructions>
+              <Label>Prep Time: </Label>
+              <Time
+                fullscreen={fullscreen}
+                value={prepTime}
+                setValue={setPrepTime}
+                setUpdate={setUpdate}
+              />
+              <List
+                listId="prepInstructions"
+                recipe={recipe}
+                array={prepInstructions}
+                setArray={setPrepInstructions}
+                fullscreen={fullscreen}
+                onChange={handleArrayChange}
+                reorder={reorder}
+              />
+
+              <br />
+              <Label>Cook Time: </Label>
+              <Time
+              fullscreen={fullscreen}
               value={cookTime}
-              onChange={e => {
-                setCookTime(e.target.value)
-                setUpdate(true)
-              }
-              }
-            />
-            <OL>{listCookInstructions}</OL>
-            <button onClick={() => setCookInstructions([...cookInstructions, ""])}>+</button>
-          </Instructions>
-        </div>
+              setValue={setCookTime}
+              setUpdate={setUpdate}
+              />
+              <List
+                listId="cookInstructions"
+                recipe={recipe}
+                array={cookInstructions}
+                setArray={setCookInstructions}
+                fullscreen={fullscreen}
+                onChange={handleArrayChange}
+                reorder={reorder}
+              />
 
-        {user && user.uid !== recipe.OwnerUid && <button onClick={copyRecipe}>Add to my recipes</button>}
-        {update && <button onClick={handleUpdate}>update</button>}
-        {!fullscreen && <a href={sourceUrl} target="_blank">Original Source</a>}
-        {!fullscreen && <button onClick={startFullScreen}>Cook now</button>}
+            </Instructions>
+          </div>
 
-      </RecipeCard>
+          {/* BUTTON TOWN */}
+
+          {reorder ? <button onClick={() => setReorder(false)}>turn reorder off</button> : <button onClick={() => setReorder(true)}>turn reorder on</button>}
+
+          {user && user.uid !== recipe.OwnerUid && <button onClick={copyRecipe}>Add to my recipes</button>}
+
+          {update && <button onClick={handleUpdate}>update</button>}
+
+          {!fullscreen && <a href={sourceUrl} target="_blank">Original Source</a>}
+
+          {!fullscreen && <button onClick={startFullScreen}>Cook now</button>}
+
+        </RecipeCard>
+      </DragDropContext>
     </Modal>
   );
 };

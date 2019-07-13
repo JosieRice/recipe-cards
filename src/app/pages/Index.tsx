@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Page, H1, P } from "./styled/Page";
+import { Page, H1, P } from "../components/styled/Page";
 
 export default function Index() {
   return (

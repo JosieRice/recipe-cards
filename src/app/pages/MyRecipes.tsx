@@ -1,18 +1,21 @@
 import * as React from "react";
 import { useState, useEffect, useContext } from "react";
-import { Route, Link } from 'react-router-dom'
+import { Route } from 'react-router-dom';
 
-import { Page, H1, LI } from "./styled/Page";
+import { Page, H1 } from "../components/styled/Page";
 import { db } from "../services/Firebase";
 import { userContext } from "../context/UserContext";
 import ModalRecipe from "./ModalRecipe";
 import { isEmpty } from "../utilites/Utilities";
+import Loading from "../components/Loading";
+import RecipeList from "../components/RecipeList";
+import { NotLoggedIn } from "../components/LoginLogout";
 
 export default function MyRecipes({ match }: any) {
   const [recipes, setRecipes] = useState([]);
   const [user] = useContext(userContext);
 
-  if (isEmpty(user)) return (<Page>Login to See</Page>);
+  if (isEmpty(user)) return (<NotLoggedIn />);
 
   const myRecipeRef = db.collection('recipes');
   const query = myRecipeRef.where("OwnerUid", "==", user.uid);
@@ -31,22 +34,19 @@ export default function MyRecipes({ match }: any) {
     });
   }, []);
 
-  if (recipes.length === 0) return (<Page>loading</Page>);
+  if (recipes.length === 0) return (<Loading />);
 
-  {console.log('MY recipes', recipes)}
+  { console.log('MY recipes', recipes) }
 
   return (
     <Page>
       <H1>My Recipes</H1>
-      <ul>
-        {recipes.map((recipe: { recipeName: string; id: string; }) =>
-          <LI key={recipe.id}>
-            <Link to={`${match.path}${recipe.id}`}>
-              {recipe.recipeName}
-            </Link> 
-          </LI>)
-        }
-      </ul>
+
+      <RecipeList
+        recipes={recipes}
+        match={match}
+      />
+
       <Route path={`${match.path}:id`} component={ModalRecipe} />
 
     </Page>

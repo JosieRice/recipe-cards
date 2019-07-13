@@ -4,6 +4,7 @@ import { auth, provider } from "../services/Firebase";
 import { UserObj } from "../types/Globals";
 import { useEffect, useContext } from "react";
 import { userContext } from "../context/UserContext";
+import { Page } from "./styled/Page";
 
 export default function LoginLogout() {
   const [user, setUser] = useContext(userContext);
@@ -51,3 +52,11 @@ export default function LoginLogout() {
     </div>
   );
 }
+
+export function NotLoggedIn() {
+  return (
+    <Page>
+      <p>Please Log In to see this page.</p>
+    </Page>
+  );
+};

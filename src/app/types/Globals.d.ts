@@ -8,3 +8,16 @@ export interface UserObj {
   photoURL?: string;
   uid: string;
 }
+
+interface Location {
+  droppableId: string,
+  index: number
+}
+
+export interface DragResult {
+  draggableId: string,
+  type: string,
+  reason: string,
+  source: Location,
+  destination?: Location
+}
