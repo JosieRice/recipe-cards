@@ -2,10 +2,10 @@ import * as React from "react";
 import { useState, useEffect, useContext } from "react";
 import { Route, Link } from 'react-router-dom'
 
-import { Page, H1, LI } from "./styled/Page";
+import { Page, H1, LI } from "../components/styled/Page";
 import { db } from "../services/Firebase";
 import { userContext } from "../context/UserContext";
-import ModalRecipe from "./ModalRecipe";
+import ModalRecipe from "../components/ModalRecipe";
 import { isEmpty } from "../utilites/Utilities";
 
 export default function MyRecipes({ match }: any) {

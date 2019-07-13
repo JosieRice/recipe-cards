@@ -3,20 +3,18 @@ import * as ReactDOM from "react-dom";
 import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom'
 import { UserContextProvider } from './context/UserContext';
 import { ToastProvider } from 'react-toast-notifications'
-import { DragDropContext } from 'react-beautiful-dnd';
 
 // Pages
-import Index from "./components/Index";
-import NewRecipe from "./components/NewRecipe";
-import MyRecipes from './components/MyRecipes';
-import AllRecipes from './components/AllRecipes';
+import Index from "./pages/Index";
+import NewRecipe from "./pages/NewRecipe";
+import MyRecipes from './pages/MyRecipes';
+import AllRecipes from './pages/AllRecipes';
 import LoginLogout from './components/LoginLogout';
 import UserPhoto from './components/UserPhoto';
 import NoMatch from './components/NoMatch';
 
 // Style
 import { NavBar, UL, ListItem, LoginLI } from './components/styled/NavBar';
-import { useCallback } from 'react';
 
 const Routing = () => {
 

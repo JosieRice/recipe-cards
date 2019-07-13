@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Page, H1, LI } from "./styled/Page";
+import { Page, H1, LI } from "../components/styled/Page";
 import { db } from "../services/Firebase";
 import { useState, useEffect } from "react";
 import { Link, Route } from "react-router-dom";
-import ModalRecipe from "./ModalRecipe";
+import ModalRecipe from "../components/ModalRecipe";
 
 export default function AllRecipes({ match }: any) {
   const [recipes, setRecipes] = useState([]);

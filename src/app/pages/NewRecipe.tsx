@@ -3,7 +3,7 @@ import { useState, useContext, FormEvent } from "react";
 import { db } from "../services/Firebase";
 import { userContext } from "../context/UserContext";
 import { isEmpty, strToArr } from "../utilites/Utilities";
-import { Page, H1, Label, Input, TextArea } from "./styled/Page";
+import { Page, H1, Label, Input, TextArea } from "../components/styled/Page";
 
 import { useToasts } from 'react-toast-notifications';
 
