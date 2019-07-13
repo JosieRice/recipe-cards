@@ -7,6 +7,7 @@ import { db } from "../services/Firebase";
 import { userContext } from "../context/UserContext";
 import ModalRecipe from "../components/ModalRecipe";
 import { isEmpty } from "../utilites/Utilities";
+import Loading from "../components/Loading";
 
 export default function MyRecipes({ match }: any) {
   const [recipes, setRecipes] = useState([]);
@@ -31,7 +32,7 @@ export default function MyRecipes({ match }: any) {
     });
   }, []);
 
-  if (recipes.length === 0) return (<Page>loading</Page>);
+  if (recipes.length === 0) return (<Loading />);
 
   {console.log('MY recipes', recipes)}
 

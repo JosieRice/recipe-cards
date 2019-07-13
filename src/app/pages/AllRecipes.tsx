@@ -4,6 +4,7 @@ import { db } from "../services/Firebase";
 import { useState, useEffect } from "react";
 import { Link, Route } from "react-router-dom";
 import ModalRecipe from "../components/ModalRecipe";
+import Loading from "../components/Loading";
 
 export default function AllRecipes({ match }: any) {
   const [recipes, setRecipes] = useState([]);
@@ -26,7 +27,7 @@ export default function AllRecipes({ match }: any) {
     });
   }, []);
 
-  if (recipes.length === 0) return (<Page>loading</Page>);
+  if (recipes.length === 0) return <Loading />;
 
   {console.log('recipes', recipes)}
   

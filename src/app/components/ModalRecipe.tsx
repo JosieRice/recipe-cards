@@ -10,6 +10,7 @@ import { Modal, Name, StyledTextArea, Time, Instructions, Label, UL, OL } from "
 import { userContext } from "../context/UserContext";
 import { Droppable, DroppableProvided, DroppableStateSnapshot, Draggable, DragDropContext } from "react-beautiful-dnd";
 import { DragResult } from "../types/Globals";
+import Loading from "./Loading";
 
 // @ts-ignore
 export default function ModalRecipe({ match, history }) {
@@ -264,7 +265,7 @@ export default function ModalRecipe({ match, history }) {
       });
   }
 
-  if (!recipe) return (<div>loading</div>);
+  if (!recipe) return (<Loading />);
 
   return (
     <Modal>

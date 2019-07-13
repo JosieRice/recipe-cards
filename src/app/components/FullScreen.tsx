@@ -6,6 +6,7 @@ import { db } from "../services/Firebase";
 import { RecipeCard } from "./styled/Page";
 import { Ingredients, Instructions, Description } from "./styled/RecipeCard";
 import { Modal } from "./styled/Modal";
+import Loading from "./Loading";
 
 // @ts-ignore
 export default function FullScreen({ match, history }) {
@@ -66,7 +67,7 @@ export default function FullScreen({ match, history }) {
 
   
 
-  if (!recipe) return (<div>loading</div>);
+  if (!recipe) return (<Loading />);
 
   return (
     <Modal>
