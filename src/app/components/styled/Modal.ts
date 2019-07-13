@@ -35,7 +35,7 @@ export const StyledTextArea = styled(Textarea)`
   color: #444;
 `
 
-export const Time = styled.input`
+export const TimeInput = styled.input`
   font-family: 'Sriracha', 'Courier New';
   font-weight: 600;
   font-size: 2.5vmin;

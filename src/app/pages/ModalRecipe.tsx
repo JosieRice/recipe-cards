@@ -5,7 +5,7 @@ import { useToasts } from 'react-toast-notifications';
 
 // Style
 import { RecipeCard } from "../components/styled/Page";
-import { Modal, Time, Instructions, Label } from "../components/styled/Modal";
+import { Modal, Instructions, Label } from "../components/styled/Modal";
 import { userContext } from "../context/UserContext";
 import { DragDropContext } from "react-beautiful-dnd";
 import { DragResult } from "../types/Globals";
@@ -13,6 +13,7 @@ import Loading from "../components/Loading";
 import Name from "../components/modalComponents/Name";
 import Description from "../components/modalComponents/Description";
 import List from "../components/modalComponents/List";
+import Time from "../components/modalComponents/Time";
 import { Ingredients } from "../components/styled/RecipeCard";
 
 // @ts-ignore
@@ -270,13 +271,10 @@ export default function ModalRecipe({ match, history }) {
             <Instructions>
               <Label>Prep Time: </Label>
               <Time
-                disabled={fullscreen || !user}
+                fullscreen={fullscreen}
                 value={prepTime}
-                onChange={e => {
-                  setPrepTime(e.target.value)
-                  setUpdate(true)
-                }
-                }
+                setValue={setPrepTime}
+                setUpdate={setUpdate}
               />
               <List
                 listId="prepInstructions"
@@ -291,14 +289,11 @@ export default function ModalRecipe({ match, history }) {
               <br />
               <Label>Cook Time: </Label>
               <Time
-                disabled={fullscreen || !user}
-                value={cookTime}
-                onChange={e => {
-                  setCookTime(e.target.value)
-                  setUpdate(true)
-                }}
+              fullscreen={fullscreen}
+              value={cookTime}
+              setValue={setCookTime}
+              setUpdate={setUpdate}
               />
-
               <List
                 listId="cookInstructions"
                 recipe={recipe}
