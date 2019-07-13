@@ -1,14 +1,13 @@
 import * as React from "react";
-import { useState, useEffect, useContext, useCallback } from "react";
+import { useState, useEffect, useContext } from "react";
 import { db } from "../services/Firebase";
 import { useToasts } from 'react-toast-notifications';
 
 // Style
 import { RecipeCard } from "../components/styled/Page";
-import { Ingredients } from "../components/styled/RecipeCard";
-import { Modal, StyledTextArea, Time, Instructions, Label, UL, OL } from "../components/styled/Modal";
+import { Modal, Time, Instructions, Label } from "../components/styled/Modal";
 import { userContext } from "../context/UserContext";
-import { Droppable, DroppableProvided, DroppableStateSnapshot, Draggable, DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext } from "react-beautiful-dnd";
 import { DragResult } from "../types/Globals";
 import Loading from "../components/Loading";
 import Name from "../components/modalComponents/Name";
@@ -111,60 +110,6 @@ export default function ModalRecipe({ match, history }) {
     cb(newList);
     setUpdate(true);
   }
-
-  const listIngredients = () => {
-    return (
-      recipe && ingredients.map((ingredient: any, index: number) =>
-        <Draggable draggableId={index.toString()} index={index} key={index} disableInteractiveElementBlocking={reorder}>
-          {(provided, snapshot) => (
-            <li
-              ref={provided.innerRef}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
-            >
-              <StyledTextArea
-                disabled={fullscreen || !user}
-                spellCheck={false}
-                value={ingredient}
-                rows={1}
-                onChange={e => handleArrayChange(index, ingredients, e.target.value, setIngredients)}
-              />
-            </li>
-          )}
-        </Draggable>
-      )
-    )
-
-  }
-
-  const IngredientsSection = () => {
-    return (
-      <Ingredients>
-        <Label>Ingredients: </Label>
-        <Droppable droppableId="ingredients">
-          {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
-            <UL
-              ref={provided.innerRef}
-            >
-              {listIngredients()}
-              {provided.placeholder}
-            </UL>
-          )}
-        </Droppable>
-        <button onClick={() => setIngredients([...ingredients, ""])}>+</button>
-      </Ingredients>
-    )
-  }
-
-  const listCookInstructions = recipe && cookInstructions.map((cookInstruction: any, index: number) =>
-    <li key={index}>
-      <StyledTextArea
-        disabled={fullscreen || !user}
-        value={cookInstruction}
-        onChange={e => handleArrayChange(index, cookInstructions, e.target.value, setCookInstructions)}
-      />
-    </li>
-  )
 
   const back = (e: any) => {
     e.stopPropagation();
@@ -286,7 +231,13 @@ export default function ModalRecipe({ match, history }) {
 
           <div style={{ display: 'flex', width: "100%" }}>
 
-            <IngredientsSection />
+            <List
+              recipe={recipe}
+              array={ingredients}
+              setArray={setIngredients}
+              fullscreen={fullscreen}
+              onChange={handleArrayChange}
+            />
 
             <Instructions>
               <Label>Prep Time: </Label>
@@ -300,7 +251,6 @@ export default function ModalRecipe({ match, history }) {
                 }
               />
               <List
-                name="Prep Instructions"
                 recipe={recipe}
                 array={prepInstructions}
                 setArray={setPrepInstructions}
@@ -319,7 +269,15 @@ export default function ModalRecipe({ match, history }) {
                   setUpdate(true)
                 }}
               />
-              <OL>{listCookInstructions}</OL>
+
+              <List
+                recipe={recipe}
+                array={cookInstructions}
+                setArray={setCookInstructions}
+                fullscreen={fullscreen}
+                onChange={handleArrayChange}
+              />
+
               <button onClick={() => setCookInstructions([...cookInstructions, ""])}>+</button>
             </Instructions>
           </div>
