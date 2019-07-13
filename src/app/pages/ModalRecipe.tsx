@@ -6,11 +6,14 @@ import { useToasts } from 'react-toast-notifications';
 // Style
 import { RecipeCard } from "../components/styled/Page";
 import { Ingredients } from "../components/styled/RecipeCard";
-import { Modal, Name, StyledTextArea, Time, Instructions, Label, UL, OL } from "../components/styled/Modal";
+import { Modal, StyledTextArea, Time, Instructions, Label, UL, OL } from "../components/styled/Modal";
 import { userContext } from "../context/UserContext";
 import { Droppable, DroppableProvided, DroppableStateSnapshot, Draggable, DragDropContext } from "react-beautiful-dnd";
 import { DragResult } from "../types/Globals";
 import Loading from "../components/Loading";
+import Name from "../components/modalComponents/Name";
+import Description from "../components/modalComponents/Description";
+import List from "../components/modalComponents/List";
 
 // @ts-ignore
 export default function ModalRecipe({ match, history }) {
@@ -153,16 +156,6 @@ export default function ModalRecipe({ match, history }) {
     )
   }
 
-  const listPrep = recipe && prepInstructions.map((prepInstruction: any, index: number) =>
-    <li key={index}>
-      <StyledTextArea
-        disabled={fullscreen || !user}
-        value={prepInstruction}
-        onChange={e => handleArrayChange(index, prepInstructions, e.target.value, setPrepInstructions)}
-      />
-    </li>
-  )
-
   const listCookInstructions = recipe && cookInstructions.map((cookInstruction: any, index: number) =>
     <li key={index}>
       <StyledTextArea
@@ -274,25 +267,25 @@ export default function ModalRecipe({ match, history }) {
         <RecipeCard id={match.params.id}>
 
           <div style={{ margin: '0 0 10px 0' }}>
+
             <Name
-              disabled={fullscreen || !user}
+              fullscreen={fullscreen}
               value={recipeName}
-              onChange={e => {
-                setRecipeName(e.target.value)
-                setUpdate(true)
-              }}
+              setValue={setRecipeName}
+              setUpdate={setUpdate}
             />
-            <StyledTextArea
-              disabled={fullscreen || !user}
+
+            <Description
+              fullscreen={fullscreen}
               value={description}
-              onChange={e => {
-                setDescription(e.target.value)
-                setUpdate(true)
-              }}
+              setValue={setDescription}
+              setUpdate={setUpdate}
             />
+
           </div>
 
           <div style={{ display: 'flex', width: "100%" }}>
+
             <IngredientsSection />
 
             <Instructions>
@@ -306,7 +299,15 @@ export default function ModalRecipe({ match, history }) {
                 }
                 }
               />
-              <OL>{listPrep}</OL>
+              <List
+                name="Prep Instructions"
+                recipe={recipe}
+                array={prepInstructions}
+                setArray={setPrepInstructions}
+                fullscreen={fullscreen}
+                onChange={handleArrayChange}
+              />
+
               <button onClick={() => setPrepInstructions([...prepInstructions, ""])}>+</button>
               <br />
               <Label>Cook Time: </Label>

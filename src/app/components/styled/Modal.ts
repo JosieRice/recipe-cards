@@ -10,7 +10,7 @@ export const Modal = styled.div`
   border: 2px solid #444;
 `
 
-export const Name = styled.input`
+export const NameInput = styled.input`
   font-family: 'Sriracha', 'Courier New';
   font-weight: 600;
   margin: 0 0 5px 0;
