@@ -13,6 +13,7 @@ import Loading from "../components/Loading";
 import Name from "../components/modalComponents/Name";
 import Description from "../components/modalComponents/Description";
 import List from "../components/modalComponents/List";
+import { Ingredients } from "../components/styled/RecipeCard";
 
 // @ts-ignore
 export default function ModalRecipe({ match, history }) {
@@ -73,28 +74,29 @@ export default function ModalRecipe({ match, history }) {
   const { addToast } = useToasts();
 
   const onDragEnd = (result: DragResult) => {
-    const { destination, source, draggableId } = result;
-    const sameListSameSpot = destination.droppableId === source.droppableId && destination.index === source.index;
-    const differentList = source.droppableId !== destination.droppableId
+    // const { destination, source, draggableId } = result;
+    // const sameListSameSpot = destination.droppableId === source.droppableId && destination.index === source.index;
+    // const differentList = source.droppableId !== destination.droppableId
 
-    if (!destination) {
-      return;
-    }
+    // if (!destination) {
+    //   return;
+    // }
 
-    if (sameListSameSpot) {
-      return;
-    }
+    // if (sameListSameSpot) {
+    //   return;
+    // }
 
-    if (differentList) {
-      return;
-    }
+    // if (differentList) {
+    //   return;
+    // }
 
-    let newArr = Array.from(ingredients)
-    newArr.splice(source.index, 1);
-    newArr.splice(destination.index, 0, ingredients[parseInt(draggableId)]);
+    // let newArr = Array.from(ingredients)
+    // newArr.splice(source.index, 1);
+    // newArr.splice(destination.index, 0, ingredients[parseInt(draggableId)]);
 
-    setIngredients(newArr);
-    setUpdate(true);
+    // setIngredients(newArr);
+    // setUpdate(true);
+    console.log('onDragEnd Reached')
   }
 
   const exitHandler = () => {
@@ -231,13 +233,18 @@ export default function ModalRecipe({ match, history }) {
 
           <div style={{ display: 'flex', width: "100%" }}>
 
-            <List
-              recipe={recipe}
-              array={ingredients}
-              setArray={setIngredients}
-              fullscreen={fullscreen}
-              onChange={handleArrayChange}
-            />
+            <Ingredients>
+              <Label>Ingredients: </Label>
+              <List
+                listId="ingredients"
+                recipe={recipe}
+                array={ingredients}
+                setArray={setIngredients}
+                fullscreen={fullscreen}
+                onChange={handleArrayChange}
+                reorder={reorder}
+              />
+            </Ingredients>
 
             <Instructions>
               <Label>Prep Time: </Label>
@@ -250,15 +257,16 @@ export default function ModalRecipe({ match, history }) {
                 }
                 }
               />
-              <List
+              {/* <List
+                listId="prepInstructions"
                 recipe={recipe}
                 array={prepInstructions}
                 setArray={setPrepInstructions}
                 fullscreen={fullscreen}
                 onChange={handleArrayChange}
-              />
+                reorder={reorder}
+              /> */}
 
-              <button onClick={() => setPrepInstructions([...prepInstructions, ""])}>+</button>
               <br />
               <Label>Cook Time: </Label>
               <Time
@@ -270,15 +278,16 @@ export default function ModalRecipe({ match, history }) {
                 }}
               />
 
-              <List
+              {/* <List
+                listId="cookInstructions"
                 recipe={recipe}
                 array={cookInstructions}
                 setArray={setCookInstructions}
                 fullscreen={fullscreen}
                 onChange={handleArrayChange}
-              />
+                reorder={reorder}
+              /> */}
 
-              <button onClick={() => setCookInstructions([...cookInstructions, ""])}>+</button>
             </Instructions>
           </div>
 
