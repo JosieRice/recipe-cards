@@ -11,7 +11,7 @@ export default function List(props: any) {
 
   const list = recipe && array.map((listItem: any, index: number) =>
     <Draggable 
-      draggableId={index.toString()} 
+      draggableId={`${listId} ${index.toString()}`} 
       index={index} 
       key={index} 
       disableInteractiveElementBlocking={reorder}
@@ -37,7 +37,7 @@ export default function List(props: any) {
   return (
     <>
       <Droppable droppableId={listId}>
-        {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
+        {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (     
           <OL
             ref={provided.innerRef}
           >

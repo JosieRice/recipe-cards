@@ -40,7 +40,6 @@ export default function ModalRecipe({ match, history }) {
 
 
   useEffect(() => {
-
     document.addEventListener('fullscreenchange', exitHandler);
     // document.addEventListener('webkitfullscreenchange', exitHandler);
     // document.addEventListener('mozfullscreenchange', exitHandler);
@@ -74,29 +73,51 @@ export default function ModalRecipe({ match, history }) {
   const { addToast } = useToasts();
 
   const onDragEnd = (result: DragResult) => {
-    // const { destination, source, draggableId } = result;
-    // const sameListSameSpot = destination.droppableId === source.droppableId && destination.index === source.index;
-    // const differentList = source.droppableId !== destination.droppableId
+    const { destination, source } = result;
 
-    // if (!destination) {
-    //   return;
-    // }
+    let sameListSameSpot;
+    let differentList;
 
-    // if (sameListSameSpot) {
-    //   return;
-    // }
+    if (destination) {
+      sameListSameSpot = destination.droppableId === source.droppableId && destination.index === source.index;
 
-    // if (differentList) {
-    //   return;
-    // }
+      differentList = source.droppableId !== destination.droppableId;
+    }
 
-    // let newArr = Array.from(ingredients)
-    // newArr.splice(source.index, 1);
-    // newArr.splice(destination.index, 0, ingredients[parseInt(draggableId)]);
+    if (!destination) {
+      return;
+    } else if (!destination.droppableId) {
+      return;
+    } else if (differentList) {
+      return;
+    } else if (sameListSameSpot) {
+      return;
+    } else {
 
-    // setIngredients(newArr);
-    // setUpdate(true);
-    console.log('onDragEnd Reached')
+      if (source.droppableId === 'ingredients') {
+        arrayReorder(result, ingredients, setIngredients);
+      }
+
+      if (source.droppableId === 'prepInstructions') {
+        arrayReorder(result, prepInstructions, setPrepInstructions);
+      }
+
+      if (source.droppableId === 'cookInstructions') {
+        arrayReorder(result, cookInstructions, setCookInstructions);
+      }
+
+    }
+  }
+
+  const arrayReorder = (result: DragResult, array: Array<string>, setState: any) => {
+    const { destination, source } = result;
+
+    let newArr = Array.from(array);
+    newArr.splice(source.index, 1);
+    newArr.splice(destination.index, 0, array[source.index]);
+
+    setState(newArr);
+    setUpdate(true);
   }
 
   const exitHandler = () => {
@@ -257,7 +278,7 @@ export default function ModalRecipe({ match, history }) {
                 }
                 }
               />
-              {/* <List
+              <List
                 listId="prepInstructions"
                 recipe={recipe}
                 array={prepInstructions}
@@ -265,7 +286,7 @@ export default function ModalRecipe({ match, history }) {
                 fullscreen={fullscreen}
                 onChange={handleArrayChange}
                 reorder={reorder}
-              /> */}
+              />
 
               <br />
               <Label>Cook Time: </Label>
@@ -278,7 +299,7 @@ export default function ModalRecipe({ match, history }) {
                 }}
               />
 
-              {/* <List
+              <List
                 listId="cookInstructions"
                 recipe={recipe}
                 array={cookInstructions}
@@ -286,7 +307,7 @@ export default function ModalRecipe({ match, history }) {
                 fullscreen={fullscreen}
                 onChange={handleArrayChange}
                 reorder={reorder}
-              /> */}
+              />
 
             </Instructions>
           </div>
