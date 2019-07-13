@@ -5,7 +5,7 @@ import { Route } from 'react-router-dom';
 import { Page, H1 } from "../components/styled/Page";
 import { db } from "../services/Firebase";
 import { userContext } from "../context/UserContext";
-import ModalRecipe from "../components/ModalRecipe";
+import ModalRecipe from "./ModalRecipe";
 import { isEmpty } from "../utilites/Utilities";
 import Loading from "../components/Loading";
 import RecipeList from "../components/RecipeList";

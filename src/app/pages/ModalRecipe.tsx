@@ -4,13 +4,13 @@ import { db } from "../services/Firebase";
 import { useToasts } from 'react-toast-notifications';
 
 // Style
-import { RecipeCard } from "./styled/Page";
-import { Ingredients } from "./styled/RecipeCard";
-import { Modal, Name, StyledTextArea, Time, Instructions, Label, UL, OL } from "./styled/Modal";
+import { RecipeCard } from "../components/styled/Page";
+import { Ingredients } from "../components/styled/RecipeCard";
+import { Modal, Name, StyledTextArea, Time, Instructions, Label, UL, OL } from "../components/styled/Modal";
 import { userContext } from "../context/UserContext";
 import { Droppable, DroppableProvided, DroppableStateSnapshot, Draggable, DragDropContext } from "react-beautiful-dnd";
 import { DragResult } from "../types/Globals";
-import Loading from "./Loading";
+import Loading from "../components/Loading";
 
 // @ts-ignore
 export default function ModalRecipe({ match, history }) {
