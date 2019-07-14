@@ -15,6 +15,7 @@ import Description from "../components/modalComponents/Description";
 import List from "../components/modalComponents/List";
 import Time from "../components/modalComponents/Time";
 import { Ingredients } from "../components/styled/RecipeCard";
+import { toastInfo, toastError } from "../utilites/Settings";
 
 // @ts-ignore
 export default function ModalRecipe({ match, history }) {
@@ -151,7 +152,6 @@ export default function ModalRecipe({ match, history }) {
 
   const copyRecipe = (e: any) => {
     e.preventDefault();
-    console.log('copy recipe')
 
     db
       .collection(`recipes`)
@@ -171,29 +171,32 @@ export default function ModalRecipe({ match, history }) {
         dateUpdated: Date.now()
       })
       .then(function () {
-        addToast('Recipe Copied into your recipes.', {
-          appearance: 'info', autoDismiss: true,
-          pauseOnHover: true
-        })
+        addToast('Recipe Copied into your recipes.', toastInfo)
         setUpdate(false);
-        console.log("Document updated");
       })
       .catch(function (error) {
-        // TODO: add feeback that it didn't save.
-        addToast(`Unable to copy recipe because ${error}, try again later`, { appearance: 'error', autoDismiss: true, pauseOnHover: true })
-        console.error("Error adding document: ", error);
+        addToast(`Unable to copy recipe because ${error}, try again later`, toastError)
       });
   }
 
   const handleUpdate = (e: any) => {
     e.preventDefault();
-    console.log('handle update')
 
     if (user.uid !== recipe.OwnerUid) {
       copyRecipe(e)
-      console.log('copied recipe')
-      return
+      addToast('We added a copy of this recipe to your box.', toastInfo)
+      return;
     }
+
+    // removes empty strings from array
+    const cleanPrepInstructions = prepInstructions.filter(Boolean);
+    setPrepInstructions(cleanPrepInstructions);
+
+    const cleanCookInstructions = cookInstructions.filter(Boolean);
+    setCookInstructions(cleanCookInstructions);
+
+    const cleanIngredients = ingredients.filter(Boolean);
+    setIngredients(cleanIngredients);
 
     db
       .collection(`recipes`)
@@ -202,9 +205,9 @@ export default function ModalRecipe({ match, history }) {
         description,
         prepTime,
         cookTime,
-        prepInstructions,
-        cookInstructions,
-        ingredients,
+        prepInstructions: cleanPrepInstructions,
+        cookInstructions: cleanCookInstructions,
+        ingredients: cleanIngredients,
         OwnerUid: user.uid,
         displayName: user.displayName,
         original: false,
@@ -212,18 +215,12 @@ export default function ModalRecipe({ match, history }) {
         dateUpdated: Date.now()
       })
       .then(function () {
-        // TODO: add feedback that it's been saved, use third arguement of optional cb to close modal
-        addToast('Updated Successfully', {
-          appearance: 'info', autoDismiss: true,
-          pauseOnHover: true
-        })
+        // TODO: use third arguement of optional cb to close modal?
+        addToast('Updated Successfully', toastInfo);
         setUpdate(false);
-        console.log("Document updated");
       })
       .catch(function (error) {
-        // TODO: add feeback that it didn't save.
-        addToast(`Unable to Update because ${error}, try again later`, { appearance: 'error', autoDismiss: true, pauseOnHover: true })
-        console.error("Error adding document: ", error);
+        addToast(`Unable to Update because ${error}, try again later`, toastError);
       });
   }
 
@@ -265,6 +262,7 @@ export default function ModalRecipe({ match, history }) {
                 fullscreen={fullscreen}
                 onChange={handleArrayChange}
                 reorder={reorder}
+                setUpdate={setUpdate}
               />
             </Ingredients>
 
@@ -284,6 +282,7 @@ export default function ModalRecipe({ match, history }) {
                 fullscreen={fullscreen}
                 onChange={handleArrayChange}
                 reorder={reorder}
+                setUpdate={setUpdate}
               />
 
               <br />
@@ -302,6 +301,7 @@ export default function ModalRecipe({ match, history }) {
                 fullscreen={fullscreen}
                 onChange={handleArrayChange}
                 reorder={reorder}
+                setUpdate={setUpdate}
               />
 
             </Instructions>

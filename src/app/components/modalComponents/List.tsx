@@ -7,13 +7,13 @@ import { Draggable, Droppable, DroppableProvided, DroppableStateSnapshot } from 
 export default function List(props: any) {
   const [user] = useContext(userContext);
 
-  const { recipe, array, setArray, fullscreen, onChange, reorder, listId } = props;
+  const { recipe, array, setArray, fullscreen, onChange, reorder, listId, setUpdate } = props;
 
   const list = recipe && array.map((listItem: any, index: number) =>
-    <Draggable 
-      draggableId={`${listId} ${index.toString()}`} 
-      index={index} 
-      key={index} 
+    <Draggable
+      draggableId={`${listId} ${index.toString()}`}
+      index={index}
+      key={index}
       disableInteractiveElementBlocking={reorder}
     >
       {(provided, snapshot) => (
@@ -37,7 +37,7 @@ export default function List(props: any) {
   return (
     <>
       <Droppable droppableId={listId}>
-        {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (     
+        {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
           <OL
             ref={provided.innerRef}
           >
@@ -46,7 +46,13 @@ export default function List(props: any) {
           </OL>
         )}
       </Droppable>
-      <button onClick={() => setArray([...array, ""])}>+</button>
+      <button
+        onClick={() => {
+          setArray([...array, ""])
+          setUpdate(true)
+        }}>
+        +
+      </button>
     </>
   )
 }
