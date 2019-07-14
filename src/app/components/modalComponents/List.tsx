@@ -1,5 +1,5 @@
 import * as React from "react";
-import { OL, StyledTextArea } from "../styled/Modal";
+import { StyledTextArea, OL } from "../styled/Modal";
 import { useContext } from "react";
 import { userContext } from "../../context/UserContext";
 import { Draggable, Droppable, DroppableProvided, DroppableStateSnapshot } from "react-beautiful-dnd";
