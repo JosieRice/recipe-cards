@@ -7,10 +7,6 @@
 
 #Product Goals
 
-## Improve UX of recipe editing
-1. Removed empty steps and ingredients from array
-2. Make a cancel updates option
-
 ## Multiple User Updates
 1. Filter out duplicate recipes in the all recipes view
 
@@ -28,6 +24,9 @@
 
 ## Increase Addictiveness of OR
 1. Add a point system for how many users have a copy of your recipe, extra points if it's unchanged, and extra points if the recipe has been cooked many times.
+
+## Improve UX of recipe editing
+1. clear blank arrays before checking for updates when opening confirmation modal.
 
 #To Do
 

@@ -16,6 +16,8 @@ import List from "../components/modalComponents/List";
 import Time from "../components/modalComponents/Time";
 import { Ingredients } from "../components/styled/RecipeCard";
 import { toastInfo, toastError } from "../utilites/Settings";
+import { ConfirmationModal } from "../components/ConfirmationModal";
+import { CloseButton } from "../components/styled/Buttons";
 
 // @ts-ignore
 export default function ModalRecipe({ match, history }) {
@@ -34,6 +36,7 @@ export default function ModalRecipe({ match, history }) {
   const [update, setUpdate] = useState<boolean>(false)
   const [fullscreen, setFullscreen] = useState<boolean>(false);
   const [reorder, setReorder] = useState<boolean>(false);
+  const [confirmModal, setConfirmModal] = useState<boolean>(false)
 
   const [user] = useContext(userContext);
 
@@ -136,9 +139,14 @@ export default function ModalRecipe({ match, history }) {
     setUpdate(true);
   }
 
-  const back = (e: any) => {
+  const modalSave = (e: any) => {
     e.stopPropagation();
-    if (update) handleUpdate(e);
+    handleUpdate(e);
+    history.goBack();
+  };
+
+  const modalCloseUnsaved = (e: any) => {
+    e.stopPropagation();
     history.goBack();
   };
 
@@ -228,10 +236,8 @@ export default function ModalRecipe({ match, history }) {
 
   return (
     <Modal>
-      <button style={{ position: 'absolute', right: '15px', top: '15px' }} onClick={back}>X</button>
       <DragDropContext onDragEnd={onDragEnd}>
         <RecipeCard id={match.params.id}>
-
           <div style={{ margin: '0 0 10px 0' }}>
 
             <Name
@@ -288,10 +294,10 @@ export default function ModalRecipe({ match, history }) {
               <br />
               <Label>Cook Time: </Label>
               <Time
-              fullscreen={fullscreen}
-              value={cookTime}
-              setValue={setCookTime}
-              setUpdate={setUpdate}
+                fullscreen={fullscreen}
+                value={cookTime}
+                setValue={setCookTime}
+                setUpdate={setUpdate}
               />
               <List
                 listId="cookInstructions"
@@ -309,7 +315,17 @@ export default function ModalRecipe({ match, history }) {
 
           {/* BUTTON TOWN */}
 
-          {reorder ? <button onClick={() => setReorder(false)}>turn reorder off</button> : <button onClick={() => setReorder(true)}>turn reorder on</button>}
+          {/* TODO: make this open a confirmation modal */}
+          
+          {update ? 
+            <CloseButton onClick={() => setConfirmModal(true)}>X</CloseButton> : 
+            <CloseButton onClick={history.goBack}>X</CloseButton> 
+          }
+
+          {reorder ? 
+            <button onClick={() => setReorder(false)}>turn reorder off</button> : 
+            <button onClick={() => setReorder(true)}>turn reorder on</button>
+          }
 
           {user && user.uid !== recipe.OwnerUid && <button onClick={copyRecipe}>Add to my recipes</button>}
 
@@ -319,8 +335,18 @@ export default function ModalRecipe({ match, history }) {
 
           {!fullscreen && <button onClick={startFullScreen}>Cook now</button>}
 
+          {confirmModal && <ConfirmationModal
+            show={confirmModal}
+            save={modalSave}
+            closeUnsaved = {modalCloseUnsaved}
+            close={() => setConfirmModal(false)}
+          >
+            How should we handle the changes that you made?
+          </ConfirmationModal>}
+
         </RecipeCard>
       </DragDropContext>
+
     </Modal>
   );
 };
