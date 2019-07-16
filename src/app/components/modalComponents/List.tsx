@@ -46,13 +46,13 @@ export default function List(props: any) {
           </OL>
         )}
       </Droppable>
-      <button
+      {!fullscreen && <button
         onClick={() => {
           setArray([...array, ""])
           setUpdate(true)
         }}>
         +
-      </button>
+      </button>}
     </>
   )
 }

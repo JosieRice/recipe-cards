@@ -32,6 +32,7 @@ export default function ModalRecipe({ match, history }) {
   const [cookInstructions, setCookInstructions] = useState<string[]>([]);
   const [recipeID, setRecipeID] = useState<string>("");
   const [sourceUrl, setSourceUrl] = useState<string>("");
+  const [sourceType, setSourceType] = useState<string>("");
 
   const [update, setUpdate] = useState<boolean>(false)
   const [fullscreen, setFullscreen] = useState<boolean>(false);
@@ -65,6 +66,7 @@ export default function ModalRecipe({ match, history }) {
         setPrepInstructions(data.prepInstructions);
         setCookInstructions(data.cookInstructions);
         setSourceUrl(data.sourceUrl);
+        setSourceType(data.sourceType);
 
       } else {
         // doc.data() will be undefined in this case
@@ -175,6 +177,7 @@ export default function ModalRecipe({ match, history }) {
         displayName: user.displayName,
         original: false,
         sourceUrl,
+        sourceType,
         creatorUid: recipe.creatorUid,
         dateUpdated: Date.now()
       })
@@ -220,6 +223,7 @@ export default function ModalRecipe({ match, history }) {
         displayName: user.displayName,
         original: false,
         sourceUrl,
+        sourceType,
         dateUpdated: Date.now()
       })
       .then(function () {
@@ -253,6 +257,8 @@ export default function ModalRecipe({ match, history }) {
               setValue={setDescription}
               setUpdate={setUpdate}
             />
+
+            {!fullscreen && <a href={sourceUrl} target="_blank">Original Source</a>}
 
           </div>
 
@@ -316,29 +322,27 @@ export default function ModalRecipe({ match, history }) {
           {/* BUTTON TOWN */}
 
           {/* TODO: make this open a confirmation modal */}
-          
-          {update ? 
-            <CloseButton onClick={() => setConfirmModal(true)}>X</CloseButton> : 
-            <CloseButton onClick={history.goBack}>X</CloseButton> 
+
+          {update ?
+            <CloseButton onClick={() => setConfirmModal(true)}>X</CloseButton> :
+            <CloseButton onClick={history.goBack}>X</CloseButton>
           }
 
-          {reorder ? 
-            <button onClick={() => setReorder(false)}>turn reorder off</button> : 
-            <button onClick={() => setReorder(true)}>turn reorder on</button>
-          }
+          {!fullscreen && reorder && <button onClick={() => setReorder(false)}>turn reorder off</button>}
 
-          {user && user.uid !== recipe.OwnerUid && <button onClick={copyRecipe}>Add to my recipes</button>}
+          {!fullscreen && !reorder && <button onClick={() => setReorder(true)}>turn reorder on</button>}
 
-          {update && <button onClick={handleUpdate}>update</button>}
 
-          {!fullscreen && <a href={sourceUrl} target="_blank">Original Source</a>}
+          {!fullscreen && user && user.uid !== recipe.OwnerUid && <button onClick={copyRecipe}>Add to my recipes</button>}
+
+          {!fullscreen && update && <button onClick={handleUpdate}>update</button>}
 
           {!fullscreen && <button onClick={startFullScreen}>Cook now</button>}
 
           {confirmModal && <ConfirmationModal
             show={confirmModal}
             save={modalSave}
-            closeUnsaved = {modalCloseUnsaved}
+            closeUnsaved={modalCloseUnsaved}
             close={() => setConfirmModal(false)}
           >
             How should we handle the changes that you made?

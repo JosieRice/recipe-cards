@@ -15,6 +15,7 @@ export default function NewRecipe() {
   const [prepTime, setPrepTime] = useState<string>("");
   const [cookTime, setCookTime] = useState<string>("");
   const [sourceUrl, setSourceUrl] = useState<string>("");
+  const [sourceType, setSourceType] = useState<string>("");
   const [prepInstructions, setPrepInstructions] = useState<string>("");
   const [cookInstructions, setCookInstructions] = useState<string>("");
   const [ingredients, setIngredients] = useState<string>("");
@@ -39,6 +40,7 @@ export default function NewRecipe() {
         prepTime,
         cookTime,
         sourceUrl,
+        sourceType,
         prepInstructions: prepInstructionsArr,
         cookInstructions: cookInstructionsArr,
         ingredients: ingredientsArr,
@@ -49,7 +51,7 @@ export default function NewRecipe() {
         dateCreated: Date.now()
       })
       .then(function (docRef) {
-        addToast('Recipe Saved', toastInfo)  
+        addToast('Recipe Saved', toastInfo)
         console.log("Document written with ID: ", docRef.id);
       })
       .catch(function (error) {
@@ -66,6 +68,7 @@ export default function NewRecipe() {
         prepTime,
         cookTime,
         sourceUrl,
+        sourceType,
         prepInstructions: prepInstructionsArr,
         cookInstructions: cookInstructionsArr,
         ingredients: ingredientsArr,
@@ -147,6 +150,17 @@ export default function NewRecipe() {
           value={sourceUrl}
           onChange={e => setSourceUrl(e.target.value)}
         />
+
+        <select onChange={(e) => {
+          setSourceType(e.target.value)
+        }}>
+          <option value="">--Please choose an option--</option>
+          <option value="web">Web Site</option>
+          <option value="book">Cook Book</option>
+          <option value="family">Family Recipe</option>
+          <option value="unknown">Not Sure</option>
+        </select>
+
         <br />
 
         <br /><br />

@@ -7,9 +7,6 @@
 
 #Product Goals
 
-## Multiple User Updates
-1. Filter out duplicate recipes in the all recipes view
-
 ## Improve Recipe Adding UX
 1. Link to URL's and to books on Amazon
 
