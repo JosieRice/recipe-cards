@@ -12,7 +12,10 @@ export default function AllRecipes({ match }: any) {
 
   const myRecipeRef = db.collection('recipes');
   // query for all recipes in all uid's
-  const query = myRecipeRef.where("OwnerUid", ">", "0");
+  const query = myRecipeRef
+    // TODO: use this limit for pagination
+    // .limit(5)
+    .where("original", "==", true);
 
   useEffect(() => {
     query.get().then(snap => {

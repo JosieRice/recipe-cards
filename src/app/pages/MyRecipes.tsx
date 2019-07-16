@@ -36,8 +36,6 @@ export default function MyRecipes({ match }: any) {
 
   if (recipes.length === 0) return (<Loading />);
 
-  { console.log('MY recipes', recipes) }
-
   return (
     <Page>
       <H1>My Recipes</H1>

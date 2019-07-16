@@ -7,6 +7,7 @@ import { Page, H1, Label, Input, TextArea } from "../components/styled/Page";
 
 import { useToasts } from 'react-toast-notifications';
 import { NotLoggedIn } from "../components/LoginLogout";
+import { toastInfo, toastError } from "../utilites/Settings";
 
 export default function NewRecipe() {
   const [recipeName, setRecipeName] = useState<string>("");
@@ -48,12 +49,11 @@ export default function NewRecipe() {
         dateCreated: Date.now()
       })
       .then(function (docRef) {
-        addToast('Recipe Saved', { appearance: 'info', autoDismiss: true,
-        pauseOnHover: true })  
+        addToast('Recipe Saved', toastInfo)  
         console.log("Document written with ID: ", docRef.id);
       })
       .catch(function (error) {
-        addToast(`Unable to save because ${error}, try again later`, { appearance: 'error', autoDismiss: true, pauseOnHover: true })
+        addToast(`Unable to save because ${error}, try again later`, toastError)
         console.error("Error adding document: ", error);
       });
 
@@ -106,7 +106,6 @@ export default function NewRecipe() {
           value={recipeName}
           onChange={e => setRecipeName(e.target.value)}
         />
-
 
         <br />
 
@@ -186,7 +185,6 @@ export default function NewRecipe() {
           value={cookInstructions}
           onChange={e => setCookInstructions(e.target.value)}
         />
-
 
         <br /><br />
 
