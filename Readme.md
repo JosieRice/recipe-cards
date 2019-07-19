@@ -25,23 +25,23 @@
 ## Improve UX of recipe editing
 1. clear blank arrays before checking for updates when opening confirmation modal.
 
-#To Do
-
-## Coding
-- give alternate options for source of recipes in new recipe form
+## UI
 - style buttons on modal recipe
 - make a logo for the site
 - add more than just recipe name to the list of recipes
 
 ## Firebase Related
-- set proper database security rules
 - discover firebase functions
 
-
-#Bugs to Fix
+## Bugs to Fix
 - Full screen view while cooking allows screen to go to sleep
 
+## UX 
+- Support mobile
+- Support all browsers
+
 # Developement improvement
+- get react router to work in development HMR
 - https://stackoverflow.com/questions/27928372/react-router-urls-dont-work-when-refreshing-or-writing-manually
 - https://codeburst.io/getting-started-with-react-router-5c978f70df91
 
