@@ -18,6 +18,7 @@ import { Ingredients } from "../components/styled/RecipeCard";
 import { toastInfo, toastError } from "../utilites/Settings";
 import { ConfirmationModal } from "../components/ConfirmationModal";
 import { CloseButton } from "../components/styled/Buttons";
+import Source from "../components/modalComponents/Source";
 
 // @ts-ignore
 export default function ModalRecipe({ match, history }) {
@@ -258,7 +259,12 @@ export default function ModalRecipe({ match, history }) {
               setUpdate={setUpdate}
             />
 
-            {!fullscreen && <a href={sourceUrl} target="_blank">Original Source</a>}
+            {!fullscreen && <Source
+              sourceUrl={sourceUrl} 
+              sourceType={sourceType}
+            >
+                Original Source
+              </Source>}
 
           </div>
 

@@ -10,28 +10,37 @@ import { isEmpty } from "../utilites/Utilities";
 import Loading from "../components/Loading";
 import RecipeList from "../components/RecipeList";
 import { NotLoggedIn } from "../components/LoginLogout";
+import { toastError } from "../utilites/Settings";
+import { useToasts } from 'react-toast-notifications';
 
 export default function MyRecipes({ match }: any) {
   const [recipes, setRecipes] = useState([]);
   const [user] = useContext(userContext);
 
+  const { addToast } = useToasts();
+
   if (isEmpty(user)) return (<NotLoggedIn />);
 
-  const myRecipeRef = db.collection('recipes');
-  const query = myRecipeRef.where("OwnerUid", "==", user.uid);
-
   useEffect(() => {
-    query.get().then(snap => {
-      let list: any = []
-      snap.forEach(recipe => {
-        // Adds recipe id's onto the recipe object
-        let recipeObj = recipe.data()
-        recipeObj['id'] = recipe.id
+    db
+      .collection('recipes')
+      .where("OwnerUid", "==", user.uid) // my recipes
+      .get()
+      .then(snap => {
+        let list: any = []
+        snap.forEach(recipe => {
+          // Adds recipe id's onto the recipe object
+          let recipeObj = recipe.data()
+          recipeObj['id'] = recipe.id
 
-        list = [...list, recipeObj]
+          list = [...list, recipeObj]
+        })
+        setRecipes(list);
       })
-      setRecipes(list);
-    });
+      .catch(function (error) {
+        addToast(`Unable to save because ${error}, try again later`, toastError)
+        console.error("Error adding document: ", error);
+      });
   }, []);
 
   if (recipes.length === 0) return (<Loading />);

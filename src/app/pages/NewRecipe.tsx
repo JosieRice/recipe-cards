@@ -22,7 +22,7 @@ export default function NewRecipe() {
 
   const [user] = useContext(userContext);
 
-  const { addToast } = useToasts()
+  const { addToast } = useToasts();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

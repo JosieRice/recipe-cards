@@ -6,29 +6,35 @@ import { Route } from "react-router-dom";
 import ModalRecipe from "./ModalRecipe";
 import Loading from "../components/Loading";
 import RecipeList from "../components/RecipeList";
+import { useToasts } from 'react-toast-notifications';
+import { toastError } from "../utilites/Settings";
 
 export default function AllRecipes({ match }: any) {
   const [recipes, setRecipes] = useState([]);
 
-  const myRecipeRef = db.collection('recipes');
-  // query for all recipes in all uid's
-  const query = myRecipeRef
-    // TODO: use this limit for pagination
-    // .limit(5)
-    .where("original", "==", true);
+  const { addToast } = useToasts();
 
   useEffect(() => {
-    query.get().then(snap => {
-      let list: any = []
-      snap.forEach(recipe => {
-        // Adds recipe id's onto the recipe object
-        let recipeObj = recipe.data()
-        recipeObj['id'] = recipe.id
+    db
+      .collection('recipes')
+      // .limit(5)   // use this limit for pagination or infinite scroll
+      .where("original", "==", true) // all original recipes
+      .get()
+      .then(snap => {
+        let list: any = []
+        snap.forEach(recipe => {
+          // Adds recipe id's onto the recipe object
+          let recipeObj = recipe.data()
+          recipeObj['id'] = recipe.id
 
-        list = [...list, recipeObj]
+          list = [...list, recipeObj]
+        })
+        setRecipes(list);
       })
-      setRecipes(list);
-    });
+      .catch(function (error) {
+        addToast(`Unable to save because ${error}, try again later`, toastError)
+        console.error("Error adding document: ", error);
+      });
   }, []);
 
   if (recipes.length === 0) return <Loading />;
