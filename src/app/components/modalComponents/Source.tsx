@@ -1,27 +1,31 @@
 import * as React from "react";
+import { extractHostname } from "../../utilites/Utilities";
 
-export default function Source(props: any) {
-  const { sourceUrl, sourceType } = props
+interface IProps {
+  sourceUrl: string,
+  sourceType: string
+}
 
-  //    /^(.*?)\./
-  // https://stackoverflow.com/questions/31941899/remove-everything-after-domain-and-http-in-url-javascript
-  // http://www.primaryobjects.com/2012/11/19/parsing-hostname-and-domain-from-a-url-with-javascript/
-  // https://www.regextester.com/100133
+export default function Source(props: IProps) {
+  const { sourceUrl, sourceType } = props;
+
+  const cleanHostname = extractHostname(sourceUrl);
+
+  if (sourceType === "unknown") return <></>;
+
+  if (sourceType === "family") return <span>Source: Old Family Recipe</span>;
+
+  if (sourceType === "book") return <span>Source: A Cook Book</span>;
 
   return (
     <>
-      From: 
-        {sourceType === "web" && "The Web Site"}
-        {sourceType === "book" && "The Cook Book"}
-        {sourceType === "family" && "Old Family Recipe"}
-        {sourceType === "unknown" && "Parts Unknown"}
-        
+      <span>Source: </span>
       <a
         href={sourceUrl}
         target="_blank"
       >
-        {sourceUrl}
-    </a>
+        {sourceType === "web" && cleanHostname}
+      </a>
     </>
   );
 };

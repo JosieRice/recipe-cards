@@ -264,9 +264,7 @@ export default function ModalRecipe({ match, history }) {
             {!fullscreen && <Source
               sourceUrl={sourceUrl}
               sourceType={sourceType}
-            >
-              Original Source
-              </Source>}
+            />}
 
           </div>
 
