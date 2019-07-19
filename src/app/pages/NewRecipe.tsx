@@ -55,7 +55,7 @@ export default function NewRecipe() {
         console.log("Document written with ID: ", docRef.id);
       })
       .catch(function (error) {
-        addToast(`Unable to save because ${error}, try again later`, toastError)
+        addToast(`Unable to save original because ${error}, try again later`, toastError)
         console.error("Error adding document: ", error);
       });
 
@@ -89,6 +89,7 @@ export default function NewRecipe() {
         setIngredients("");
       })
       .catch(function (error) {
+        addToast(`Unable to create recipe because ${error}, try again later`, toastError);
         console.error("Error adding document: ", error);
       });
 

@@ -32,7 +32,7 @@ export default function AllRecipes({ match }: any) {
         setRecipes(list);
       })
       .catch(function (error) {
-        addToast(`Unable to save because ${error}, try again later`, toastError)
+        addToast(`Unable to load recipes because ${error}, try again later`, toastError)
         console.error("Error adding document: ", error);
       });
   }, []);

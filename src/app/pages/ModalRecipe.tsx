@@ -42,9 +42,6 @@ export default function ModalRecipe({ match, history }) {
 
   const [user] = useContext(userContext);
 
-  const myRecipeRef = db.collection('recipes');
-  const query = myRecipeRef.doc(match.params.id);
-
 
   useEffect(() => {
     document.addEventListener('fullscreenchange', exitHandler);
@@ -52,30 +49,35 @@ export default function ModalRecipe({ match, history }) {
     // document.addEventListener('mozfullscreenchange', exitHandler);
     // document.addEventListener('MSFullscreenChange', exitHandler);
 
-    query.get().then(function (doc) {
-      if (doc.exists) {
-        console.log("Document data:", doc.data());
-        setRecipeID(doc.id);
-        const data = doc.data()
+    db
+      .collection('recipes')
+      .doc(match.params.id)
+      .get()
+      .then(function (doc) {
+        if (doc.exists) {
+          console.log("Document data:", doc.data());
+          setRecipeID(doc.id);
+          const data = doc.data()
 
-        setRecipe(data);
-        setRecipeName(data.recipeName);
-        setDescription(data.description);
-        setPrepTime(data.prepTime);
-        setCookTime(data.cookTime);
-        setIngredients(data.ingredients);
-        setPrepInstructions(data.prepInstructions);
-        setCookInstructions(data.cookInstructions);
-        setSourceUrl(data.sourceUrl);
-        setSourceType(data.sourceType);
+          setRecipe(data);
+          setRecipeName(data.recipeName);
+          setDescription(data.description);
+          setPrepTime(data.prepTime);
+          setCookTime(data.cookTime);
+          setIngredients(data.ingredients);
+          setPrepInstructions(data.prepInstructions);
+          setCookInstructions(data.cookInstructions);
+          setSourceUrl(data.sourceUrl);
+          setSourceType(data.sourceType);
 
-      } else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
-      }
-    }).catch(function (error) {
-      console.log("Error getting document:", error);
-    });
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+        }
+      }).catch(function (error) {
+        addToast(`Unable to load recipe because ${error}, try again later`, toastError);
+        console.log("Error getting document:", error);
+      });
   }, []);
 
   const { addToast } = useToasts();
@@ -260,10 +262,10 @@ export default function ModalRecipe({ match, history }) {
             />
 
             {!fullscreen && <Source
-              sourceUrl={sourceUrl} 
+              sourceUrl={sourceUrl}
               sourceType={sourceType}
             >
-                Original Source
+              Original Source
               </Source>}
 
           </div>
