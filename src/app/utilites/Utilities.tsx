@@ -1,4 +1,6 @@
 import * as React from 'react'
+import axios from "axios";
+
 import { default as angnosticStyled } from 'styled-components'
 
 export function isEmpty(obj: Object) {
@@ -13,6 +15,11 @@ export function strToArr(str: string) {
   const arrWithAll = str.split("\n");
   const arr = arrWithAll.filter(Boolean);
   return arr;
+}
+
+export function arrToStr(arr: any) {
+  const string = arr.join("\n")
+  return string
 }
 
 export function extractHostname(url: string) {
@@ -32,6 +39,26 @@ export function extractHostname(url: string) {
   hostname = hostname.split('?')[0];
 
   return hostname;
+}
+
+const serverUrl = "https://sheltered-cove-44895.herokuapp.com/api/v1/recipes";
+
+// const serverUrl = "http://localhost:8000/api/v1/recipes";
+
+
+export const getRecipeDetails: any = async (url: string) => {
+  const response = await axios({
+    method: 'post',
+    url: serverUrl,
+    headers: {},
+    data: {
+      url
+    }
+  })
+
+  console.log("post", response.data)
+
+  return response.data.recipe
 }
 
 

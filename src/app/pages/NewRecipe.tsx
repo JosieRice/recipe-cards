@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useContext, FormEvent } from "react";
 import { db } from "../services/Firebase";
 import { userContext } from "../context/UserContext";
-import { isEmpty, strToArr } from "../utilites/Utilities";
+import { isEmpty, strToArr, getRecipeDetails, arrToStr } from "../utilites/Utilities";
 import { Page, H1, Label, Input, TextArea } from "../components/styled/Page";
 
 import { useToasts } from 'react-toast-notifications';
@@ -161,6 +161,13 @@ export default function NewRecipe() {
           <option value="family">Family Recipe</option>
           <option value="unknown">Not Sure</option>
         </select>
+
+        <button type="button" onClick={async () => {
+          const res = await getRecipeDetails(sourceUrl);
+          setRecipeName(res.title);
+          setIngredients(arrToStr(res.ingredients));
+          setCookInstructions(arrToStr(res.instructions));
+        }}>grab</button>
 
         <br />
 
