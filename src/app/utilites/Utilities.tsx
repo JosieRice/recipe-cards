@@ -18,6 +18,7 @@ export function strToArr(str: string) {
 }
 
 export function arrToStr(arr: any) {
+  if (typeof (arr) === "string") return arr;
   const string = arr.join("\n")
   return string
 }

@@ -3,8 +3,6 @@ import { Page, H1, P } from "../components/styled/Page";
 
 export default function Index() {
 
-  // getRecipeDetails('https://www.buzzfeed.com/pierceabernathy/bacon-avocado-brussels-sprout-salad-with-lemon-vinaigrette')
-
   return (
     <Page>
       <H1>Home Page</H1>

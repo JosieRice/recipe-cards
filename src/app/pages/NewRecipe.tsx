@@ -165,6 +165,7 @@ export default function NewRecipe() {
         <button type="button" onClick={async () => {
           const res = await getRecipeDetails(sourceUrl);
           setRecipeName(res.title);
+          setDescription(res.description);
           setIngredients(arrToStr(res.ingredients));
           setCookInstructions(arrToStr(res.instructions));
         }}>grab</button>
