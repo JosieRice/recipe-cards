@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useContext, FormEvent } from "react";
-import { db } from "../services/Firebase";
+import { db, storage } from "../services/Firebase";
 import { userContext } from "../context/UserContext";
 import { isEmpty, strToArr, getRecipeDetails, arrToStr } from "../utilites/Utilities";
 import { Page, H1, Label, Input, TextArea } from "../components/styled/Page";
@@ -122,6 +122,9 @@ export default function NewRecipe() {
           onChange={e => setDescription(e.target.value)}
         />
         <br />
+
+        <Label>Image:</Label>
+        <p>image upload stuff here</p>
 
         <Label>Prep Time:</Label>
         <Input
