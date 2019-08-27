@@ -23,11 +23,47 @@ export const P = styled.p`
   line-height: 18px;
 `;
 
-export const LI = styled.li`
+export const ULCards = styled.ul`
+  list-style-type: none;
+  padding-inline-start: unset;
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+export const LICards = styled.li`
   font-family: "Palanquin", "Trebuchet MS", sans-serif;
   font-size: 14px;
   color: #5c6274;
   line-height: 18px;
+  border: 1px solid #5c6274;
+  border-radius: 3px;
+  margin: 5px;
+  min-width: 225px;
+  max-width: 225px;
+  height: 250px;
+  position: relative;
+`;
+
+export const Photo = styled.img`
+  max-width: 225px;
+  max-height: 199px;
+`;
+
+export const TitleContainer = styled.div`
+  position: absolute;
+  bottom: 0px;
+  width: 225px;
+  height: 45px;
+  padding-top: 5px;
+  border-top: 1px solid #5c6274;
+`;
+
+export const Title = styled.h2`
+  margin: 0;
+  color: #5c6274;
+  text-decoration: none;
+  font-size: 14px;
+  text-align: center;
 `;
 
 export const Label = styled.label`

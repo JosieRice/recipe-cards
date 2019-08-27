@@ -168,7 +168,7 @@ export default function NewRecipe() {
           setDescription(res.description);
           setIngredients(arrToStr(res.ingredients));
           setCookInstructions(arrToStr(res.instructions));
-        }}>grab</button>
+        }}>beta web scraper</button>
 
         <br />
 
