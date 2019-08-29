@@ -8,6 +8,7 @@ import { Page, H1, Label, Input, TextArea } from "../components/styled/Page";
 import { useToasts } from 'react-toast-notifications';
 import { NotLoggedIn } from "../components/LoginLogout";
 import { toastInfo, toastError } from "../utilites/Settings";
+import { UploadRecipePic } from "../utilites/FileUploader";
 
 export default function NewRecipe() {
   const [recipeName, setRecipeName] = useState<string>("");
@@ -123,8 +124,7 @@ export default function NewRecipe() {
         />
         <br />
 
-        <Label>Image:</Label>
-        <p>image upload stuff here</p>
+        <UploadRecipePic />
 
         <Label>Prep Time:</Label>
         <Input
