@@ -13,6 +13,7 @@ import { UploadRecipePic } from "../utilites/FileUploader";
 export default function NewRecipe() {
   const [recipeName, setRecipeName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>("");
   const [prepTime, setPrepTime] = useState<string>("");
   const [cookTime, setCookTime] = useState<string>("");
   const [sourceUrl, setSourceUrl] = useState<string>("");
@@ -38,6 +39,7 @@ export default function NewRecipe() {
       .add({
         recipeName,
         description,
+        imageUrl,
         prepTime,
         cookTime,
         sourceUrl,
@@ -66,6 +68,7 @@ export default function NewRecipe() {
       .add({
         recipeName,
         description,
+        imageUrl,
         prepTime,
         cookTime,
         sourceUrl,
@@ -124,7 +127,7 @@ export default function NewRecipe() {
         />
         <br />
 
-        <UploadRecipePic />
+        <UploadRecipePic setImageUrl={setImageUrl} />
 
         <Label>Prep Time:</Label>
         <Input

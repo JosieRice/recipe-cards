@@ -5,7 +5,11 @@ import FileUploader from "react-firebase-file-uploader";
 import { UploaderStyle } from "../components/styled/Buttons";
 import { Label } from "../components/styled/Page";
 
-export const UploadRecipePic = () => {
+interface Props {
+  setImageUrl: React.Dispatch<React.SetStateAction<string>>
+}
+
+export const UploadRecipePic = ({ setImageUrl }: Props) => {
   // const [pic, setPic] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -28,7 +32,8 @@ export const UploadRecipePic = () => {
       .ref("images")
       .child(filename)
       .getDownloadURL()
-      .then(url => console.log('SUCCESS, ITS HERE: ', url))
+      .then(url => setImageUrl(url))
+    // .then(url => console.log('SUCCESS, ITS HERE: ', url))
     // TODO: this url needs to be linked to the recipe
   };
 
