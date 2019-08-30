@@ -45,8 +45,12 @@ export const LICards = styled.li`
 `;
 
 export const Photo = styled.img`
+  object-position: center;
+  object-fit: cover;
   max-width: 225px;
-  max-height: 199px;
+  max-height: 200px;
+  min-height: 200px;
+  min-width: 225px;
 `;
 
 export const TitleContainer = styled.div`

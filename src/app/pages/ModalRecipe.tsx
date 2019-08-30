@@ -5,7 +5,7 @@ import { useToasts } from 'react-toast-notifications';
 
 // Style
 import { RecipeCard } from "../components/styled/Page";
-import { Modal, Instructions, Label } from "../components/styled/Modal";
+import { Modal, Instructions, Label, PhotoInModal, TitleWrapper } from "../components/styled/Modal";
 import { userContext } from "../context/UserContext";
 import { DragDropContext } from "react-beautiful-dnd";
 import { DragResult } from "../types/Globals";
@@ -19,6 +19,7 @@ import { toastInfo, toastError } from "../utilites/Settings";
 import { ConfirmationModal } from "../components/ConfirmationModal";
 import { CloseButton } from "../components/styled/Buttons";
 import Source from "../components/modalComponents/Source";
+import { UploadRecipePic } from "../utilites/FileUploader";
 
 // @ts-ignore
 export default function ModalRecipe({ match, history }) {
@@ -26,6 +27,7 @@ export default function ModalRecipe({ match, history }) {
 
   const [recipeName, setRecipeName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>("");
   const [prepTime, setPrepTime] = useState<string>("");
   const [cookTime, setCookTime] = useState<string>("");
   const [ingredients, setIngredients] = useState<string[]>([]);
@@ -62,6 +64,7 @@ export default function ModalRecipe({ match, history }) {
           setRecipe(data);
           setRecipeName(data.recipeName);
           setDescription(data.description);
+          setImageUrl(data.imageUrl);
           setPrepTime(data.prepTime);
           setCookTime(data.cookTime);
           setIngredients(data.ingredients);
@@ -171,6 +174,7 @@ export default function ModalRecipe({ match, history }) {
       .add({
         recipeName,
         description,
+        imageUrl,
         prepTime,
         cookTime,
         prepInstructions,
@@ -217,6 +221,7 @@ export default function ModalRecipe({ match, history }) {
       .doc(recipeID).update({
         recipeName,
         description,
+        imageUrl,
         prepTime,
         cookTime,
         prepInstructions: cleanPrepInstructions,
@@ -247,25 +252,35 @@ export default function ModalRecipe({ match, history }) {
         <RecipeCard id={match.params.id}>
           <div style={{ margin: '0 0 10px 0' }}>
 
-            <Name
-              fullscreen={fullscreen}
-              value={recipeName}
-              setValue={setRecipeName}
-              setUpdate={setUpdate}
-            />
+            {imageUrl && !fullscreen && <PhotoInModal src={imageUrl} />}
+            {!imageUrl && !fullscreen &&
+              <UploadRecipePic
+                modal={true}
+                imageUrl={imageUrl}
+                setImageUrl={setImageUrl}
+                setUpdate={setUpdate}
+              />}
 
-            <Description
-              fullscreen={fullscreen}
-              value={description}
-              setValue={setDescription}
-              setUpdate={setUpdate}
-            />
+            <TitleWrapper fullscreen={fullscreen}>
+              <Name
+                fullscreen={fullscreen}
+                value={recipeName}
+                setValue={setRecipeName}
+                setUpdate={setUpdate}
+              />
 
-            {!fullscreen && <Source
-              sourceUrl={sourceUrl}
-              sourceType={sourceType}
-            />}
+              <Description
+                fullscreen={fullscreen}
+                value={description}
+                setValue={setDescription}
+                setUpdate={setUpdate}
+              />
 
+              {!fullscreen && <Source
+                sourceUrl={sourceUrl}
+                sourceType={sourceType}
+              />}
+            </TitleWrapper>
           </div>
 
           <div style={{ display: 'flex', width: "100%" }}>

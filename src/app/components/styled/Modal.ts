@@ -11,6 +11,31 @@ export const Modal = styled.div`
   border: 2px solid #444;
 `;
 
+export const PhotoInModal = styled.img`
+  object-position: center;
+  object-fit: cover;
+  max-width: 125px;
+  max-height: 100px;
+  min-height: 100px;
+  min-width: 125px;
+  border-radius: 10px;
+`;
+
+interface TWProps {
+  fullscreen: boolean;
+}
+
+export const TitleWrapper = styled.div<TWProps>`
+  ${props =>
+    props.fullscreen === false &&
+    `
+      display: inline-block;
+      width: calc(100% - 175px);
+      padding-left: 20px;
+      vertical-align: top;
+  `}
+`;
+
 export const NameInput = styled.input`
   font-family: "Sriracha", "Courier New";
   font-weight: 600;

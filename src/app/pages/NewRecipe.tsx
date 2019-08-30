@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useContext, FormEvent } from "react";
-import { db, storage } from "../services/Firebase";
+import { db } from "../services/Firebase";
 import { userContext } from "../context/UserContext";
 import { isEmpty, strToArr, getRecipeDetails, arrToStr } from "../utilites/Utilities";
 import { Page, H1, Label, Input, TextArea } from "../components/styled/Page";
@@ -86,6 +86,7 @@ export default function NewRecipe() {
         console.log("Document written with ID: ", docRef.id);
         setRecipeName("");
         setDescription("");
+        setImageUrl("");
         setPrepTime("");
         setCookTime("");
         setPrepInstructions("");
@@ -127,7 +128,11 @@ export default function NewRecipe() {
         />
         <br />
 
-        <UploadRecipePic setImageUrl={setImageUrl} />
+        <UploadRecipePic
+          imageUrl={imageUrl}
+          setImageUrl={setImageUrl}
+        />
+        <br />
 
         <Label>Prep Time:</Label>
         <Input

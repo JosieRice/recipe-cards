@@ -6,16 +6,19 @@ import { UploaderStyle } from "../components/styled/Buttons";
 import { Label } from "../components/styled/Page";
 
 interface Props {
+  imageUrl: string
   setImageUrl: React.Dispatch<React.SetStateAction<string>>
+  modal?: boolean
+  setUpdate?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const UploadRecipePic = ({ setImageUrl }: Props) => {
-  // const [pic, setPic] = useState("");
+export const UploadRecipePic = ({ imageUrl, setImageUrl, modal = false, setUpdate }: Props) => {
   const [isUploading, setIsUploading] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  const start = !progress && !isUploading;
-  const finished = progress === 100;
+  const start = progress === 0 && !isUploading;
+  const finished = progress === 100 && isUploading === false && imageUrl !== "";
+  const uploading = !start && !finished && isUploading;
 
   const handleUploadError = (error: any) => {
     setIsUploading(false);
@@ -23,7 +26,6 @@ export const UploadRecipePic = ({ setImageUrl }: Props) => {
   };
 
   const handleUploadSuccess = (filename: any) => {
-    // setPic(filename);
     setProgress(100);
     setIsUploading(false);
 
@@ -32,37 +34,36 @@ export const UploadRecipePic = ({ setImageUrl }: Props) => {
       .ref("images")
       .child(filename)
       .getDownloadURL()
-      .then(url => setImageUrl(url))
-    // .then(url => console.log('SUCCESS, ITS HERE: ', url))
-    // TODO: this url needs to be linked to the recipe
+      .then(url => {
+        setImageUrl(url);
+        setUpdate(true);
+      })
   };
 
   return (
-    <div>
-      <form>
-        <Label>Image:</Label>
+    <>
+      {!modal && <Label>Image:</Label>}
 
-        <UploaderStyle start={start} isUploading={isUploading} finished={finished}>
-          {start && `Select your file`}
-          {isUploading && `Uploading`}
-          {finished && `Done`}
-          <FileUploader
-            hidden
-            disabled={finished}
-            accept="image/*"
-            name="pic"
-            randomizeFilename
-            storageRef={firebase.storage().ref("images")}
-            onUploadStart={() => {
-              setIsUploading(true);
-              setProgress(0);
-            }}
-            onUploadError={handleUploadError}
-            onUploadSuccess={handleUploadSuccess}
-            onProgress={(progress: any) => setProgress(progress)}
-          />
-        </UploaderStyle>
-      </form>
-    </div>
+      <UploaderStyle start={start} uploading={uploading} finished={finished} modal={modal}>
+        {start && modal ? `Add image` : `Select your file`}
+        {uploading && `Uploading`}
+        {finished && `Done`}
+        <FileUploader
+          hidden
+          disabled={finished}
+          accept="image/*"
+          name="pic"
+          randomizeFilename
+          storageRef={firebase.storage().ref("images")}
+          onUploadStart={() => {
+            setIsUploading(true);
+            setProgress(0);
+          }}
+          onUploadError={handleUploadError}
+          onUploadSuccess={handleUploadSuccess}
+          onProgress={(progress: any) => setProgress(progress)}
+        />
+      </UploaderStyle>
+    </>
   );
 }

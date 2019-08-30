@@ -8,18 +8,41 @@ export const CloseButton = styled.button`
 
 interface USProps {
   start: boolean;
-  isUploading: boolean;
+  uploading: boolean;
   finished: boolean;
+  modal?: boolean;
 }
 
 export const UploaderStyle = styled.label<USProps>`
   ${props => props.start && `cursor: pointer;`}
-  background-color: steelblue;
-  color: white;
-  padding: 10px;
-  border-radius: 4px;
-  display: inline-block;
-  margin-bottom: 14px;
-  min-width: 100px;
-  text-align: center;
+
+  ${props =>
+    !props.modal &&
+    `
+      background-color: steelblue;
+      color: white;
+      padding: 10px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 14px;
+      min-width: 100px;
+      text-align: center;
+  `}
+
+  ${props =>
+    props.modal &&
+    `
+      object-position: center;
+      object-fit: cover;
+      max-width: 100px;
+      max-height: 100px;
+      min-height: 100px;
+      min-width: 100px;
+      border-radius: 10px;
+      background: #c4c0c0;
+      color: white;
+      padding: 10px;
+      display: inline-block;
+      text-align: center;
+  `}
 `;
