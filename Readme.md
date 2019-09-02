@@ -3,9 +3,12 @@
 
 #To Deploy
 `npm run build`<br>
-`firebase deploy --except functions`<br>
+`firebase deploy --only hosting`<br>
 
 #Product Goals
+
+## TODO Next
+1. if original recipe has no photo, use the next updated photo.
 
 ## Improve Recipe Adding UX
 1. Link to URL's and to books on Amazon
