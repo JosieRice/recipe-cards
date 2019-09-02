@@ -6,7 +6,6 @@ export default function RecipeList(props: any) {
   const { recipes, match } = props;
   return (
     <ULCards>
-      {console.log("RECIPES: ", recipes)}
       {recipes.map((recipe: { recipeName: string; id: string; imageUrl: string }, index: number) =>
 
         <Link key={index} to={`${match.path}${recipe.id}`}>

@@ -2,8 +2,10 @@
 `npm run dev`
 
 #To Deploy
-`npm run build`<br>
-`firebase deploy --only hosting`<br>
+`npm run build`<br />
+`firebase deploy --only hosting`<br />
+or<br />
+`firebase deploy --except functions`<br />
 
 #Product Goals
 
