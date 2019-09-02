@@ -20,6 +20,7 @@ import { ConfirmationModal } from "../components/ConfirmationModal";
 import { CloseButton } from "../components/styled/Buttons";
 import Source from "../components/modalComponents/Source";
 import { UploadRecipePic } from "../utilites/FileUploader";
+import LoginLogout from "../components/LoginLogout";
 
 // @ts-ignore
 export default function ModalRecipe({ match, history, collection }) {
@@ -182,7 +183,6 @@ export default function ModalRecipe({ match, history, collection }) {
         ingredients,
         OwnerUid: user.uid,
         displayName: user.displayName,
-        original: false,
         sourceUrl,
         sourceType,
         creatorUid: recipe.creatorUid,
@@ -244,6 +244,12 @@ export default function ModalRecipe({ match, history, collection }) {
   }
 
   if (!recipe) return (<Loading />);
+
+  const canReorder = user && !fullscreen && reorder;
+  const cantReorder = user && !fullscreen && !reorder;
+  const canCopy = user && !fullscreen && user && user.uid !== recipe.OwnerUid;
+  const canUpdate = user && !fullscreen && update;
+  const canLogin = !user && !fullscreen;
 
   return (
     <Modal>
@@ -348,16 +354,16 @@ export default function ModalRecipe({ match, history, collection }) {
             <CloseButton onClick={history.goBack}>X</CloseButton>
           }
 
-          {!fullscreen && reorder && <button onClick={() => setReorder(false)}>turn reorder off</button>}
+          {canReorder && <button onClick={() => setReorder(false)}>turn reorder off</button>}
+          {cantReorder && <button onClick={() => setReorder(true)}>turn reorder on</button>}
 
-          {!fullscreen && !reorder && <button onClick={() => setReorder(true)}>turn reorder on</button>}
+          {canCopy && <button onClick={copyRecipe}>Add to my recipes</button>}
 
-
-          {!fullscreen && user && user.uid !== recipe.OwnerUid && <button onClick={copyRecipe}>Add to my recipes</button>}
-
-          {!fullscreen && update && <button onClick={handleUpdate}>update</button>}
+          {canUpdate && <button onClick={handleUpdate}>update</button>}
 
           {!fullscreen && <button onClick={startFullScreen}>Cook now</button>}
+
+          {canLogin && <LoginLogout />}
 
           {confirmModal && <ConfirmationModal
             show={confirmModal}

@@ -40,7 +40,7 @@ export default function AllRecipes({ match }: any) {
 
   return (
     <Page>
-      <H1>All Recipes</H1>
+      <H1>Browse Recipes</H1>
 
       <RecipeList
         recipes={recipes}

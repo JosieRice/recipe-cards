@@ -48,7 +48,6 @@ export default function NewRecipe() {
         cookInstructions: cookInstructionsArr,
         ingredients: ingredientsArr,
         displayName: user.displayName,
-        originalCreatorUid: user.uid,
         creatorUid: user.uid,
         dateCreated: Date.now()
       })

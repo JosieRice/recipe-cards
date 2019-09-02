@@ -34,6 +34,8 @@ export default function List(props: any) {
     </Draggable>
   )
 
+  const canEdit = !fullscreen && user
+
   return (
     <>
       <Droppable droppableId={listId}>
@@ -46,7 +48,7 @@ export default function List(props: any) {
           </OL>
         )}
       </Droppable>
-      {!fullscreen && <button
+      {canEdit && <button
         onClick={() => {
           setArray([...array, ""])
           setUpdate(true)
