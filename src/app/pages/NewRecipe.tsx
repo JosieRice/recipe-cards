@@ -35,7 +35,7 @@ export default function NewRecipe() {
 
     // Create Original Recipe
     db
-      .collection(`recipes`)
+      .collection(`original`)
       .add({
         recipeName,
         description,
@@ -48,7 +48,6 @@ export default function NewRecipe() {
         cookInstructions: cookInstructionsArr,
         ingredients: ingredientsArr,
         displayName: user.displayName,
-        original: true,
         originalCreatorUid: user.uid,
         creatorUid: user.uid,
         dateCreated: Date.now()
@@ -64,7 +63,7 @@ export default function NewRecipe() {
 
     // Create your editable copy
     db
-      .collection(`recipes`)
+      .collection(user.uid)
       .add({
         recipeName,
         description,
@@ -78,7 +77,6 @@ export default function NewRecipe() {
         ingredients: ingredientsArr,
         OwnerUid: user.uid,
         displayName: user.displayName,
-        original: false,
         creatorUid: user.uid,
         dateCreated: Date.now()
       })

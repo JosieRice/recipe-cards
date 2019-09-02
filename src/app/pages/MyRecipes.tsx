@@ -23,8 +23,7 @@ export default function MyRecipes({ match }: any) {
 
   useEffect(() => {
     db
-      .collection('recipes')
-      .where("OwnerUid", "==", user.uid) // my recipes
+      .collection(user.uid)
       .get()
       .then(snap => {
         let list: any = []
@@ -54,7 +53,10 @@ export default function MyRecipes({ match }: any) {
         match={match}
       />
 
-      <Route path={`${match.path}:id`} component={ModalRecipe} />
+      <Route
+        path={`${match.path}:id`}
+        render={(props) => <ModalRecipe {...props} collection={user.uid} />}
+      />
 
     </Page>
   );

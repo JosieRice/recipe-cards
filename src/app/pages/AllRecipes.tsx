@@ -16,9 +16,8 @@ export default function AllRecipes({ match }: any) {
 
   useEffect(() => {
     db
-      .collection('recipes')
+      .collection('original')
       // .limit(5)   // use this limit for pagination or infinite scroll
-      .where("original", "==", true) // all original recipes
       .get()
       .then(snap => {
         let list: any = []
@@ -48,7 +47,10 @@ export default function AllRecipes({ match }: any) {
         match={match}
       />
 
-      <Route path={`${match.path}:id`} component={ModalRecipe} />
+      <Route
+        path={`${match.path}:id`}
+        render={(props) => <ModalRecipe {...props} collection={'original'} />}
+      />
 
     </Page>
   );

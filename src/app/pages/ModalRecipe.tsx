@@ -22,7 +22,7 @@ import Source from "../components/modalComponents/Source";
 import { UploadRecipePic } from "../utilites/FileUploader";
 
 // @ts-ignore
-export default function ModalRecipe({ match, history }) {
+export default function ModalRecipe({ match, history, collection }) {
   const [recipe, setRecipe] = useState();
 
   const [recipeName, setRecipeName] = useState<string>("");
@@ -52,7 +52,7 @@ export default function ModalRecipe({ match, history }) {
     // document.addEventListener('MSFullscreenChange', exitHandler);
 
     db
-      .collection('recipes')
+      .collection(collection)
       .doc(match.params.id)
       .get()
       .then(function (doc) {
@@ -170,7 +170,7 @@ export default function ModalRecipe({ match, history }) {
     e.preventDefault();
 
     db
-      .collection(`recipes`)
+      .collection(user.uid)
       .add({
         recipeName,
         description,
@@ -217,7 +217,7 @@ export default function ModalRecipe({ match, history }) {
     setIngredients(cleanIngredients);
 
     db
-      .collection(`recipes`)
+      .collection(user.uid)
       .doc(recipeID).update({
         recipeName,
         description,
@@ -229,7 +229,6 @@ export default function ModalRecipe({ match, history }) {
         ingredients: cleanIngredients,
         OwnerUid: user.uid,
         displayName: user.displayName,
-        original: false,
         sourceUrl,
         sourceType,
         dateUpdated: Date.now()
