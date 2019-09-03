@@ -6,8 +6,7 @@ export default function Index() {
   return (
     <Page>
       <H1>Home Page</H1>
-      <P>Currently, just a spot that I'm keeping all my favourite recipes.</P>
-      <P>If you're seeing this, you're probably a friend helping me test it out.</P>
+      <P>Welcome to Original Recipe. Browse through the current recipes, or Login and make your own!</P>
     </Page>
   );
 };

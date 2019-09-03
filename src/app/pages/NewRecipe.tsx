@@ -74,7 +74,7 @@ export default function NewRecipe() {
         prepInstructions: prepInstructionsArr,
         cookInstructions: cookInstructionsArr,
         ingredients: ingredientsArr,
-        OwnerUid: user.uid,
+        ownerUid: user.uid,
         displayName: user.displayName,
         creatorUid: user.uid,
         dateCreated: Date.now()

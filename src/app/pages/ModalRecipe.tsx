@@ -37,6 +37,8 @@ export default function ModalRecipe({ match, history, collection }) {
   const [recipeID, setRecipeID] = useState<string>("");
   const [sourceUrl, setSourceUrl] = useState<string>("");
   const [sourceType, setSourceType] = useState<string>("");
+  const [trackingId, setTrackingId] = useState<string>("");
+  const [copyIds, setCopyIds] = useState<any>([]);
 
   const [update, setUpdate] = useState<boolean>(false)
   const [fullscreen, setFullscreen] = useState<boolean>(false);
@@ -45,12 +47,30 @@ export default function ModalRecipe({ match, history, collection }) {
 
   const [user] = useContext(userContext);
 
-
   useEffect(() => {
     document.addEventListener('fullscreenchange', exitHandler);
     // document.addEventListener('webkitfullscreenchange', exitHandler);
     // document.addEventListener('mozfullscreenchange', exitHandler);
     // document.addEventListener('MSFullscreenChange', exitHandler);
+
+    // db
+    //   .collection('copy-tracking')
+    //   .doc(match.params.id)
+    //   .get()
+    //   .then(function (doc) {
+    //     if (doc.exists) {
+    //       console.log("Document data:", doc.data());
+    //       setCopyIds(doc.data())
+
+    //     } else {
+    //       // doc.data() will be undefined in this case
+    //       addToast(`No such document!`, toastError);
+    //       console.log("No such document!");
+    //     }
+    //   }).catch(function (error) {
+    //     addToast(`Unable to load recipe because ${error}, try again later`, toastError);
+    //     console.log("Error getting document:", error);
+    //   });
 
     db
       .collection(collection)
@@ -58,9 +78,11 @@ export default function ModalRecipe({ match, history, collection }) {
       .get()
       .then(function (doc) {
         if (doc.exists) {
-          console.log("Document data:", doc.data());
+          // console.log("Document data:", doc.data());
           setRecipeID(doc.id);
           const data = doc.data()
+
+          setTrackingId(data.originalDocId)
 
           setRecipe(data);
           setRecipeName(data.recipeName);
@@ -82,6 +104,9 @@ export default function ModalRecipe({ match, history, collection }) {
         addToast(`Unable to load recipe because ${error}, try again later`, toastError);
         console.log("Error getting document:", error);
       });
+
+
+
   }, []);
 
   const { addToast } = useToasts();
@@ -181,7 +206,7 @@ export default function ModalRecipe({ match, history, collection }) {
         prepInstructions,
         cookInstructions,
         ingredients,
-        OwnerUid: user.uid,
+        ownerUid: user.uid,
         displayName: user.displayName,
         sourceUrl,
         sourceType,
@@ -200,7 +225,7 @@ export default function ModalRecipe({ match, history, collection }) {
   const handleUpdate = (e: any) => {
     e.preventDefault();
 
-    if (user.uid !== recipe.OwnerUid) {
+    if (user.uid !== recipe.ownerUid) {
       copyRecipe(e)
       addToast('We added a copy of this recipe to your box.', toastInfo)
       return;
@@ -227,7 +252,7 @@ export default function ModalRecipe({ match, history, collection }) {
         prepInstructions: cleanPrepInstructions,
         cookInstructions: cleanCookInstructions,
         ingredients: cleanIngredients,
-        OwnerUid: user.uid,
+        ownerUid: user.uid,
         displayName: user.displayName,
         sourceUrl,
         sourceType,
@@ -247,7 +272,7 @@ export default function ModalRecipe({ match, history, collection }) {
 
   const canReorder = user && !fullscreen && reorder;
   const cantReorder = user && !fullscreen && !reorder;
-  const canCopy = user && !fullscreen && user && user.uid !== recipe.OwnerUid;
+  const canCopy = user && !fullscreen && user && user.uid !== recipe.ownerUid;
   const canUpdate = user && !fullscreen && update;
   const canLogin = !user && !fullscreen;
 
@@ -348,6 +373,8 @@ export default function ModalRecipe({ match, history, collection }) {
           {/* BUTTON TOWN */}
 
           {/* TODO: make this open a confirmation modal */}
+
+          {/* {copyIds && <div>test</div>} */}
 
           {update ?
             <CloseButton onClick={() => setConfirmModal(true)}>X</CloseButton> :

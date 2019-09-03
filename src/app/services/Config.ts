@@ -1,6 +1,6 @@
 export const config = {
   apiKey: "AIzaSyARAAlgdXzq6SXf-pHBLWcWo03cm-ujelU",
-  authDomain: "original-recipe.firebaseapp.com",
+  authDomain: "original-recipe.com",
   databaseURL: "https://original-recipe.firebaseio.com",
   projectId: "original-recipe",
   storageBucket: "original-recipe.appspot.com",

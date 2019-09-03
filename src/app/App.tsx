@@ -37,7 +37,7 @@ const Routing = () => {
               </ListItem>
 
               <ListItem>
-                <Link to="/allrecipes/">All Recipes</Link>
+                <Link to="/allrecipes/">Browse Recipes</Link>
               </ListItem>
 
               <LoginLI>
