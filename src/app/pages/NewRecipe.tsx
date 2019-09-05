@@ -86,6 +86,7 @@ export default function NewRecipe() {
         setImageUrl("");
         setPrepTime("");
         setCookTime("");
+        setSourceUrl("");
         setPrepInstructions("");
         setCookInstructions("");
         setIngredients("");
