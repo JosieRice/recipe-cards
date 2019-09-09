@@ -3,14 +3,18 @@
 
 #To Deploy
 `npm run build`<br />
-`firebase deploy --only hosting`<br />
+`firebase deploy -P staging --only hosting`<br />
+`firebase deploy -P production --only hosting`<br />
 or<br />
 `firebase deploy --except functions`<br />
 
 #Product Goals
 
 ## TODO Next
-1. if original recipe has no photo, use the next updated photo.
+2. get website working on mobile and iphone
+3. setup better homepage and better links to log in.
+4. setup scrolling through multiple versions of recipe.
+5. if original recipe has no photo, use the next updated photo.
 
 ## Improve Recipe Adding UX
 1. Link to URL's and to books on Amazon
@@ -56,3 +60,7 @@ or<br />
 [React with typescript and webpack boilerplate](https://hackernoon.com/react-with-typescript-and-webpack-654f93f34db6)
 
 [User Authentication](https://css-tricks.com/firebase-react-part-2-user-authentication/)
+
+[Setup Multiple Envs](https://firebase.googleblog.com/2017/04/easier-configuration-for-firebase-on-web.html)
+
+`firebase database:set /_admin/env env.json` - not using anymore

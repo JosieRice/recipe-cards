@@ -36,7 +36,7 @@ export const UploadRecipePic = ({ imageUrl, setImageUrl, modal = false, setUpdat
       .getDownloadURL()
       .then(url => {
         setImageUrl(url);
-        setUpdate(true);
+        { setUpdate && setUpdate(true); }
       })
   };
 
@@ -44,7 +44,7 @@ export const UploadRecipePic = ({ imageUrl, setImageUrl, modal = false, setUpdat
     <>
       {!modal && <Label>Image:</Label>}
 
-      <UploaderStyle start={start} uploading={uploading} finished={finished} modal={modal}>
+      <UploaderStyle start={start.toString()} uploading={uploading} finished={finished} modal={modal}>
         {start && modal ? `Add image` : `Select your file`}
         {uploading && `Uploading`}
         {finished && `Done`}

@@ -7,7 +7,7 @@ export const CloseButton = styled.button`
 `;
 
 interface USProps {
-  start: boolean;
+  start: string;
   uploading: boolean;
   finished: boolean;
   modal?: boolean;
