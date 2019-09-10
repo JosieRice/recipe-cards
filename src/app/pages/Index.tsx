@@ -7,6 +7,7 @@ export default function Index() {
     <Page>
       <H1>Home Page</H1>
       <P>Welcome to Original Recipe. Browse through the current recipes, or Login and make your own!</P>
+      <P>Currently only supported on Chrome.</P>
     </Page>
   );
 };

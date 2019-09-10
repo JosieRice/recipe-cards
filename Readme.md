@@ -11,10 +11,16 @@ or<br />
 #Product Goals
 
 ## TODO Next
-2. get website working on mobile and iphone
+1. setup staging version of functions
+1. setup staging version of heroku deploy or webscraper.
+2. get fullscreen modal working on ipad and iphone.
 3. setup better homepage and better links to log in.
-4. setup scrolling through multiple versions of recipe.
-5. if original recipe has no photo, use the next updated photo.
+4. get functions separated for prod and staging.
+5. setup scrolling through multiple versions of recipe.
+6. if original recipe has no photo, use the next updated photo.
+7. Move logic into cloud functions.
+
+be able to close modal with esc
 
 ## Improve Recipe Adding UX
 1. Link to URL's and to books on Amazon

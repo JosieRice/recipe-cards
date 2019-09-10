@@ -9,6 +9,8 @@ export const Page = styled.div`
 export const RecipeCard = styled.div`
   background-color: #f2eecb;
   padding: 15px;
+  /* For Safari Fullscreen */
+  width: 98vw;
 `;
 
 export const H1 = styled.h1`

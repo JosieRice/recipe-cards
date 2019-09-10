@@ -2,24 +2,26 @@ import * as React from "react";
 import { useState, useEffect, useContext } from "react";
 import { db } from "../services/Firebase";
 import { useToasts } from 'react-toast-notifications';
+import { UploadRecipePic } from "../utilites/FileUploader";
+import { toastInfo, toastError } from "../utilites/Settings";
+import { userContext } from "../context/UserContext";
+import { DragDropContext } from "react-beautiful-dnd";
+import { DragResult } from "../types/Globals";
 
 // Style
 import { RecipeCard } from "../components/styled/Page";
 import { Modal, Instructions, Label, PhotoInModal, TitleWrapper } from "../components/styled/Modal";
-import { userContext } from "../context/UserContext";
-import { DragDropContext } from "react-beautiful-dnd";
-import { DragResult } from "../types/Globals";
+import { Ingredients } from "../components/styled/RecipeCard";
+import { CloseButton } from "../components/styled/Buttons";
+
+// Components
 import Loading from "../components/Loading";
 import Name from "../components/modalComponents/Name";
 import Description from "../components/modalComponents/Description";
 import List from "../components/modalComponents/List";
 import Time from "../components/modalComponents/Time";
-import { Ingredients } from "../components/styled/RecipeCard";
-import { toastInfo, toastError } from "../utilites/Settings";
 import { ConfirmationModal } from "../components/ConfirmationModal";
-import { CloseButton } from "../components/styled/Buttons";
 import Source from "../components/modalComponents/Source";
-import { UploadRecipePic } from "../utilites/FileUploader";
 import LoginLogout from "../components/LoginLogout";
 
 // @ts-ignore
@@ -47,11 +49,20 @@ export default function ModalRecipe({ match, history, collection }) {
 
   const [user] = useContext(userContext);
 
+  // TODO, make this only work for the moda component
+  const escCloseModal = (event: any) => {
+    if (event.keyCode === 27) {
+      history.goBack()
+    }
+  }
+
   useEffect(() => {
     document.addEventListener('fullscreenchange', exitHandler);
-    // document.addEventListener('webkitfullscreenchange', exitHandler);
-    // document.addEventListener('mozfullscreenchange', exitHandler);
-    // document.addEventListener('MSFullscreenChange', exitHandler);
+    document.addEventListener('webkitfullscreenchange', exitHandler);
+    document.addEventListener('mozfullscreenchange', exitHandler);
+    document.addEventListener('MSFullscreenChange', exitHandler);
+
+    document.addEventListener("keydown", escCloseModal, false);
 
     // db
     //   .collection('copy-tracking')
@@ -184,10 +195,23 @@ export default function ModalRecipe({ match, history, collection }) {
     history.goBack();
   };
 
+  interface Document {
+    requestFullscreen?: () => void;
+    mozRequestFullScreen?: () => void;
+    webkitRequestFullscreen?: () => void;
+    msRequestFullscreen?: () => void;
+  }
+
   const startFullScreen = () => {
-    const elem = document.getElementById(match.params.id);
+    const elem: Document = document.getElementById(match.params.id);
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) { /* Firefox */
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+      elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE/Edge */
+      elem.msRequestFullscreen();
     }
     setFullscreen(true)
   }
