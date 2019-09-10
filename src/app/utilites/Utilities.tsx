@@ -42,15 +42,14 @@ export function extractHostname(url: string) {
   return hostname;
 }
 
-const serverUrl = "https://sheltered-cove-44895.herokuapp.com/api/v1/recipes";
-
-// const serverUrl = "http://localhost:8000/api/v1/recipes";
-
+const production = location.hostname === "original-recipe.com";
+const prodScraper = "https://sheltered-cove-44895.herokuapp.com/api/v1/recipes";
+const stagingScraper = "http://localhost:8000/api/v1/recipes";
 
 export const getRecipeDetails: any = async (url: string) => {
   const response = await axios({
     method: 'post',
-    url: serverUrl,
+    url: production ? prodScraper : stagingScraper,
     headers: {},
     data: {
       url

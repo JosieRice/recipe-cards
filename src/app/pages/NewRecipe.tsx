@@ -173,10 +173,10 @@ export default function NewRecipe() {
 
         <button type="button" onClick={async () => {
           const res = await getRecipeDetails(sourceUrl);
-          setRecipeName(res.title);
-          setDescription(res.description);
-          setIngredients(arrToStr(res.ingredients));
-          setCookInstructions(arrToStr(res.instructions));
+          res.title && setRecipeName(res.title);
+          res.description && setDescription(res.description);
+          res.ingredients && setIngredients(arrToStr(res.ingredients));
+          res.instructions && setCookInstructions(arrToStr(res.instructions));
         }}>beta web scraper</button>
 
         <br />
