@@ -7,6 +7,7 @@
 5. setup scrolling through multiple versions of recipe.
 6. if original recipe has no photo, use the next updated photo.
 7. Move logic into cloud functions.
+8. Make adding a recipe more of a guided experience. start with source.
 
 ## Improve Recipe Adding UX
 1. Link to URL's and to books on Amazon
