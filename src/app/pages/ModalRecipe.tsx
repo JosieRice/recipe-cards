@@ -62,7 +62,7 @@ export default function ModalRecipe({ match, history, collection }) {
     document.addEventListener('mozfullscreenchange', exitHandler);
     document.addEventListener('MSFullscreenChange', exitHandler);
 
-    document.addEventListener("keydown", escCloseModal, false);
+    document.addEventListener("keydown", escCloseModal, { once: true });
 
     // db
     //   .collection('copy-tracking')
@@ -116,7 +116,9 @@ export default function ModalRecipe({ match, history, collection }) {
         console.log("Error getting document:", error);
       });
 
-
+    return () => {
+      document.removeEventListener("keydown", escCloseModal);
+    };
 
   }, []);
 
