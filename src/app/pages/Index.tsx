@@ -1,7 +1,13 @@
 import * as React from "react";
 import { Page, H1, P } from "../components/styled/Page";
+// import firebase from "../services/Firebase";
 
 export default function Index() {
+
+  // const test = firebase.functions().httpsCallable('test');
+  // test({ data: "messageText" }).then(function (result) {
+  //   console.log('RESULT: ', result)
+  // });
 
   return (
     <Page>
