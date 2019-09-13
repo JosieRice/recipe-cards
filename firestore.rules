@@ -1,11 +1,11 @@
 service cloud.firestore {
   match /databases/{database}/documents {
+    match /{collectionName}/{docId} {
+      allow read: if collectionName == 'original';
+    }
     match /{document=**} {
-      // anyone can read all the database (document and list)
-      allow read: if true;
-      
-      // you have to be logged in to create a document
-      allow create: if request.auth.uid != null; 
+      // you have to be logged in to read or create a document
+      allow read, create: if request.auth.uid != null; 
       
       // your logged in UID must match the ownerUid to edit a document
       allow update: if request.auth.uid == request.resource.data.ownerUid;  
