@@ -55,6 +55,12 @@ export const Photo = styled.img`
   min-width: 225px;
 `;
 
+export const Plus = styled(Photo)`
+  min-height: 150px;
+  min-width: 150px;
+  padding: 25px 38px;
+`;
+
 export const TitleContainer = styled.div`
   position: absolute;
   bottom: 0px;

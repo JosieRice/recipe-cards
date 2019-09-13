@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const NavBar = styled.nav`
-  background: #3772FF;
+  background: #3772ff;
   position: absolute;
   margin: 0;
   padding: 0 20px;
@@ -20,8 +20,8 @@ export const ListItem = styled.li`
   display: inline-block;
   padding: 0 10px;
   a {
-    font-family: 'Exo', Arial Black, sans-serif;
-    color: #FFF;
+    font-family: "Exo", Arial Black, sans-serif;
+    color: #fff;
     text-decoration: none;
     text-transform: uppercase;
   }
@@ -31,11 +31,11 @@ export const ListItem = styled.li`
   }
 
   a:active {
-    color: #FFF;
+    color: #fff;
   }
 
   a:visited {
-    color: #FFF;
+    color: #fff;
   }
 `;
 
@@ -48,7 +48,7 @@ export const NavButton = styled.button`
   border: 1px solid white;
   border-radius: 5px;
   padding: 5px 20px;
-  background-color: #F5F1E3;
+  background-color: #f5f1e3;
   color: #050505;
   text-decoration: none;
 `;
@@ -56,7 +56,7 @@ export const NavButton = styled.button`
 export const ProfilePhoto = styled.img`
   height: 30px;
   border-radius: 8px;
-  border: 1px solid #5C6274;
+  border: 1px solid #5c6274;
   position: absolute;
   top: 13px;
   right: 48px;

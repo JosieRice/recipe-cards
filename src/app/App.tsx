@@ -8,13 +8,13 @@ import { ToastProvider } from 'react-toast-notifications'
 import Index from "./pages/Index";
 import NewRecipe from "./pages/NewRecipe";
 import MyRecipes from './pages/MyRecipes';
-import AllRecipes from './pages/AllRecipes';
 import LoginLogout from './components/LoginLogout';
 import UserPhoto from './components/UserPhoto';
 import NoMatch from './components/NoMatch';
 
 // Style
 import { NavBar, UL, ListItem, LoginLI } from './components/styled/NavBar';
+import ModalRecipe from './pages/ModalRecipe';
 
 const Routing = () => {
 
@@ -26,18 +26,6 @@ const Routing = () => {
             <UL>
               <ListItem>
                 <Link to="/">Home</Link>
-              </ListItem>
-
-              <ListItem>
-                <Link to="/newrecipe/">New Recipe</Link>
-              </ListItem>
-
-              <ListItem>
-                <Link to="/recipes/">My Recipes</Link>
-              </ListItem>
-
-              <ListItem>
-                <Link to="/allrecipes/">Browse Recipes</Link>
               </ListItem>
 
               <LoginLI>
@@ -56,7 +44,7 @@ const Routing = () => {
             <Route path="/" exact component={Index} />
             <Route path="/newrecipe/" component={NewRecipe} />
             <Route path="/recipes/" component={MyRecipes} />
-            <Route path='/allrecipes/' component={AllRecipes} />
+            <Route path="/:id" render={(props) => <ModalRecipe {...props} collection={'original'} />} />
             <Route component={NoMatch} />
           </Switch>
         </Router>

@@ -1,7 +1,6 @@
 # Product Goals
 
 ## TODO Next
-3. setup better homepage and better links to log in.
 5. setup scrolling through multiple versions of recipe.
 6. if original recipe has no photo, use the next updated photo.
 7. Move image resize logic into cloud functions. https://firebase.google.com/docs/functions/use-cases
@@ -9,6 +8,8 @@
 9. Wake up web scrapper when the page loads to make it quicker to load.
 10. Make image uploading a better experience.
 11. Keep modal centered in screen.
+12. Optimize recipe loading for lists and modals.
+13. Route Logins from create new and my recipes to the correct page after login.
 
 ## Improve Recipe Adding UX
 1. Link to URL's and to books on Amazon
