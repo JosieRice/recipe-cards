@@ -11,12 +11,12 @@ import { useToasts } from 'react-toast-notifications';
 
 const CreateNewCard = () => {
   return (
-    <LICards>
+    <>
       <Plus src={"https://firebasestorage.googleapis.com/v0/b/original-recipe.appspot.com/o/assets%2Fplus.png?alt=media&token=df3ec1d7-8946-4e33-a857-0578bcb5ffcb"} />
       <TitleContainer>
         <Title>Create New</Title>
       </TitleContainer>
-    </LICards>
+    </>
   )
 }
 
@@ -48,13 +48,18 @@ export default function CreateNewButton() {
   return (
     <ULCards>
       {user ?
-        <Link to="/newrecipe/">
-          <CreateNewCard />
-        </Link>
+        <LICards>
+          <Link to="/newrecipe/">
+            <CreateNewCard />
+          </Link>
+        </LICards>
         :
-        <a href="#" onClick={() => login()}>
-          <CreateNewCard />
-        </a>
+        <LICards>
+          <a href="#" onClick={() => login()}>
+            <CreateNewCard />
+          </a>
+        </LICards>
+
       }
     </ULCards >
   );

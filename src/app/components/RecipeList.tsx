@@ -12,15 +12,14 @@ export default function RecipeList(props: any) {
 
       {recipes.map((recipe: { recipeName: string; id: string; imageUrl: string }, index: number) =>
 
-        <Link key={index} to={`${match.path}${recipe.id}`}>
-          <LICards>
+        <LICards>
+          <Link key={index} to={`${match.path}${recipe.id}`}>
             <Photo src={recipe.imageUrl} />
             <TitleContainer>
               <Title>{recipe.recipeName}</Title>
             </TitleContainer>
-          </LICards>
-        </Link>
-
+          </Link>
+        </LICards>
       )}
     </ULCards>
   );

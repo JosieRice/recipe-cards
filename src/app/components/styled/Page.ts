@@ -68,6 +68,10 @@ export const TitleContainer = styled.div`
   height: 45px;
   padding-top: 5px;
   border-top: 1px solid #5c6274;
+
+  ${LICards}:hover & {
+    background: #3772ff;
+  }
 `;
 
 export const Title = styled.h2`
@@ -76,6 +80,10 @@ export const Title = styled.h2`
   text-decoration: none;
   font-size: 14px;
   text-align: center;
+
+  ${LICards}:hover & {
+    color: #fff;
+  }
 `;
 
 export const Label = styled.label`
