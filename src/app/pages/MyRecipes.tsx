@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect, useContext } from "react";
-import { Route } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 
 import { Page, H1 } from "../components/styled/Page";
 import { db } from "../services/Firebase";
@@ -47,6 +47,8 @@ export default function MyRecipes({ match }: any) {
   return (
     <Page>
       <H1>My Recipes</H1>
+
+      <Link to="/">All Recipes</Link>
 
       <RecipeList
         recipes={recipes}

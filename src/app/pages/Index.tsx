@@ -64,10 +64,9 @@ export default function Index({ match }: any) {
   return (
     <Page>
 
+      <H1>All Recipes</H1>
 
       {user ? <Link to="/recipes/">My Recipes</Link> : <a href="#" onClick={() => login()} >My Recipes</a>}
-
-      <H1>Browse Recipes</H1>
 
       <RecipeList
         recipes={recipes}

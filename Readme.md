@@ -10,6 +10,9 @@
 11. Keep modal centered in screen.
 12. Optimize recipe loading for lists and modals.
 13. Route Logins from create new and my recipes to the correct page after login.
+14. Make a logo
+15. Update top nav.
+16. Add loading state
 
 ## Improve Recipe Adding UX
 1. Link to URL's and to books on Amazon
