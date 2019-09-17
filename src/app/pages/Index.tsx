@@ -59,8 +59,7 @@ export default function Index({ match }: any) {
       });
   }
 
-  if (recipes.length === 0) return <Loading />;
-
+  // if (recipes.length === 0) return <Loading />;
   return (
     <Page>
 

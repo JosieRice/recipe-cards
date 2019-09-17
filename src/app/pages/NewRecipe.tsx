@@ -33,54 +33,39 @@ export default function NewRecipe() {
     const cookInstructionsArr = strToArr(cookInstructions);
     const ingredientsArr = strToArr(ingredients);
 
-    // Create Original Recipe
-    db
-      .collection(`original`)
-      .add({
-        recipeName,
-        description,
-        imageUrl,
-        prepTime,
-        cookTime,
-        sourceUrl,
-        sourceType,
-        prepInstructions: prepInstructionsArr,
-        cookInstructions: cookInstructionsArr,
-        ingredients: ingredientsArr,
-        displayName: user.displayName,
-        creatorUid: user.uid,
-        dateCreated: Date.now()
-      })
-      .then(function (docRef) {
-        addToast('Recipe Saved', toastInfo)
-        console.log("Document written with ID: ", docRef.id);
-      })
-      .catch(function (error) {
-        addToast(`Unable to save original because ${error}, try again later`, toastError)
-        console.error("Error adding document: ", error);
-      });
+    const batch = db.batch();
 
-    // Create your editable copy
-    db
-      .collection(user.uid)
-      .add({
-        recipeName,
-        description,
-        imageUrl,
-        prepTime,
-        cookTime,
-        sourceUrl,
-        sourceType,
-        prepInstructions: prepInstructionsArr,
-        cookInstructions: cookInstructionsArr,
-        ingredients: ingredientsArr,
-        ownerUid: user.uid,
-        displayName: user.displayName,
-        creatorUid: user.uid,
-        dateCreated: Date.now()
+    const originalRecipe = {
+      recipeName,
+      description,
+      imageUrl,
+      prepTime,
+      cookTime,
+      sourceUrl,
+      sourceType,
+      prepInstructions: prepInstructionsArr,
+      cookInstructions: cookInstructionsArr,
+      ingredients: ingredientsArr,
+      displayName: user.displayName,
+      creatorUid: user.uid,
+      dateCreated: Date.now()
+    }
+
+    const editableRecipe = { ...originalRecipe, ownerUid: user.uid }
+
+    // Set the value of 'original'
+    var original = db.collection("original").doc()
+    batch.set(original, originalRecipe);
+
+    var editable = db.collection(user.uid).doc()
+    batch.set(editable, editableRecipe);
+
+    // Commit the batch
+    batch.commit()
+      .then(function () {
+        addToast('Recipe Saved', toastInfo)
       })
-      .then(function (docRef) {
-        console.log("Document written with ID: ", docRef.id);
+      .then(function () {
         setRecipeName("");
         setDescription("");
         setImageUrl("");
@@ -92,13 +77,12 @@ export default function NewRecipe() {
         setIngredients("");
       })
       .catch(function (error) {
-        addToast(`Unable to create recipe because ${error}, try again later`, toastError);
+        addToast(`Unable to save original because ${error}, try again later`, toastError)
         console.error("Error adding document: ", error);
       });
-
   };
 
-  if (isEmpty(user)) return <NotLoggedIn />;
+  // if (isEmpty(user)) return <NotLoggedIn />;
 
   return (
     <Page>
