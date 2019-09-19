@@ -49,16 +49,23 @@ export default function NewRecipe() {
       displayName: user.displayName,
       creatorUid: user.uid,
       dateCreated: Date.now()
-    }
+    };
 
-    const editableRecipe = { ...originalRecipe, ownerUid: user.uid }
+    const editableRecipe = { ...originalRecipe, ownerUid: user.uid };
 
-    // Set the value of 'original'
-    var original = db.collection("original").doc()
+    const original = db.collection("original").doc();
     batch.set(original, originalRecipe);
 
-    var editable = db.collection(user.uid).doc()
+    const editable = db.collection(user.uid).doc();
     batch.set(editable, editableRecipe);
+
+    const copyTrackingData = {
+      'original': original.id,
+      [user.uid]: editable.id
+    };
+
+    const copyTracking = db.collection("copy-tracking").doc(original.id);
+    batch.set(copyTracking, copyTrackingData);
 
     // Commit the batch
     batch.commit()
