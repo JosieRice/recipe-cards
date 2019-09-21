@@ -39,7 +39,6 @@ export default function ModalRecipe({ match, history, collection }) {
   const [recipeID, setRecipeID] = useState<string>("");
   const [sourceUrl, setSourceUrl] = useState<string>("");
   const [sourceType, setSourceType] = useState<string>("");
-  const [trackingId, setTrackingId] = useState<string>("");
   const [copyIds, setCopyIds] = useState<any>([]);
 
   const [update, setUpdate] = useState<boolean>(false)
@@ -49,7 +48,6 @@ export default function ModalRecipe({ match, history, collection }) {
 
   const [user] = useContext(userContext);
 
-  // TODO, make this only work for the moda component
   const escCloseModal = (event: any) => {
     if (event.keyCode === 27) {
       history.goBack()
@@ -57,31 +55,14 @@ export default function ModalRecipe({ match, history, collection }) {
   }
 
   useEffect(() => {
+    // Full Screen Listeners
     document.addEventListener('fullscreenchange', exitHandler);
     document.addEventListener('webkitfullscreenchange', exitHandler);
     document.addEventListener('mozfullscreenchange', exitHandler);
     document.addEventListener('MSFullscreenChange', exitHandler);
 
+    // Escape Keydown Listener
     document.addEventListener("keydown", escCloseModal, { once: true });
-
-    // db
-    //   .collection('copy-tracking')
-    //   .doc(match.params.id)
-    //   .get()
-    //   .then(function (doc) {
-    //     if (doc.exists) {
-    //       console.log("Document data:", doc.data());
-    //       setCopyIds(doc.data())
-
-    //     } else {
-    //       // doc.data() will be undefined in this case
-    //       addToast(`No such document!`, toastError);
-    //       console.log("No such document!");
-    //     }
-    //   }).catch(function (error) {
-    //     addToast(`Unable to load recipe because ${error}, try again later`, toastError);
-    //     console.log("Error getting document:", error);
-    //   });
 
     db
       .collection(collection)
@@ -89,11 +70,8 @@ export default function ModalRecipe({ match, history, collection }) {
       .get()
       .then(function (doc) {
         if (doc.exists) {
-          // console.log("Document data:", doc.data());
           setRecipeID(doc.id);
-          const data = doc.data()
-
-          setTrackingId(data.originalDocId)
+          const data = doc.data();
 
           setRecipe(data);
           setRecipeName(data.recipeName);
@@ -107,13 +85,27 @@ export default function ModalRecipe({ match, history, collection }) {
           setSourceUrl(data.sourceUrl);
           setSourceType(data.sourceType);
 
+          db
+            .collection('copy-tracking')
+            .doc(data.originalID)
+            .get()
+            .then(function (doc) {
+              if (doc.exists) {
+                const data = doc.data()
+                setCopyIds(data)
+
+              } else {
+                addToast(`No such document!`, toastError);
+              }
+            }).catch(function (error) {
+              addToast(`Unable to load recipe because ${error}, try again later`, toastError);
+            });
+
         } else {
-          // doc.data() will be undefined in this case
-          console.log("No such document!");
+          addToast(`No such document!`, toastError);
         }
       }).catch(function (error) {
         addToast(`Unable to load recipe because ${error}, try again later`, toastError);
-        console.log("Error getting document:", error);
       });
 
     return () => {
@@ -415,6 +407,44 @@ export default function ModalRecipe({ match, history, collection }) {
           {canUpdate && <button onClick={handleUpdate}>update</button>}
 
           {!fullscreen && <button onClick={startFullScreen}>Cook now</button>}
+
+          {console.log("COPY IDS: ", copyIds)}
+
+          <button onClick={() => console.log('prev')}>prev</button>
+
+          <button onClick={() => {
+
+            db
+              .collection(copyIds.recipeVariations[1].collection)
+              .doc(copyIds.recipeVariations[1].document)
+              .get()
+              .then(function (doc) {
+                if (doc.exists) {
+                  setRecipeID(doc.id);
+                  const data = doc.data();
+
+                  setRecipe(data);
+                  setRecipeName(data.recipeName);
+                  setDescription(data.description);
+                  setImageUrl(data.imageUrl);
+                  setPrepTime(data.prepTime);
+                  setCookTime(data.cookTime);
+                  setIngredients(data.ingredients);
+                  setPrepInstructions(data.prepInstructions);
+                  setCookInstructions(data.cookInstructions);
+                  setSourceUrl(data.sourceUrl);
+                  setSourceType(data.sourceType);
+
+                } else {
+                  // doc.data() will be undefined in this case
+                  console.log("No such document!");
+                }
+              }).catch(function (error) {
+                addToast(`Unable to load recipe because ${error}, try again later`, toastError);
+                console.log("Error getting document:", error);
+              });
+
+          }}>next</button>
 
           {canLogin && <LoginLogout />}
 

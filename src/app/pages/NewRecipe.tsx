@@ -54,14 +54,24 @@ export default function NewRecipe() {
     const editableRecipe = { ...originalRecipe, ownerUid: user.uid };
 
     const original = db.collection("original").doc();
-    batch.set(original, originalRecipe);
+    batch.set(original, { ...originalRecipe, ...{ originalID: original.id } });
 
     const editable = db.collection(user.uid).doc();
-    batch.set(editable, editableRecipe);
+    batch.set(editable, { ...editableRecipe, ...{ originalID: original.id } });
 
     const copyTrackingData = {
-      'original': original.id,
-      [user.uid]: editable.id
+      recipeVariations: [
+        {
+          collection: 'original',
+          document: original.id,
+          lastUpdated: (originalRecipe.dateCreated - 1)
+        },
+        {
+          collection: user.uid,
+          document: editable.id,
+          lastUpdated: editableRecipe.dateCreated
+        }
+      ]
     };
 
     const copyTracking = db.collection("copy-tracking").doc(original.id);
