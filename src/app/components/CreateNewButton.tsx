@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { userContext } from "../context/UserContext";
 import { auth, provider } from "../services/Firebase";
-import { UserObj } from "../types/Globals";
+import { UserObj } from "../types/User";
 import { toastError } from "../utilites/Settings";
 import { useToasts } from 'react-toast-notifications';
 

@@ -2,6 +2,7 @@ import * as React from 'react'
 import axios from "axios";
 
 import { default as angnosticStyled } from 'styled-components'
+import { DragResult } from '../types/Globals';
 
 export function isEmpty(obj: Object) {
   for (var key in obj) {
@@ -60,9 +61,6 @@ export const getRecipeDetails: any = async (url: string) => {
 
   return response.data.recipe
 }
-
-
-
 
 // Extends styled components to be able to assign HTML tags dynamically
 // https://codesandbox.io/s/6881pjMLQ

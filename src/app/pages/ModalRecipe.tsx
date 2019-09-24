@@ -3,10 +3,12 @@ import { useState, useEffect, useContext } from "react";
 import { db } from "../services/Firebase";
 import { useToasts } from 'react-toast-notifications';
 import { UploadRecipePic } from "../utilites/FileUploader";
+import { arrayReorder } from "../utilites/DragAndDrop";
 import { toastInfo, toastError } from "../utilites/Settings";
 import { userContext } from "../context/UserContext";
 import { DragDropContext } from "react-beautiful-dnd";
 import { DragResult } from "../types/Globals";
+import { Match, History } from "../types/Routing";
 
 // Style
 import { RecipeCard } from "../components/styled/Page";
@@ -24,8 +26,13 @@ import { ConfirmationModal } from "../components/ConfirmationModal";
 import Source from "../components/modalComponents/Source";
 import LoginLogout from "../components/LoginLogout";
 
-// @ts-ignore
-export default function ModalRecipe({ match, history, collection }) {
+interface Props {
+  match: Match
+  history: History
+  collection: string
+}
+
+export default function ModalRecipe({ match, history, collection }: Props) {
   const [recipe, setRecipe] = useState();
 
   const [recipeName, setRecipeName] = useState<string>("");
@@ -39,7 +46,7 @@ export default function ModalRecipe({ match, history, collection }) {
   const [recipeID, setRecipeID] = useState<string>("");
   const [sourceUrl, setSourceUrl] = useState<string>("");
   const [sourceType, setSourceType] = useState<string>("");
-  const [copyIds, setCopyIds] = useState<any>([]);
+  const [recipeVariations, setRecipeVariations] = useState<any>([]);
 
   const [update, setUpdate] = useState<boolean>(false)
   const [fullscreen, setFullscreen] = useState<boolean>(false);
@@ -92,7 +99,7 @@ export default function ModalRecipe({ match, history, collection }) {
             .then(function (doc) {
               if (doc.exists) {
                 const data = doc.data()
-                setCopyIds(data)
+                setRecipeVariations(data)
 
               } else {
                 addToast(`No such document!`, toastError);
@@ -139,29 +146,17 @@ export default function ModalRecipe({ match, history, collection }) {
     } else {
 
       if (source.droppableId === 'ingredients') {
-        arrayReorder(result, ingredients, setIngredients);
+        arrayReorder(result, ingredients, setIngredients, setUpdate);
       }
 
       if (source.droppableId === 'prepInstructions') {
-        arrayReorder(result, prepInstructions, setPrepInstructions);
+        arrayReorder(result, prepInstructions, setPrepInstructions, setUpdate);
       }
 
       if (source.droppableId === 'cookInstructions') {
-        arrayReorder(result, cookInstructions, setCookInstructions);
+        arrayReorder(result, cookInstructions, setCookInstructions, setUpdate);
       }
-
     }
-  }
-
-  const arrayReorder = (result: DragResult, array: Array<string>, setState: any) => {
-    const { destination, source } = result;
-
-    let newArr = Array.from(array);
-    newArr.splice(source.index, 1);
-    newArr.splice(destination.index, 0, array[source.index]);
-
-    setState(newArr);
-    setUpdate(true);
   }
 
   const exitHandler = () => {
@@ -390,10 +385,6 @@ export default function ModalRecipe({ match, history, collection }) {
 
           {/* BUTTON TOWN */}
 
-          {/* TODO: make this open a confirmation modal */}
-
-          {/* {copyIds && <div>test</div>} */}
-
           {update ?
             <CloseButton onClick={() => setConfirmModal(true)}>X</CloseButton> :
             <CloseButton onClick={history.goBack}>X</CloseButton>
@@ -408,15 +399,15 @@ export default function ModalRecipe({ match, history, collection }) {
 
           {!fullscreen && <button onClick={startFullScreen}>Cook now</button>}
 
-          {console.log("COPY IDS: ", copyIds)}
+          {console.log("variations: ", recipeVariations)}
 
           <button onClick={() => console.log('prev')}>prev</button>
 
           <button onClick={() => {
-
+            // TODO: figure out how to pick the correct next recipe
             db
-              .collection(copyIds.recipeVariations[1].collection)
-              .doc(copyIds.recipeVariations[1].document)
+              .collection(recipeVariations.recipeVariations[1].collection)
+              .doc(recipeVariations.recipeVariations[1].document)
               .get()
               .then(function (doc) {
                 if (doc.exists) {

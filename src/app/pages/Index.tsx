@@ -9,7 +9,7 @@ import RecipeList from "../components/RecipeList";
 import ModalRecipe from "./ModalRecipe";
 import { useEffect, useState, useContext } from "react";
 import { userContext } from "../context/UserContext";
-import { UserObj } from "../types/Globals";
+import { UserObj } from "../types/User";
 
 export default function Index({ match }: any) {
   const [user, setUser] = useContext(userContext);

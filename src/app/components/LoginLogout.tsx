@@ -1,7 +1,7 @@
 import * as React from "react";
 import { NavButton } from "./styled/NavBar";
 import { auth, provider } from "../services/Firebase";
-import { UserObj } from "../types/Globals";
+import { UserObj } from "../types/User";
 import { useEffect, useContext } from "react";
 import { userContext } from "../context/UserContext";
 import { Page } from "./styled/Page";

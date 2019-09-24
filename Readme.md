@@ -1,6 +1,7 @@
 # Product Goals
 
 ## TODO Next
+- modal file is getting big, break out the logic to other files
 5. setup scrolling through multiple versions of recipe.
 6. if original recipe has no photo, use the next updated photo.
 7. Move image resize logic into cloud functions. https://firebase.google.com/docs/functions/use-cases

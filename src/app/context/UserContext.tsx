@@ -1,5 +1,5 @@
 import * as React from "react";
-import { UserObj } from "../types/Globals";
+import { UserObj } from "../types/User";
 import { useState } from "react";
 
 interface User {
@@ -7,16 +7,16 @@ interface User {
 }
 type Context = Array<User | any>
 
-const userContext = React.createContext<Context>([{user: null}, () => {}]);
+const userContext = React.createContext<Context>([{ user: null }, () => { }]);
 
 const UserContextProvider = (props: any) => {
   const [user, setUser] = useState(null);
-  
+
   return (
     <userContext.Provider value={[user, setUser]}>
       {props.children}
     </userContext.Provider>
   );
 }
- 
+
 export { userContext, UserContextProvider };

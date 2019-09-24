@@ -2,11 +2,10 @@ import * as React from "react";
 import { useState, useContext, FormEvent } from "react";
 import { db } from "../services/Firebase";
 import { userContext } from "../context/UserContext";
-import { isEmpty, strToArr, getRecipeDetails, arrToStr } from "../utilites/Utilities";
+import { strToArr, getRecipeDetails, arrToStr } from "../utilites/Utilities";
 import { Page, H1, Label, Input, TextArea } from "../components/styled/Page";
 
 import { useToasts } from 'react-toast-notifications';
-import { NotLoggedIn } from "../components/LoginLogout";
 import { toastInfo, toastError } from "../utilites/Settings";
 import { UploadRecipePic } from "../utilites/FileUploader";
 
@@ -64,12 +63,12 @@ export default function NewRecipe() {
         {
           collection: 'original',
           document: original.id,
-          lastUpdated: (originalRecipe.dateCreated - 1)
+          lastUpdated: originalRecipe.dateCreated
         },
         {
           collection: user.uid,
           document: editable.id,
-          lastUpdated: editableRecipe.dateCreated
+          lastUpdated: originalRecipe.dateCreated
         }
       ]
     };
@@ -98,8 +97,6 @@ export default function NewRecipe() {
         console.error("Error adding document: ", error);
       });
   };
-
-  // if (isEmpty(user)) return <NotLoggedIn />;
 
   return (
     <Page>
