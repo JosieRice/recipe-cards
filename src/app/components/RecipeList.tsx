@@ -7,20 +7,23 @@ export default function RecipeList(props: any) {
   const { recipes, match } = props;
   return (
     <ULCards>
-
       <CreateNewButton />
 
-      {recipes.map((recipe: { recipeName: string; id: string; imageUrl: string }, index: number) =>
-
-        <LICards>
-          <Link key={index} to={`${match.path}${recipe.id}`}>
-            <Photo src={recipe.imageUrl} />
-            <TitleContainer>
-              <Title>{recipe.recipeName}</Title>
-            </TitleContainer>
-          </Link>
-        </LICards>
+      {recipes.map(
+        (
+          recipe: { recipeName: string; id: string; imageUrl: string },
+          index: number
+        ) => (
+          <LICards key={index}>
+            <Link to={`${match.path}${recipe.id}`}>
+              <Photo src={recipe.imageUrl} />
+              <TitleContainer>
+                <Title>{recipe.recipeName}</Title>
+              </TitleContainer>
+            </Link>
+          </LICards>
+        )
       )}
     </ULCards>
   );
-};
+}

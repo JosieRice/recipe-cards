@@ -1,57 +1,63 @@
-import * as React from 'react'
+import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { Route, Link, BrowserRouter as Router, Switch } from 'react-router-dom'
-import { UserContextProvider } from './context/UserContext';
-import { ToastProvider } from 'react-toast-notifications'
+import { Route, Link, BrowserRouter as Router, Switch } from "react-router-dom";
+import { UserContextProvider } from "./context/UserContext";
+import { ToastProvider } from "react-toast-notifications";
+import { ApolloProvider } from "@apollo/react-hooks";
+import client from "../graphql/ApolloClient";
 
 // Pages
 import Index from "./pages/Index";
 import NewRecipe from "./pages/NewRecipe";
-import MyRecipes from './pages/MyRecipes';
-import LoginLogout from './components/LoginLogout';
-import UserPhoto from './components/UserPhoto';
-import NoMatch from './components/NoMatch';
+import MyRecipes from "./pages/MyRecipes";
+import LoginLogout from "./components/LoginLogout";
+import UserPhoto from "./components/UserPhoto";
+import NoMatch from "./components/NoMatch";
 
 // Style
-import { NavBar, UL, ListItem, LoginLI } from './components/styled/NavBar';
-import ModalRecipe from './pages/ModalRecipe';
+import { NavBar, UL, ListItem, LoginLI } from "./components/styled/NavBar";
+import ModalRecipe from "./pages/ModalRecipe";
 
 const Routing = () => {
-
   return (
     <UserContextProvider>
-      <ToastProvider placement='bottom-center' autoDismissTimeout='4000'>
-        <Router>
-          <NavBar>
-            <UL>
-              <ListItem>
-                <Link to="/">Home</Link>
-              </ListItem>
+      <ApolloProvider client={client}>
+        <ToastProvider placement="bottom-center" autoDismissTimeout="4000">
+          <Router>
+            <NavBar>
+              <UL>
+                <ListItem>
+                  <Link to="/">Home</Link>
+                </ListItem>
 
-              <LoginLI>
-                <LoginLogout />
-              </LoginLI>
+                <LoginLI>
+                  <LoginLogout />
+                </LoginLI>
 
-              <LoginLI>
-                <UserPhoto />
-              </LoginLI>
+                <LoginLI>
+                  <UserPhoto />
+                </LoginLI>
+              </UL>
+            </NavBar>
 
-            </UL>
-          </NavBar>
-
-
-          <Switch>
-            <Route path="/" exact component={Index} />
-            <Route path="/newrecipe/" component={NewRecipe} />
-            <Route path="/recipes/" component={MyRecipes} />
-            <Route path="/:id" render={(props) => <ModalRecipe {...props} collection={'original'} />} />
-            <Route component={NoMatch} />
-          </Switch>
-        </Router>
-      </ToastProvider>
+            <Switch>
+              <Route path="/" exact component={Index} />
+              <Route path="/newrecipe/" component={NewRecipe} />
+              <Route path="/recipes/" component={MyRecipes} />
+              <Route
+                path="/:id"
+                render={props => (
+                  <ModalRecipe {...props} collection={"original"} />
+                )}
+              />
+              <Route component={NoMatch} />
+            </Switch>
+          </Router>
+        </ToastProvider>
+      </ApolloProvider>
     </UserContextProvider>
-  )
-}
+  );
+};
 
 // for hot reloading
 declare let module: any;

@@ -1,13 +1,13 @@
 const path = require("path"),
   express = require("express"),
-  apolloServer = require('./graphql/apolloServer')
+  apolloServer = require("./graphql/apolloServer"),
   webpack = require("webpack"),
   webpackConfig = require("./webpack.config.js"),
   app = express(),
   port = process.env.PORT || 3000;
 
 // add graphql and /graphiql path to express server
-apolloServer.applyMiddleware({ app, path: '/graphiql' });
+apolloServer.applyMiddleware({ app, path: "/graphql" });
 
 app.listen(port, () => {
   console.log(`App is listening on port ${port}`);
