@@ -1,58 +1,57 @@
 import * as React from "react";
 import { Page, H1 } from "../components/styled/Page";
 import { Link, Route } from "react-router-dom";
-import { db, auth, provider } from "../services/Firebase";
+import { auth, provider } from "../services/Firebase";
 import { useToasts } from "react-toast-notifications";
 import { toastError } from "../utilites/Settings";
 import Loading from "../components/Loading";
 import RecipeList from "../components/RecipeList";
 import ModalRecipe from "./ModalRecipe";
-import { useEffect, useState, useContext } from "react";
+import { useContext } from "react";
 import { userContext } from "../context/UserContext";
 import { UserObj } from "../types/Globals";
 import { useQuery } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 
-const BOOKS = gql`
+const RECIPES = gql`
   {
-    books {
-      title
+    recipes {
+      cookInstructions
+      cookTime
+      creatorUid
+      dateUpdated
+      description
+      displayName
+      imageUrl
+      ingredients
+      prepInstructins
+      prepTime
+      recipeName
+      sourceType
+      sourceUrl
     }
   }
 `;
 
 export default function Index({ match }: any) {
-  const { loading, error, data } = useQuery(BOOKS);
+  const { loading, error, data } = useQuery(RECIPES);
+
+  // TODO: toast on error
+  // (
+  // addToast(
+  //   `Unable to load recipes because ${error}, try again later`,
+  //   toastError
+  // );
+  // )
+
+  if (loading) return <Loading />;
+  if (error) return <div>error</div>;
+
   const [user, setUser] = useContext(userContext);
-  const [recipes, setRecipes] = useState([]);
+  const { recipes } = data;
+  console.log("RECIPES: ", recipes);
 
   const { addToast } = useToasts();
-
-  console.log("DATA: ", data);
-
-  useEffect(() => {
-    db.collection("original")
-      // .limit(5)   // use this limit for pagination or infinite scroll
-      .get()
-      .then(snap => {
-        let list: any = [];
-        snap.forEach(recipe => {
-          // Adds recipe id's onto the recipe object
-          let recipeObj = recipe.data();
-          recipeObj["id"] = recipe.id;
-
-          list = [...list, recipeObj];
-        });
-        setRecipes(list);
-      })
-      .catch(function(error) {
-        addToast(
-          `Unable to load recipes because ${error}, try again later`,
-          toastError
-        );
-        console.error("Error adding document: ", error);
-      });
-  }, []);
 
   function login() {
     auth
@@ -75,8 +74,6 @@ export default function Index({ match }: any) {
         console.error("Error adding document: ", error);
       });
   }
-
-  if (recipes.length === 0) return <Loading />;
 
   return (
     <Page>

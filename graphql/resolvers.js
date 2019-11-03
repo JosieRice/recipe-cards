@@ -1,27 +1,31 @@
-// Resolvers define the technique for fetching the types defined in the
-// schema. This resolver retrieves books from the "books" array above.
+const db = require("./services/firestore");
+
 const resolvers = {
   Query: {
-    recipes: () => recipes
+    recipes: () => {
+      return (
+        db
+          .collection("original")
+          // .limit(5)   // use this limit for pagination or infinite scroll
+          .get()
+          .then(snap => {
+            let list = [];
+            snap.forEach(recipe => {
+              // Adds recipe id's onto the recipe object
+              let recipeObj = recipe.data();
+              recipeObj["id"] = recipe.id;
+
+              list = [...list, recipeObj];
+            });
+            // console.log("LIST: ", list);
+            return list;
+          })
+          .catch(function(error) {
+            console.error("Error adding document: ", error);
+          })
+      );
+    }
   }
 };
 
 module.exports = resolvers;
-
-const recipes = [
-  {
-    cookInstructions: ["String", "2", "string 3"],
-    cookTime: "String",
-    creatorUid: "String",
-    dateUpdated: 999,
-    description: "String",
-    displayName: "String",
-    imageUrl: "String",
-    ingredients: ["ingred1", "ingred2", "ingred3"],
-    prepInstructins: ["prep1", "prep2", "prep3"],
-    prepTime: "String",
-    recipeName: "String",
-    sourceType: "String",
-    sourceUrl: "String"
-  }
-];
