@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npm run build && nodemon server.js",
+    "dev": "npm run build && ENV=DEV nodemon server.js",
     "build": "./node_modules/.bin/webpack",
     "deploy-staging": "npm run build && firebase deploy -P staging",
     "deploy-production": "npm run build && firebase deploy -P production"

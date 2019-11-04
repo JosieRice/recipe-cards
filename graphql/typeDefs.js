@@ -2,6 +2,7 @@ const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
   type Recipe {
+    id: String
     cookInstructions: [String]
     cookTime: String
     creatorUid: String!
