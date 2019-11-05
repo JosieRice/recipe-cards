@@ -48,11 +48,8 @@ export default function Index({ match }: any) {
   if (loading) return <Loading />;
   if (error) return <div>error</div>;
 
-  console.log("Loading: ", loading);
-
   const [user, setUser] = useContext(userContext);
   const { recipes } = data;
-  console.log("RECIPES: ", recipes);
 
   const { addToast } = useToasts();
 
