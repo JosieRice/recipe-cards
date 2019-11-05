@@ -1,0 +1,20 @@
+[debug] [2019-11-05T13:55:59.418Z] ----------------------------------------------------------------------
+[debug] [2019-11-05T13:55:59.420Z] Command:       /usr/local/bin/node /usr/local/bin/firebase emulators:start --only functions
+[debug] [2019-11-05T13:55:59.421Z] CLI Version:   7.6.2
+[debug] [2019-11-05T13:55:59.421Z] Platform:      darwin
+[debug] [2019-11-05T13:55:59.421Z] Node Version:  v10.16.0
+[debug] [2019-11-05T13:55:59.422Z] Time:          Tue Nov 05 2019 05:55:59 GMT-0800 (Pacific Standard Time)
+[debug] [2019-11-05T13:55:59.422Z] ----------------------------------------------------------------------
+[debug] [2019-11-05T13:55:59.422Z] 
+[info] i  Starting emulators: ["functions"]
+[warn] ⚠  Your requested "node" version "8" doesn't match your global version "10"
+[info] ✔  functions: Emulator started at http://localhost:5001
+[info] i  functions: Watching "/Users/craigrice/webDev/originalRecipe/functions" for Cloud Functions...
+[debug] [2019-11-05T13:55:59.785Z] [worker-~diagnostic~-3c6d9437-2eaa-4232-af7b-08ab7b8f9b68]: BUSY
+[debug] [2019-11-05T13:56:00.246Z] [runtime-status] Functions runtime initialized. {"cwd":"/Users/craigrice/webDev/originalRecipe/functions","node_version":"10.16.0"}
+[debug] [2019-11-05T13:56:00.249Z] [runtime-status] Disabled runtime features: undefined {}
+[debug] [2019-11-05T13:56:00.254Z] [runtime-status] Resolved module firebase-admin {"declared":true,"installed":true,"version":"7.0.0","resolution":"/Users/craigrice/webDev/originalRecipe/functions/node_modules/firebase-admin/lib/index.js"}
+[warn] ⚠  The Cloud Functions emulator requires the module "firebase-admin" to be version >8.0.0.0.0 so your version is too old. You can probably fix this by running "npm install firebase-admin@latest" in your functions directory.
+[info] i  functions: Your functions could not be parsed due to an issue with your node_modules (see above)
+[debug] [2019-11-05T13:56:00.275Z] [worker-~diagnostic~-3c6d9437-2eaa-4232-af7b-08ab7b8f9b68]: exited
+[debug] [2019-11-05T13:56:00.275Z] [worker-~diagnostic~-3c6d9437-2eaa-4232-af7b-08ab7b8f9b68]: FINISHED
