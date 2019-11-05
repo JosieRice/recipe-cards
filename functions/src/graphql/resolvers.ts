@@ -1,4 +1,4 @@
-const db = require("./services/firestore");
+import db from "./firestore";
 
 const resolvers = {
   Query: {
@@ -8,11 +8,11 @@ const resolvers = {
           .collection("original")
           // .limit(5)   // use this limit for pagination or infinite scroll
           .get()
-          .then(snap => {
-            let list = [];
-            snap.forEach(recipe => {
+          .then((snap: any) => {
+            let list: any = [];
+            snap.forEach((recipe: any) => {
               // Adds recipe id's onto the recipe object
-              let recipeObj = recipe.data();
+              const recipeObj = recipe.data();
               recipeObj["id"] = recipe.id;
 
               list = [...list, recipeObj];
@@ -20,7 +20,7 @@ const resolvers = {
             // console.log("LIST: ", list);
             return list;
           })
-          .catch(function(error) {
+          .catch(function(error: any) {
             console.error("Error adding document: ", error);
           })
       );
@@ -28,4 +28,4 @@ const resolvers = {
   }
 };
 
-module.exports = resolvers;
+export default resolvers;

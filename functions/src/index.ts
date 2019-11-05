@@ -1,3 +1,14 @@
+import { https } from "firebase-functions";
+import apolloServer from "./graphql/server";
+
+const server = apolloServer();
+
+// Graphql api
+// https://us-central1-staging-or.cloudfunctions.net/api/api
+const api = https.onRequest(server);
+
+export { api };
+
 // import * as functions from "firebase-functions";
 
 // // Start writing Firebase Functions

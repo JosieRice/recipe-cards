@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server-express");
+import { gql } from "apollo-server-express";
 
 const typeDefs = gql`
   type Recipe {
@@ -6,7 +6,7 @@ const typeDefs = gql`
     cookInstructions: [String]
     cookTime: String
     creatorUid: String!
-    dateUpdated: Int
+    dateUpdated: Float
     description: String
     displayName: String
     imageUrl: String
@@ -23,4 +23,4 @@ const typeDefs = gql`
   }
 `;
 
-module.exports = typeDefs;
+export default typeDefs;
