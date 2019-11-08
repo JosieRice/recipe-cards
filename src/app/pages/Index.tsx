@@ -14,8 +14,8 @@ import { useQuery } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 
 const RECIPES = gql`
-  {
-    recipes {
+  query getRecipes($collection: String!) {
+    recipes(collection: $collection) {
       id
       cookInstructions
       cookTime
@@ -35,7 +35,9 @@ const RECIPES = gql`
 `;
 
 export default function Index({ match }: any) {
-  const { loading, error, data } = useQuery(RECIPES);
+  const { loading, error, data } = useQuery(RECIPES, {
+    variables: { collection: "original" }
+  });
 
   // TODO: toast on error
   // (
