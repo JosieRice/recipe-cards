@@ -19,7 +19,7 @@ const recipes = (_: null, args: { collection: string }) => {
         return list;
       })
       .catch(function(error: any) {
-        console.error("Error adding document: ", error);
+        console.error("Error fetching documents: ", error);
         throw new ApolloError(error);
       })
   );
