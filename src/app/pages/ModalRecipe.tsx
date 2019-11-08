@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect, useContext } from "react";
 import { db } from "../services/Firebase";
-import { useToasts } from 'react-toast-notifications';
+import { useToasts } from "react-toast-notifications";
 import { UploadRecipePic } from "../utilites/FileUploader";
 import { toastInfo, toastError } from "../utilites/Settings";
 import { userContext } from "../context/UserContext";
@@ -10,7 +10,13 @@ import { DragResult } from "../types/Globals";
 
 // Style
 import { RecipeCard } from "../components/styled/Page";
-import { Modal, Instructions, Label, PhotoInModal, TitleWrapper } from "../components/styled/Modal";
+import {
+  Modal,
+  Instructions,
+  Label,
+  PhotoInModal,
+  TitleWrapper
+} from "../components/styled/Modal";
 import { Ingredients } from "../components/styled/RecipeCard";
 import { CloseButton } from "../components/styled/Buttons";
 
@@ -42,25 +48,25 @@ export default function ModalRecipe({ match, history, collection }) {
   const [trackingId, setTrackingId] = useState<string>("");
   const [copyIds, setCopyIds] = useState<any>([]);
 
-  const [update, setUpdate] = useState<boolean>(false)
+  const [update, setUpdate] = useState<boolean>(false);
   const [fullscreen, setFullscreen] = useState<boolean>(false);
   const [reorder, setReorder] = useState<boolean>(false);
-  const [confirmModal, setConfirmModal] = useState<boolean>(false)
+  const [confirmModal, setConfirmModal] = useState<boolean>(false);
 
   const [user] = useContext(userContext);
 
   // TODO, make this only work for the moda component
   const escCloseModal = (event: any) => {
     if (event.keyCode === 27) {
-      history.goBack()
+      history.goBack();
     }
-  }
+  };
 
   useEffect(() => {
-    document.addEventListener('fullscreenchange', exitHandler);
-    document.addEventListener('webkitfullscreenchange', exitHandler);
-    document.addEventListener('mozfullscreenchange', exitHandler);
-    document.addEventListener('MSFullscreenChange', exitHandler);
+    document.addEventListener("fullscreenchange", exitHandler);
+    document.addEventListener("webkitfullscreenchange", exitHandler);
+    document.addEventListener("mozfullscreenchange", exitHandler);
+    document.addEventListener("MSFullscreenChange", exitHandler);
 
     document.addEventListener("keydown", escCloseModal, { once: true });
 
@@ -83,17 +89,16 @@ export default function ModalRecipe({ match, history, collection }) {
     //     console.log("Error getting document:", error);
     //   });
 
-    db
-      .collection(collection)
+    db.collection(collection)
       .doc(match.params.id)
       .get()
-      .then(function (doc) {
+      .then(function(doc) {
         if (doc.exists) {
           // console.log("Document data:", doc.data());
           setRecipeID(doc.id);
-          const data = doc.data()
+          const data = doc.data();
 
-          setTrackingId(data.originalDocId)
+          setTrackingId(data.originalDocId);
 
           setRecipe(data);
           setRecipeName(data.recipeName);
@@ -106,20 +111,22 @@ export default function ModalRecipe({ match, history, collection }) {
           setCookInstructions(data.cookInstructions);
           setSourceUrl(data.sourceUrl);
           setSourceType(data.sourceType);
-
         } else {
           // doc.data() will be undefined in this case
           console.log("No such document!");
         }
-      }).catch(function (error) {
-        addToast(`Unable to load recipe because ${error}, try again later`, toastError);
+      })
+      .catch(function(error) {
+        addToast(
+          `Unable to load recipe because ${error}, try again later`,
+          toastError
+        );
         console.log("Error getting document:", error);
       });
 
     return () => {
       document.removeEventListener("keydown", escCloseModal);
     };
-
   }, []);
 
   const { addToast } = useToasts();
@@ -131,7 +138,9 @@ export default function ModalRecipe({ match, history, collection }) {
     let differentList;
 
     if (destination) {
-      sameListSameSpot = destination.droppableId === source.droppableId && destination.index === source.index;
+      sameListSameSpot =
+        destination.droppableId === source.droppableId &&
+        destination.index === source.index;
 
       differentList = source.droppableId !== destination.droppableId;
     }
@@ -145,23 +154,25 @@ export default function ModalRecipe({ match, history, collection }) {
     } else if (sameListSameSpot) {
       return;
     } else {
-
-      if (source.droppableId === 'ingredients') {
+      if (source.droppableId === "ingredients") {
         arrayReorder(result, ingredients, setIngredients);
       }
 
-      if (source.droppableId === 'prepInstructions') {
+      if (source.droppableId === "prepInstructions") {
         arrayReorder(result, prepInstructions, setPrepInstructions);
       }
 
-      if (source.droppableId === 'cookInstructions') {
+      if (source.droppableId === "cookInstructions") {
         arrayReorder(result, cookInstructions, setCookInstructions);
       }
-
     }
-  }
+  };
 
-  const arrayReorder = (result: DragResult, array: Array<string>, setState: any) => {
+  const arrayReorder = (
+    result: DragResult,
+    array: Array<string>,
+    setState: any
+  ) => {
     const { destination, source } = result;
 
     let newArr = Array.from(array);
@@ -170,21 +181,26 @@ export default function ModalRecipe({ match, history, collection }) {
 
     setState(newArr);
     setUpdate(true);
-  }
+  };
 
   const exitHandler = () => {
     if (!document.fullscreenElement) {
-      setFullscreen(false)
+      setFullscreen(false);
     }
-  }
+  };
 
-  const handleArrayChange = (index: number, array: any, ingredient: string, cb: any) => {
-    let newList = [...array]
-    newList[index] = ingredient
+  const handleArrayChange = (
+    index: number,
+    array: any,
+    ingredient: string,
+    cb: any
+  ) => {
+    let newList = [...array];
+    newList[index] = ingredient;
 
     cb(newList);
     setUpdate(true);
-  }
+  };
 
   const modalSave = (e: any) => {
     e.stopPropagation();
@@ -208,21 +224,23 @@ export default function ModalRecipe({ match, history, collection }) {
     const elem: Document = document.getElementById(match.params.id);
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
-    } else if (elem.mozRequestFullScreen) { /* Firefox */
+    } else if (elem.mozRequestFullScreen) {
+      /* Firefox */
       elem.mozRequestFullScreen();
-    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+    } else if (elem.webkitRequestFullscreen) {
+      /* Chrome, Safari and Opera */
       elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) { /* IE/Edge */
+    } else if (elem.msRequestFullscreen) {
+      /* IE/Edge */
       elem.msRequestFullscreen();
     }
-    setFullscreen(true)
-  }
+    setFullscreen(true);
+  };
 
   const copyRecipe = (e: any) => {
     e.preventDefault();
 
-    db
-      .collection(user.uid)
+    db.collection(user.uid)
       .add({
         recipeName,
         description,
@@ -239,21 +257,24 @@ export default function ModalRecipe({ match, history, collection }) {
         creatorUid: recipe.creatorUid,
         dateUpdated: Date.now()
       })
-      .then(function () {
-        addToast('Recipe Copied into your recipes.', toastInfo)
+      .then(function() {
+        addToast("Recipe Copied into your recipes.", toastInfo);
         setUpdate(false);
       })
-      .catch(function (error) {
-        addToast(`Unable to copy recipe because ${error}, try again later`, toastError)
+      .catch(function(error) {
+        addToast(
+          `Unable to copy recipe because ${error}, try again later`,
+          toastError
+        );
       });
-  }
+  };
 
   const handleUpdate = (e: any) => {
     e.preventDefault();
 
     if (user.uid !== recipe.ownerUid) {
-      copyRecipe(e)
-      addToast('We added a copy of this recipe to your box.', toastInfo)
+      copyRecipe(e);
+      addToast("We added a copy of this recipe to your box.", toastInfo);
       return;
     }
 
@@ -267,9 +288,9 @@ export default function ModalRecipe({ match, history, collection }) {
     const cleanIngredients = ingredients.filter(Boolean);
     setIngredients(cleanIngredients);
 
-    db
-      .collection(user.uid)
-      .doc(recipeID).update({
+    db.collection(user.uid)
+      .doc(recipeID)
+      .update({
         recipeName,
         description,
         imageUrl,
@@ -284,17 +305,20 @@ export default function ModalRecipe({ match, history, collection }) {
         sourceType,
         dateUpdated: Date.now()
       })
-      .then(function () {
+      .then(function() {
         // TODO: use third arguement of optional cb to close modal?
-        addToast('Updated Successfully', toastInfo);
+        addToast("Updated Successfully", toastInfo);
         setUpdate(false);
       })
-      .catch(function (error) {
-        addToast(`Unable to Update because ${error}, try again later`, toastError);
+      .catch(function(error) {
+        addToast(
+          `Unable to Update because ${error}, try again later`,
+          toastError
+        );
       });
-  }
+  };
 
-  if (!recipe) return (<Loading />);
+  if (!recipe) return <Loading />;
 
   const canReorder = user && !fullscreen && reorder;
   const cantReorder = user && !fullscreen && !reorder;
@@ -306,16 +330,16 @@ export default function ModalRecipe({ match, history, collection }) {
     <Modal>
       <DragDropContext onDragEnd={onDragEnd}>
         <RecipeCard id={match.params.id}>
-          <div style={{ margin: '0 0 10px 0' }}>
-
+          <div style={{ margin: "0 0 10px 0" }}>
             {imageUrl && !fullscreen && <PhotoInModal src={imageUrl} />}
-            {!imageUrl && !fullscreen &&
+            {!imageUrl && !fullscreen && (
               <UploadRecipePic
                 modal={true}
                 imageUrl={imageUrl}
                 setImageUrl={setImageUrl}
                 setUpdate={setUpdate}
-              />}
+              />
+            )}
 
             <TitleWrapper fullscreen={fullscreen}>
               <Name
@@ -332,15 +356,13 @@ export default function ModalRecipe({ match, history, collection }) {
                 setUpdate={setUpdate}
               />
 
-              {!fullscreen && <Source
-                sourceUrl={sourceUrl}
-                sourceType={sourceType}
-              />}
+              {!fullscreen && (
+                <Source sourceUrl={sourceUrl} sourceType={sourceType} />
+              )}
             </TitleWrapper>
           </div>
 
-          <div style={{ display: 'flex', width: "100%" }}>
-
+          <div style={{ display: "flex", width: "100%" }}>
             <Ingredients>
               <Label>Ingredients: </Label>
               <List
@@ -392,7 +414,6 @@ export default function ModalRecipe({ match, history, collection }) {
                 reorder={reorder}
                 setUpdate={setUpdate}
               />
-
             </Instructions>
           </div>
 
@@ -402,13 +423,18 @@ export default function ModalRecipe({ match, history, collection }) {
 
           {/* {copyIds && <div>test</div>} */}
 
-          {update ?
-            <CloseButton onClick={() => setConfirmModal(true)}>X</CloseButton> :
+          {update ? (
+            <CloseButton onClick={() => setConfirmModal(true)}>X</CloseButton>
+          ) : (
             <CloseButton onClick={history.goBack}>X</CloseButton>
-          }
+          )}
 
-          {canReorder && <button onClick={() => setReorder(false)}>turn reorder off</button>}
-          {cantReorder && <button onClick={() => setReorder(true)}>turn reorder on</button>}
+          {canReorder && (
+            <button onClick={() => setReorder(false)}>turn reorder off</button>
+          )}
+          {cantReorder && (
+            <button onClick={() => setReorder(true)}>turn reorder on</button>
+          )}
 
           {canCopy && <button onClick={copyRecipe}>Add to my recipes</button>}
 
@@ -418,18 +444,18 @@ export default function ModalRecipe({ match, history, collection }) {
 
           {canLogin && <LoginLogout />}
 
-          {confirmModal && <ConfirmationModal
-            show={confirmModal}
-            save={modalSave}
-            closeUnsaved={modalCloseUnsaved}
-            close={() => setConfirmModal(false)}
-          >
-            How should we handle the changes that you made?
-          </ConfirmationModal>}
-
+          {confirmModal && (
+            <ConfirmationModal
+              show={confirmModal}
+              save={modalSave}
+              closeUnsaved={modalCloseUnsaved}
+              close={() => setConfirmModal(false)}
+            >
+              How should we handle the changes that you made?
+            </ConfirmationModal>
+          )}
         </RecipeCard>
       </DragDropContext>
-
     </Modal>
   );
-};
+}

@@ -11,7 +11,7 @@ import { useContext } from "react";
 import { userContext } from "../context/UserContext";
 import { UserObj } from "../types/Globals";
 import { useQuery } from "@apollo/react-hooks";
-import { gql } from "apollo-boost";
+import gql from "graphql-tag";
 
 const RECIPES = gql`
   query getRecipes($collection: String!) {
@@ -35,6 +35,7 @@ const RECIPES = gql`
 `;
 
 export default function Index({ match }: any) {
+  const [user, setUser] = useContext(userContext);
   const { loading, error, data } = useQuery(RECIPES, {
     variables: { collection: "original" }
   });
@@ -50,7 +51,6 @@ export default function Index({ match }: any) {
   if (loading) return <Loading />;
   if (error) return <div>error</div>;
 
-  const [user, setUser] = useContext(userContext);
   const { recipes } = data;
 
   const { addToast } = useToasts();
