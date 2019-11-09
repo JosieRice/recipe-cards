@@ -17,19 +17,8 @@ const RECIPES = gql`
   query getRecipes($collection: String!) {
     recipes(collection: $collection) {
       id
-      cookInstructions
-      cookTime
-      creatorUid
-      dateUpdated
-      description
-      displayName
       imageUrl
-      ingredients
-      prepInstructins
-      prepTime
       recipeName
-      sourceType
-      sourceUrl
     }
   }
 `;
@@ -39,14 +28,6 @@ export default function Index({ match }: any) {
   const { loading, error, data } = useQuery(RECIPES, {
     variables: { collection: "original" }
   });
-
-  // TODO: toast on error
-  // (
-  // addToast(
-  //   `Unable to load recipes because ${error}, try again later`,
-  //   toastError
-  // );
-  // )
 
   if (loading) return <Loading />;
   if (error) return <div>error</div>;

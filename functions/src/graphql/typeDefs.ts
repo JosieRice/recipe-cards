@@ -11,7 +11,7 @@ const typeDefs = gql`
     displayName: String
     imageUrl: String
     ingredients: [String]
-    prepInstructins: [String]
+    prepInstructions: [String]
     prepTime: String
     recipeName: String
     sourceType: String
@@ -31,7 +31,7 @@ const typeDefs = gql`
 
   type Query {
     recipes(collection: String!): [Recipe]
-    recipe(id: ID!): Recipe
+    recipe(collection: String!, id: ID!): Recipe
     # Queries for the current user
     me: User
   }

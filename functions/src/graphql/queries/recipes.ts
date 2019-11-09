@@ -4,7 +4,7 @@ import { ApolloError } from "apollo-server-express";
 const recipes = (_: null, args: { collection: string }) => {
   return (
     db
-      .collection(`${args.collection}`)
+      .collection(args.collection)
       // .limit(5)   // use this limit for pagination or infinite scroll
       .get()
       .then((snap: any) => {

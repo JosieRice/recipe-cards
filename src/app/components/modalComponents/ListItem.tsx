@@ -1,12 +1,15 @@
 import * as React from "react";
-import { StyledTextArea } from "../styled/Modal";
 import { useState } from "react";
 
-export default function Description(props: any) {
-  const [value, setValue] = useState(props.initialValue);
+interface Props {
+  initialValue: string;
+}
+
+export default function ListItem({ initialValue }: Props) {
+  const [value, setValue] = useState(initialValue);
 
   return (
-    <StyledTextArea
+    <input
       value={value}
       onChange={e => {
         setValue(e.target.value);

@@ -1,20 +1,16 @@
 import * as React from "react";
 import { TimeInput } from "../styled/Modal";
-import { useContext } from "react";
-import { userContext } from "../../context/UserContext";
+import { useState } from "react";
 
 export default function Name(props: any) {
-  const [user] = useContext(userContext);
-  const { fullscreen, value, setValue, setUpdate } = props
+  const [value, setValue] = useState(props.initialValue);
 
   return (
     <TimeInput
-      disabled={fullscreen || !user}
       value={value}
       onChange={e => {
-        setValue(e.target.value)
-        setUpdate(true)
+        setValue(e.target.value);
       }}
     />
   );
-};
+}

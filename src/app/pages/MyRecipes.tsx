@@ -16,19 +16,8 @@ const RECIPES = gql`
   query getRecipes($collection: String!) {
     recipes(collection: $collection) {
       id
-      cookInstructions
-      cookTime
-      creatorUid
-      dateUpdated
-      description
-      displayName
       imageUrl
-      ingredients
-      prepInstructins
-      prepTime
       recipeName
-      sourceType
-      sourceUrl
     }
   }
 `;
