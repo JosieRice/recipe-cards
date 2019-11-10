@@ -23,7 +23,8 @@ const typeDefs = gql`
     email: String!
   }
 
-  type RecipeUpdateResponse {
+  type MutationResponse {
+    code: String
     success: Boolean!
     message: String
     recipe: Recipe
@@ -38,12 +39,12 @@ const typeDefs = gql`
 
   type Mutation {
     # if false, edit recipe failed -- check errors
-    editRecipe(id: ID!): RecipeUpdateResponse!
+    editRecipe(id: ID!, collection: String!): MutationResponse!
 
     # if false, create recipe failed -- check errors
-    createRecipe(userId: ID!): RecipeUpdateResponse!
+    createRecipe(userId: ID!): MutationResponse!
 
-    login(email: String): String # login token
+    login(email: String): MutationResponse! # login token
   }
 `;
 
