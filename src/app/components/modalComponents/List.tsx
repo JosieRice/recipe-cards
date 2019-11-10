@@ -1,11 +1,17 @@
 import * as React from "react";
 import ListItem from "../modalComponents/ListItem";
+import { UL } from "../styled/Modal";
 
-export default function List(props: any) {
-  const { listItems } = props;
+interface Props {
+  listItems: string[];
+  name: string;
+}
 
-  const list = listItems.map((ingred: string, i: string) => (
-    <ListItem initialValue={ingred} key={i} />
+export default function List({ listItems, name }: Props) {
+  const list = listItems.map((item, i) => (
+    <li>
+      <ListItem initialValue={item} key={`${name}${i}`} />
+    </li>
   ));
-  return list;
+  return <UL>{list}</UL>;
 }

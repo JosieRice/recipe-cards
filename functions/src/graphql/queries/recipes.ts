@@ -10,7 +10,6 @@ const recipes = (_: null, args: { collection: string }) => {
       .then((snap: any) => {
         let list: any = [];
         snap.forEach((recipe: any) => {
-          // Adds recipe id's onto the recipe object
           const recipeObj = recipe.data();
           recipeObj["id"] = recipe.id;
 

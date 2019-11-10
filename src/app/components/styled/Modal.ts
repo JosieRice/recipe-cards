@@ -22,7 +22,7 @@ export const PhotoInModal = styled.img`
 `;
 
 interface TWProps {
-  fullscreen: boolean;
+  fullscreen?: boolean;
 }
 
 export const TitleWrapper = styled.div<TWProps>`
@@ -62,6 +62,16 @@ export const StyledTextArea = styled(Textarea)`
 `;
 
 export const TimeInput = styled.input`
+  font-family: "Sriracha", "Courier New";
+  font-weight: 600;
+  font-size: 2.5vmin;
+  line-height: 2.5vmin;
+  border: none;
+  background: transparent;
+  color: #444;
+`;
+
+export const ListInput = styled.input`
   font-family: "Sriracha", "Courier New";
   font-weight: 600;
   font-size: 2.5vmin;
