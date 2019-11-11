@@ -1,7 +1,8 @@
 import * as React from "react";
 import { useRef } from "react";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
+import { useToasts } from "react-toast-notifications";
 
 // Style
 import { RecipeCard } from "../components/styled/Page";
@@ -24,11 +25,11 @@ import Description from "../components/modalComponents/Description";
 import Time from "../components/modalComponents/Time";
 import Source from "../components/modalComponents/Source";
 import ListItem from "../components/modalComponents/ListItem";
+import { toastInfo, toastError } from "../utilites/Settings";
 
 const RECIPE = gql`
   query getRecipe($collection: String!, $id: ID!) {
     recipe(collection: $collection, id: $id) {
-      recipeName
       id
       recipeName
       description
@@ -40,6 +41,46 @@ const RECIPE = gql`
       cookInstructions
       sourceUrl
       sourceType
+    }
+  }
+`;
+
+const EDIT_RECIPE = gql`
+  mutation editRecipe(
+    $collection: String!
+    $id: ID!
+    $recipeName: String
+    $description: String
+    $prepTime: String
+    $cookTime: String
+    $prepInstructions: [String]
+    $cookInstructions: [String]
+    $ingredients: [String]
+  ) {
+    editRecipe(
+      id: $id
+      collection: $collection
+      recipeName: $recipeName
+      prepTime: $prepTime
+      description: $description
+      cookTime: $cookTime
+      ingredients: $ingredients
+      prepInstructions: $prepInstructions
+      cookInstructions: $cookInstructions
+    ) {
+      code
+      success
+      message
+      recipe {
+        id
+        recipeName
+        prepTime
+        description
+        cookTime
+        ingredients
+        prepInstructions
+        cookInstructions
+      }
     }
   }
 `;
@@ -63,12 +104,21 @@ export default function ModalRecipe({ match, history, collection }: Props) {
   let prepInstructionsRef = useRef([]);
   let cookInstructionsRef = useRef([]);
 
-  const { loading, error, data } = useQuery(RECIPE, {
-    variables: { collection, id: match.params.id }
-  });
+  const { loading: queryLoad, error: queryError, data: queryData } = useQuery(
+    RECIPE,
+    {
+      variables: { collection, id: match.params.id }
+    }
+  );
 
-  if (loading) return <Loading />;
-  if (error) return <div>error</div>;
+  const [editRecipe, { loading: editRecipeLoading }] = useMutation(EDIT_RECIPE);
+
+  const { addToast } = useToasts();
+
+  // console.log("M LOAD: ", editRecipeLoading);
+
+  if (queryLoad) return <Loading />;
+  if (queryError) return <div>error</div>;
 
   const {
     id,
@@ -82,17 +132,31 @@ export default function ModalRecipe({ match, history, collection }: Props) {
     cookInstructions,
     sourceUrl,
     sourceType
-  } = data.recipe;
+  } = queryData.recipe;
 
   const handleSubmit = (e: any) => {
     e.preventDefault;
-    console.log("Name: ", recipeNameRef.current.value);
-    console.log("Description: ", descriptionRef.current.props.value);
-    console.log("Prep Time: ", prepTimeRef.current.value);
-    console.log("Cook Time: ", cookTimeRef.current.value);
-    console.log("Ingredients: ", ingredientsRef.current[0].value);
-    console.log("Prep Instructions: ", prepInstructionsRef.current[0].value);
-    console.log("Cook Instructions: ", cookInstructionsRef.current[0].value);
+    editRecipe({
+      variables: {
+        collection,
+        id: match.params.id,
+        recipeName: recipeNameRef.current.value,
+        description: descriptionRef.current.props.value,
+        prepTime: prepTimeRef.current.value,
+        cookTime: cookTimeRef.current.value,
+        ingredients: ingredientsRef.current.map(el => el.value),
+        prepInstructions: prepInstructionsRef.current.map(el => el.value),
+        cookInstructions: cookInstructionsRef.current.map(el => el.value)
+      }
+    }).then(res => {
+      console.log("RES: ", res);
+      const { success, message } = res.data.editRecipe;
+      if (success) {
+        addToast(message, toastInfo);
+      } else {
+        addToast(message, toastError);
+      }
+    });
   };
 
   return (
@@ -117,7 +181,7 @@ export default function ModalRecipe({ match, history, collection }: Props) {
                 <li>
                   <ListItem
                     initialValue={item}
-                    key={`${name}${index}`}
+                    key={`${item}${index}`}
                     forwardRef={(ref: any) =>
                       (ingredientsRef.current[index] = ref)
                     }
@@ -125,6 +189,14 @@ export default function ModalRecipe({ match, history, collection }: Props) {
                 </li>
               ))}
             </UL>
+            <button
+              onClick={() => {
+                ingredients.push("");
+                console.log("REF: ", ingredientsRef);
+              }}
+            >
+              +
+            </button>
           </Ingredients>
           <Instructions>
             <Label>Prep Time: </Label>
@@ -134,7 +206,7 @@ export default function ModalRecipe({ match, history, collection }: Props) {
                 <li>
                   <ListItem
                     initialValue={item}
-                    key={`${name}${index}`}
+                    key={`${item}${index}`}
                     forwardRef={(ref: any) =>
                       (prepInstructionsRef.current[index] = ref)
                     }
@@ -150,7 +222,7 @@ export default function ModalRecipe({ match, history, collection }: Props) {
                 <li>
                   <ListItem
                     initialValue={item}
-                    key={`${name}${index}`}
+                    key={`${item}${index}`}
                     forwardRef={(ref: any) =>
                       (cookInstructionsRef.current[index] = ref)
                     }

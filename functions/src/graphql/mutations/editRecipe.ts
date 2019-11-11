@@ -10,9 +10,9 @@ const editRecipe = async (
     description: string;
     prepTime: string;
     cookTime: string;
+    ingredients: string[];
     prepInstructions: string[];
     cookInstructions: string[];
-    ingredients: string[];
   }
 ) => {
   const {
@@ -22,10 +22,19 @@ const editRecipe = async (
     description,
     prepTime,
     cookTime,
+    ingredients,
     prepInstructions,
-    cookInstructions,
-    ingredients
+    cookInstructions
   } = args;
+
+  if (collection === "original") {
+    return {
+      code: "todo",
+      success: false,
+      message: "You cannot update an original recipe."
+    };
+  }
+
   const result = db
     .collection(collection)
     .doc(id)
@@ -34,18 +43,20 @@ const editRecipe = async (
       description,
       prepTime,
       cookTime,
+      ingredients,
       prepInstructions,
       cookInstructions,
-      ingredients,
       dateUpdated: Date.now()
     });
 
-  if (!result)
+  // TODO: result is always a promise so it never returns an error.
+  if (!result) {
     return {
       code: "todo",
       success: false,
       message: "Failed to update recipe"
     };
+  }
 
   // TODO: this updated recipe should probably come from the database or update response. not sure how to do that in firestore
   const recipe = {

@@ -24,17 +24,16 @@ const RECIPES = gql`
 `;
 
 export default function Index({ match }: any) {
-  const [user, setUser] = useContext(userContext);
   const { loading, error, data } = useQuery(RECIPES, {
     variables: { collection: "original" }
   });
+  const [user, setUser] = useContext(userContext);
+  const { addToast } = useToasts();
 
   if (loading) return <Loading />;
   if (error) return <div>error</div>;
 
   const { recipes } = data;
-
-  const { addToast } = useToasts();
 
   function login() {
     auth
