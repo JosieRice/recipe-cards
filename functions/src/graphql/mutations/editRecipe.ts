@@ -1,28 +1,42 @@
 import db from "../firestore";
 
-// TODO: pass in all of the fields you can edit to this mutation and get working on graphql
-// TODO: update typeDef for all the variables that are passed here
 // TODO: get a response code for responses? or just hard code them?
 const editRecipe = async (
   _: null,
-  args: { collection: string; id: string }
+  args: {
+    collection: string;
+    id: string;
+    recipeName: string;
+    description: string;
+    prepTime: string;
+    cookTime: string;
+    prepInstructions: string[];
+    cookInstructions: string[];
+    ingredients: string[];
+  }
 ) => {
+  const {
+    collection,
+    id,
+    recipeName,
+    description,
+    prepTime,
+    cookTime,
+    prepInstructions,
+    cookInstructions,
+    ingredients
+  } = args;
   const result = db
-    .collection(args.collection)
-    .doc(args.id)
+    .collection(collection)
+    .doc(id)
     .update({
-      recipeName: "test",
-      description: "",
-      imageUrl: "",
-      prepTime: "",
-      cookTime: "",
-      prepInstructions: "",
-      cookInstructions: "",
-      ingredients: "",
-      ownerUid: "",
-      displayName: "",
-      sourceUrl: "",
-      sourceType: "",
+      recipeName,
+      description,
+      prepTime,
+      cookTime,
+      prepInstructions,
+      cookInstructions,
+      ingredients,
       dateUpdated: Date.now()
     });
 
@@ -33,15 +47,18 @@ const editRecipe = async (
       message: "Failed to update recipe"
     };
 
-  const recipe = db
-    .collection(args.collection)
-    .doc(args.id)
-    .get()
-    .then((snap: any) => {
-      const recipe = snap.data();
-      recipe["id"] = args.id;
-      return recipe;
-    });
+  // TODO: this updated recipe should probably come from the database or update response. not sure how to do that in firestore
+  const recipe = {
+    collection,
+    id,
+    recipeName,
+    description,
+    prepTime,
+    cookTime,
+    prepInstructions,
+    cookInstructions,
+    ingredients
+  };
 
   return {
     code: "todo",

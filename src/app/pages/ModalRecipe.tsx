@@ -71,8 +71,8 @@ export default function ModalRecipe({ match, history, collection }: Props) {
   if (error) return <div>error</div>;
 
   const {
-    recipeName,
     id,
+    recipeName,
     description,
     imageUrl,
     prepTime,

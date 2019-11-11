@@ -5,7 +5,7 @@ const typeDefs = gql`
     id: ID!
     cookInstructions: [String]
     cookTime: String
-    creatorUid: String!
+    creatorUid: String
     dateUpdated: Float
     description: String
     displayName: String
@@ -38,8 +38,18 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    # if false, edit recipe failed -- check errors
-    editRecipe(id: ID!, collection: String!): MutationResponse!
+    # edit existing recipe
+    editRecipe(
+      id: ID!
+      collection: String!
+      recipeName: String
+      description: String
+      prepTime: String
+      cookTime: String
+      prepInstructions: [String]
+      cookInstructions: [String]
+      ingredients: [String]
+    ): MutationResponse!
 
     # if false, create recipe failed -- check errors
     createRecipe(userId: ID!): MutationResponse!
