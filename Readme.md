@@ -1,6 +1,11 @@
 # Product Goals
 
+## Graphql Switch
+
+drag and drop functionality with graphql in modal
+
 ## TODO Next
+
 5. setup scrolling through multiple versions of recipe.
 6. if original recipe has no photo, use the next updated photo.
 7. Move image resize logic into cloud functions. https://firebase.google.com/docs/functions/use-cases
@@ -15,34 +20,41 @@
 16. Add loading state
 
 ## Improve Recipe Adding UX
+
 1. Link to URL's and to books on Amazon
 
 ## Revenue Goals
+
 1. Links to books on Amazon should be linked to a company Amazon account.
 
 ## Increase Addictiveness of OR
+
 1. Add a point system for how many users have a copy of your recipe, extra points if it's unchanged, and extra points if the recipe has been cooked many times.
 
 ## Improve UX of recipe editing
+
 1. clear blank arrays before checking for updates when opening confirmation modal.
 
 ## UI
+
 - style buttons on modal recipe
 - make a logo for the site
 
 ## Bugs to Fix (without a clear path)
+
 - Full screen view while cooking allows screen to go to sleep (not sure if it's possible)
 - Full screen modal not working on ipad and iphone (might need to create an app)
 
-## UX 
+## UX
+
 - Support mobile
 - Support all browsers
 
 # Developement improvement
+
 - get react router to work in development HMR
 - https://stackoverflow.com/questions/27928372/react-router-urls-dont-work-when-refreshing-or-writing-manually
 - https://codeburst.io/getting-started-with-react-router-5c978f70df91
-
 
 # Historically helpful articles
 

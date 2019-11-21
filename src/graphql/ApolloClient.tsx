@@ -3,6 +3,8 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import { HttpLink } from "apollo-link-http";
 import { onError } from "apollo-link-error";
 import { ApolloLink } from "apollo-link";
+import resolvers from "./resolvers";
+import typeDefs from "./typeDefs";
 
 import { toastError } from "../app/utilites/Settings";
 import { useToasts } from "react-toast-notifications";
@@ -33,9 +35,13 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 const link = ApolloLink.from([errorLink, httpLink]);
 
+const cache = new InMemoryCache();
+
 const client = new ApolloClient({
   link,
-  cache: new InMemoryCache()
+  cache,
+  typeDefs,
+  resolvers
 });
 
 export default client;

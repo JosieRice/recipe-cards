@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useRef } from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
-import gql from "graphql-tag";
 import { useToasts } from "react-toast-notifications";
 
 // Style
@@ -26,62 +25,25 @@ import Time from "../components/modalComponents/Time";
 import Source from "../components/modalComponents/Source";
 import ListItem from "../components/modalComponents/ListItem";
 import { toastInfo, toastError } from "../utilites/Settings";
+import EDIT_RECIPE from "../mutations/EDIT_RECIPE";
+import GET_RECIPE from "../queries/GET_RECIPE";
+import gql from "graphql-tag";
 
-const RECIPE = gql`
-  query getRecipe($collection: String!, $id: ID!) {
-    recipe(collection: $collection, id: $id) {
-      id
-      recipeName
-      description
-      imageUrl
-      prepTime
-      cookTime
-      ingredients
-      prepInstructions
-      cookInstructions
-      sourceUrl
-      sourceType
-    }
+const ADD_INGREDIENT = gql`
+  mutation addIngredient($id: Int!) {
+    addIngredient(id: $id) @client
   }
 `;
 
-const EDIT_RECIPE = gql`
-  mutation editRecipe(
-    $collection: String!
-    $id: ID!
-    $recipeName: String
-    $description: String
-    $prepTime: String
-    $cookTime: String
-    $prepInstructions: [String]
-    $cookInstructions: [String]
-    $ingredients: [String]
-  ) {
-    editRecipe(
-      id: $id
-      collection: $collection
-      recipeName: $recipeName
-      prepTime: $prepTime
-      description: $description
-      cookTime: $cookTime
-      ingredients: $ingredients
-      prepInstructions: $prepInstructions
-      cookInstructions: $cookInstructions
-    ) {
-      code
-      success
-      message
-      recipe {
-        id
-        recipeName
-        prepTime
-        description
-        cookTime
-        ingredients
-        prepInstructions
-        cookInstructions
-      }
-    }
+const ADD_PREP_INSTRUCTION = gql`
+  mutation addPrepInstruction($id: Int!) {
+    addPrepInstruction(id: $id) @client
+  }
+`;
+
+const ADD_COOK_INSTRUCTION = gql`
+  mutation addCookInstruction($id: Int!) {
+    addCookInstruction(id: $id) @client
   }
 `;
 
@@ -105,13 +67,17 @@ export default function ModalRecipe({ match, history, collection }: Props) {
   let cookInstructionsRef = useRef([]);
 
   const { loading: queryLoad, error: queryError, data: queryData } = useQuery(
-    RECIPE,
+    GET_RECIPE,
     {
       variables: { collection, id: match.params.id }
     }
   );
 
   const [editRecipe, { loading: editRecipeLoading }] = useMutation(EDIT_RECIPE);
+
+  const [addIngredient] = useMutation(ADD_INGREDIENT);
+  const [addPrepInstruction] = useMutation(ADD_PREP_INSTRUCTION);
+  const [addCookInstruction] = useMutation(ADD_COOK_INSTRUCTION);
 
   const { addToast } = useToasts();
 
@@ -149,7 +115,6 @@ export default function ModalRecipe({ match, history, collection }: Props) {
         cookInstructions: cookInstructionsRef.current.map(el => el.value)
       }
     }).then(res => {
-      console.log("RES: ", res);
       const { success, message } = res.data.editRecipe;
       if (success) {
         addToast(message, toastInfo);
@@ -181,7 +146,7 @@ export default function ModalRecipe({ match, history, collection }: Props) {
                 <li>
                   <ListItem
                     initialValue={item}
-                    key={`${item}${index}`}
+                    // key={`${item}${index}`}
                     forwardRef={(ref: any) =>
                       (ingredientsRef.current[index] = ref)
                     }
@@ -191,8 +156,9 @@ export default function ModalRecipe({ match, history, collection }: Props) {
             </UL>
             <button
               onClick={() => {
-                ingredients.push("");
-                console.log("REF: ", ingredientsRef);
+                addIngredient({
+                  variables: { id: match.params.id }
+                });
               }}
             >
               +
@@ -206,7 +172,7 @@ export default function ModalRecipe({ match, history, collection }: Props) {
                 <li>
                   <ListItem
                     initialValue={item}
-                    key={`${item}${index}`}
+                    // key={`${item}${index}`}
                     forwardRef={(ref: any) =>
                       (prepInstructionsRef.current[index] = ref)
                     }
@@ -214,6 +180,15 @@ export default function ModalRecipe({ match, history, collection }: Props) {
                 </li>
               ))}
             </OL>
+            <button
+              onClick={() => {
+                addPrepInstruction({
+                  variables: { id: match.params.id }
+                });
+              }}
+            >
+              +
+            </button>
             <br />
             <Label>Cook Time: </Label>
             <Time initialValue={cookTime} forwardRef={cookTimeRef} />
@@ -222,7 +197,7 @@ export default function ModalRecipe({ match, history, collection }: Props) {
                 <li>
                   <ListItem
                     initialValue={item}
-                    key={`${item}${index}`}
+                    // key={`${item}${index}`}
                     forwardRef={(ref: any) =>
                       (cookInstructionsRef.current[index] = ref)
                     }
@@ -230,6 +205,15 @@ export default function ModalRecipe({ match, history, collection }: Props) {
                 </li>
               ))}
             </OL>
+            <button
+              onClick={() => {
+                addCookInstruction({
+                  variables: { id: match.params.id }
+                });
+              }}
+            >
+              +
+            </button>
           </Instructions>
         </div>
         <CloseButton onClick={history.goBack}>X</CloseButton>
