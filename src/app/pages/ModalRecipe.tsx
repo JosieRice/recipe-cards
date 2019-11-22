@@ -2,6 +2,7 @@ import * as React from "react";
 import { useRef } from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { useToasts } from "react-toast-notifications";
+import { UploadRecipePic } from "../utilites/FileUploader";
 
 // Style
 import { RecipeCard } from "../components/styled/Page";
@@ -27,25 +28,9 @@ import ListItem from "../components/modalComponents/ListItem";
 import { toastInfo, toastError } from "../utilites/Settings";
 import EDIT_RECIPE from "../mutations/EDIT_RECIPE";
 import GET_RECIPE from "../queries/GET_RECIPE";
-import gql from "graphql-tag";
-
-const ADD_INGREDIENT = gql`
-  mutation addIngredient($id: Int!) {
-    addIngredient(id: $id) @client
-  }
-`;
-
-const ADD_PREP_INSTRUCTION = gql`
-  mutation addPrepInstruction($id: Int!) {
-    addPrepInstruction(id: $id) @client
-  }
-`;
-
-const ADD_COOK_INSTRUCTION = gql`
-  mutation addCookInstruction($id: Int!) {
-    addCookInstruction(id: $id) @client
-  }
-`;
+import ADD_INGREDIENT from "../mutations/ADD_INGREDIENT";
+import ADD_PREP_INSTRUCTION from "../mutations/ADD_PREP_INSTRUCTION";
+import ADD_COOK_INSTRUCTION from "../mutations/ADD_COOK_INSTRUCTION";
 
 type Match = {
   params: { id: string };
@@ -73,15 +58,12 @@ export default function ModalRecipe({ match, history, collection }: Props) {
     }
   );
 
-  const [editRecipe, { loading: editRecipeLoading }] = useMutation(EDIT_RECIPE);
-
+  const [editRecipe] = useMutation(EDIT_RECIPE);
   const [addIngredient] = useMutation(ADD_INGREDIENT);
   const [addPrepInstruction] = useMutation(ADD_PREP_INSTRUCTION);
   const [addCookInstruction] = useMutation(ADD_COOK_INSTRUCTION);
 
   const { addToast } = useToasts();
-
-  // console.log("M LOAD: ", editRecipeLoading);
 
   if (queryLoad) return <Loading />;
   if (queryError) return <div>error</div>;
@@ -106,6 +88,7 @@ export default function ModalRecipe({ match, history, collection }: Props) {
       variables: {
         collection,
         id: match.params.id,
+        imageUrl,
         recipeName: recipeNameRef.current.value,
         description: descriptionRef.current.props.value,
         prepTime: prepTimeRef.current.value,
@@ -128,7 +111,12 @@ export default function ModalRecipe({ match, history, collection }: Props) {
     <Modal>
       <RecipeCard id={id}>
         <div style={{ margin: "0 0 10px 0" }}>
-          <PhotoInModal src={imageUrl} />
+          {imageUrl ? (
+            <PhotoInModal src={imageUrl} />
+          ) : (
+            <UploadRecipePic modal={true} imageUrl={imageUrl} id={id} />
+          )}
+
           <TitleWrapper>
             <RecipeName initialValue={recipeName} forwardRef={recipeNameRef} />
             <Description

@@ -3,7 +3,7 @@ import agnosticStyled from "../../utilites/Utilities";
 import Textarea from "react-textarea-autosize";
 
 export const Modal = styled.div`
-  position: absolute;
+  position: fixed;
   background: #fff;
   top: 25px;
   left: 25px;

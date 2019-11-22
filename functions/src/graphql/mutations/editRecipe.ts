@@ -6,6 +6,7 @@ const editRecipe = async (
   args: {
     collection: string;
     id: string;
+    imageUrl: string;
     recipeName: string;
     description: string;
     prepTime: string;
@@ -18,6 +19,7 @@ const editRecipe = async (
   const {
     collection,
     id,
+    imageUrl,
     recipeName,
     description,
     prepTime,
@@ -40,6 +42,7 @@ const editRecipe = async (
     .doc(id)
     .update({
       recipeName,
+      imageUrl,
       description,
       prepTime,
       cookTime,
@@ -62,6 +65,7 @@ const editRecipe = async (
   const recipe = {
     collection,
     id,
+    imageUrl,
     recipeName,
     description,
     prepTime,

@@ -4,6 +4,7 @@ const EDIT_RECIPE = gql`
   mutation editRecipe(
     $collection: String!
     $id: ID!
+    $imageUrl: String
     $recipeName: String
     $description: String
     $prepTime: String
@@ -14,6 +15,7 @@ const EDIT_RECIPE = gql`
   ) {
     editRecipe(
       id: $id
+      imageUrl: $imageUrl
       collection: $collection
       recipeName: $recipeName
       prepTime: $prepTime
@@ -28,6 +30,7 @@ const EDIT_RECIPE = gql`
       message
       recipe {
         id
+        imageUrl
         recipeName
         prepTime
         description

@@ -2,6 +2,7 @@ import recipeDraft from "./queries/recipeDraft";
 import addIngredient from "./mutations/addIngredient";
 import addPrepInstruction from "./mutations/addPrepInstruction";
 import addCookInstruction from "./mutations/addCookInstruction";
+import setImageUrl from "./mutations/setImageUrl";
 
 const resolvers = {
   Query: {
@@ -10,7 +11,8 @@ const resolvers = {
   Mutation: {
     addIngredient,
     addPrepInstruction,
-    addCookInstruction
+    addCookInstruction,
+    setImageUrl
   }
 };
 

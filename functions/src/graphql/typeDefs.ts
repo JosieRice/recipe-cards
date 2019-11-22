@@ -43,6 +43,7 @@ const typeDefs = gql`
       id: ID!
       collection: String!
       recipeName: String
+      imageUrl: String
       description: String
       prepTime: String
       cookTime: String

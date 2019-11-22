@@ -4,17 +4,26 @@ import firebase from "../services/Firebase";
 import FileUploader from "react-firebase-file-uploader";
 import { UploaderStyle } from "../components/styled/Buttons";
 import { Label } from "../components/styled/Page";
+import { useMutation } from "@apollo/react-hooks";
+import SET_IMAGE_URL from "../mutations/SET_IMAGE_URL";
 
 interface Props {
-  imageUrl: string
-  setImageUrl: React.Dispatch<React.SetStateAction<string>>
-  modal?: boolean
-  setUpdate?: React.Dispatch<React.SetStateAction<boolean>>
+  imageUrl: string;
+  modal?: boolean;
+  setUpdate?: React.Dispatch<React.SetStateAction<boolean>>;
+  id: string;
 }
 
-export const UploadRecipePic = ({ imageUrl, setImageUrl, modal = false, setUpdate }: Props) => {
+export const UploadRecipePic = ({
+  imageUrl,
+  modal = false,
+  setUpdate,
+  id
+}: Props) => {
   const [isUploading, setIsUploading] = useState(false);
   const [progress, setProgress] = useState(0);
+
+  const [setImageUrl] = useMutation(SET_IMAGE_URL);
 
   const start = progress === 0 && !isUploading;
   const finished = progress === 100 && isUploading === false && imageUrl !== "";
@@ -35,16 +44,25 @@ export const UploadRecipePic = ({ imageUrl, setImageUrl, modal = false, setUpdat
       .child(filename)
       .getDownloadURL()
       .then(url => {
-        setImageUrl(url);
-        { setUpdate && setUpdate(true); }
-      })
+        setImageUrl({
+          variables: { id, imageUrl: url }
+        });
+        {
+          setUpdate && setUpdate(true);
+        }
+      });
   };
 
   return (
     <>
       {!modal && <Label>Image:</Label>}
 
-      <UploaderStyle start={start.toString()} uploading={uploading} finished={finished} modal={modal}>
+      <UploaderStyle
+        start={start.toString()}
+        uploading={uploading}
+        finished={finished}
+        modal={modal}
+      >
         {start && modal ? `Add image` : `Select your file`}
         {uploading && `Uploading`}
         {finished && `Done`}
@@ -66,4 +84,4 @@ export const UploadRecipePic = ({ imageUrl, setImageUrl, modal = false, setUpdat
       </UploaderStyle>
     </>
   );
-}
+};
