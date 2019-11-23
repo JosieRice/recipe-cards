@@ -14,6 +14,8 @@ interface USProps {
 }
 
 export const UploaderStyle = styled.label<USProps>`
+  margin-right: 15px;
+  
   ${props => props.start && `cursor: pointer;`}
 
   ${props =>

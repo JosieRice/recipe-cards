@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { useToasts } from "react-toast-notifications";
 import { UploadRecipePic } from "../utilites/FileUploader";
@@ -63,6 +63,19 @@ export default function ModalRecipe({ match, history, collection }: Props) {
   const [addPrepInstruction] = useMutation(ADD_PREP_INSTRUCTION);
   const [addCookInstruction] = useMutation(ADD_COOK_INSTRUCTION);
 
+  useEffect(() => {
+    const escCloseModal = (event: any) => {
+      if (event.keyCode === 27) {
+        history.goBack();
+      }
+    };
+    document.addEventListener("keydown", escCloseModal, { once: true });
+
+    return () => {
+      document.removeEventListener("keydown", escCloseModal);
+    };
+  });
+
   const { addToast } = useToasts();
 
   if (queryLoad) return <Loading />;
@@ -110,7 +123,7 @@ export default function ModalRecipe({ match, history, collection }: Props) {
   return (
     <Modal>
       <RecipeCard id={id}>
-        <div style={{ margin: "0 0 10px 0" }}>
+        <div style={{ margin: "0 0 10px 0", display: "flex" }}>
           {imageUrl ? (
             <PhotoInModal src={imageUrl} />
           ) : (

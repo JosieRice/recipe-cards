@@ -19,6 +19,7 @@ export const PhotoInModal = styled.img`
   min-height: 100px;
   min-width: 125px;
   border-radius: 10px;
+  margin-right: 15px;
 `;
 
 interface TWProps {
@@ -26,6 +27,7 @@ interface TWProps {
 }
 
 export const TitleWrapper = styled.div<TWProps>`
+  width: 100%;
   ${props =>
     props.fullscreen === false &&
     `
@@ -40,10 +42,10 @@ export const NameInput = styled.input`
   font-family: "Sriracha", "Courier New";
   font-weight: 600;
   margin: 0 0 5px 0;
-  font-size: 4vmin;
-  line-height: 5vmin;
+  font-size: 3vmin;
+  line-height: 4vmin;
   border: none;
-  width: 90%;
+  width: 95%;
   background: transparent;
   color: #444;
 `;
@@ -54,8 +56,8 @@ export const StyledTextArea = styled(Textarea)`
   display: block;
   border: none;
   width: 100%;
-  font-size: 2.5vmin;
-  line-height: 2.5vmin;
+  font-size: 2vmin;
+  line-height: 2vmin;
   resize: none;
   background: transparent;
   color: #444;
@@ -64,8 +66,8 @@ export const StyledTextArea = styled(Textarea)`
 export const TimeInput = styled.input`
   font-family: "Sriracha", "Courier New";
   font-weight: 600;
-  font-size: 2.5vmin;
-  line-height: 2.5vmin;
+  font-size: 2vmin;
+  line-height: 2vmin;
   border: none;
   background: transparent;
   color: #444;
@@ -74,8 +76,9 @@ export const TimeInput = styled.input`
 export const ListInput = styled.input`
   font-family: "Sriracha", "Courier New";
   font-weight: 600;
-  font-size: 2.5vmin;
-  line-height: 2.5vmin;
+  font-size: 2vmin;
+  line-height: 2vmin;
+  height: 2.2vh;
   border: none;
   background: transparent;
   color: #444;
@@ -84,8 +87,8 @@ export const ListInput = styled.input`
 export const Instructions = styled.div`
   font-family: "Sriracha", "Courier New";
   font-weight: 600;
-  font-size: 2.5vmin;
-  line-height: 2.5vmin;
+  font-size: 2vmin;
+  line-height: 2vmin;
   width: 100%;
   background: transparent;
   color: #444;
@@ -93,7 +96,7 @@ export const Instructions = styled.div`
 
 export const Label = styled.span`
   font-family: "Exo", Arial Black, sans-serif;
-  font-size: 2.5vmin;
+  font-size: 2vmin;
   color: #444;
 `;
 

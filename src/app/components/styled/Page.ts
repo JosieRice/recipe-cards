@@ -9,8 +9,7 @@ export const Page = styled.div`
 export const RecipeCard = styled.div`
   background-color: #f2eecb;
   padding: 15px;
-  /* For Safari Fullscreen */
-  width: 98vw;
+  height: 88vh;
 `;
 
 export const H1 = styled.h1`
@@ -53,6 +52,7 @@ export const Photo = styled.img`
   max-height: 200px;
   min-height: 200px;
   min-width: 225px;
+  margin-right: 15px;
 `;
 
 export const Plus = styled(Photo)`
