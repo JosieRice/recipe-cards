@@ -37,6 +37,11 @@ const editRecipe = async (
     };
   }
 
+  // removes empty strings from array
+  const cleanIngredients = ingredients.filter(Boolean);
+  const cleanPrepInstructions = prepInstructions.filter(Boolean);
+  const cleanCookInstructions = cookInstructions.filter(Boolean);
+
   const result = db
     .collection(collection)
     .doc(id)
@@ -46,9 +51,9 @@ const editRecipe = async (
       description,
       prepTime,
       cookTime,
-      ingredients,
-      prepInstructions,
-      cookInstructions,
+      ingredients: cleanIngredients,
+      prepInstructions: cleanPrepInstructions,
+      cookInstructions: cleanCookInstructions,
       dateUpdated: Date.now()
     });
 
@@ -70,9 +75,9 @@ const editRecipe = async (
     description,
     prepTime,
     cookTime,
-    prepInstructions,
-    cookInstructions,
-    ingredients
+    ingredients: cleanIngredients,
+    prepInstructions: cleanPrepInstructions,
+    cookInstructions: cleanCookInstructions
   };
 
   return {

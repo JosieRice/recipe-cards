@@ -82,6 +82,7 @@ export const ListInput = styled.input`
   border: none;
   background: transparent;
   color: #444;
+  width: 100%;
 `;
 
 export const Instructions = styled.div`

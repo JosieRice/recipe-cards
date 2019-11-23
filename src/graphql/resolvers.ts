@@ -3,6 +3,7 @@ import addIngredient from "./mutations/addIngredient";
 import addPrepInstruction from "./mutations/addPrepInstruction";
 import addCookInstruction from "./mutations/addCookInstruction";
 import setImageUrl from "./mutations/setImageUrl";
+import setRecipeName from "./mutations/setRecipeName";
 
 const resolvers = {
   Query: {
@@ -12,7 +13,8 @@ const resolvers = {
     addIngredient,
     addPrepInstruction,
     addCookInstruction,
-    setImageUrl
+    setImageUrl,
+    setRecipeName
   }
 };
 

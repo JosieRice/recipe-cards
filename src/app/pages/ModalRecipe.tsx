@@ -6,15 +6,7 @@ import { UploadRecipePic } from "../utilites/FileUploader";
 
 // Style
 import { RecipeCard } from "../components/styled/Page";
-import {
-  Modal,
-  Instructions,
-  Label,
-  PhotoInModal,
-  TitleWrapper,
-  UL,
-  OL
-} from "../components/styled/Modal";
+import { Modal, Instructions, Label, PhotoInModal, TitleWrapper, UL, OL } from "../components/styled/Modal";
 import { Ingredients } from "../components/styled/RecipeCard";
 import { CloseButton } from "../components/styled/Buttons";
 
@@ -43,7 +35,6 @@ interface Props {
 }
 
 export default function ModalRecipe({ match, history, collection }: Props) {
-  let recipeNameRef = useRef(null);
   let descriptionRef = useRef(null);
   let prepTimeRef = useRef(null);
   let cookTimeRef = useRef(null);
@@ -51,12 +42,9 @@ export default function ModalRecipe({ match, history, collection }: Props) {
   let prepInstructionsRef = useRef([]);
   let cookInstructionsRef = useRef([]);
 
-  const { loading: queryLoad, error: queryError, data: queryData } = useQuery(
-    GET_RECIPE,
-    {
-      variables: { collection, id: match.params.id }
-    }
-  );
+  const { loading: queryLoad, error: queryError, data: queryData } = useQuery(GET_RECIPE, {
+    variables: { collection, id: match.params.id }
+  });
 
   const [editRecipe] = useMutation(EDIT_RECIPE);
   const [addIngredient] = useMutation(ADD_INGREDIENT);
@@ -81,36 +69,24 @@ export default function ModalRecipe({ match, history, collection }: Props) {
   if (queryLoad) return <Loading />;
   if (queryError) return <div>error</div>;
 
-  const {
-    id,
-    recipeName,
-    description,
-    imageUrl,
-    prepTime,
-    cookTime,
-    ingredients,
-    prepInstructions,
-    cookInstructions,
-    sourceUrl,
-    sourceType
-  } = queryData.recipe;
+  const { id, recipeName, description, imageUrl, prepTime, cookTime, ingredients, prepInstructions, cookInstructions, sourceUrl, sourceType } = queryData.recipe;
 
   const handleSubmit = (e: any) => {
     e.preventDefault;
     editRecipe({
       variables: {
         collection,
-        id: match.params.id,
+        id,
         imageUrl,
-        recipeName: recipeNameRef.current.value,
+        recipeName,
         description: descriptionRef.current.props.value,
         prepTime: prepTimeRef.current.value,
         cookTime: cookTimeRef.current.value,
-        ingredients: ingredientsRef.current.map(el => el.value),
-        prepInstructions: prepInstructionsRef.current.map(el => el.value),
-        cookInstructions: cookInstructionsRef.current.map(el => el.value)
+        ingredients: ingredientsRef.current.map((el) => el.value),
+        prepInstructions: prepInstructionsRef.current.map((el) => el.value),
+        cookInstructions: cookInstructionsRef.current.map((el) => el.value)
       }
-    }).then(res => {
+    }).then((res) => {
       const { success, message } = res.data.editRecipe;
       if (success) {
         addToast(message, toastInfo);
@@ -124,18 +100,12 @@ export default function ModalRecipe({ match, history, collection }: Props) {
     <Modal>
       <RecipeCard id={id}>
         <div style={{ margin: "0 0 10px 0", display: "flex" }}>
-          {imageUrl ? (
-            <PhotoInModal src={imageUrl} />
-          ) : (
-            <UploadRecipePic modal={true} imageUrl={imageUrl} id={id} />
-          )}
+          {imageUrl ? <PhotoInModal src={imageUrl} /> : <UploadRecipePic modal={true} imageUrl={imageUrl} id={id} />}
 
           <TitleWrapper>
-            <RecipeName initialValue={recipeName} forwardRef={recipeNameRef} />
-            <Description
-              initialValue={description}
-              forwardRef={descriptionRef}
-            />
+            {/* TODO: move state of recipe name into graphql state */}
+            <RecipeName id={id} recipeName={recipeName} />
+            <Description initialValue={description} forwardRef={descriptionRef} />
             <Source sourceUrl={sourceUrl} sourceType={sourceType} />
           </TitleWrapper>
         </div>
@@ -144,14 +114,8 @@ export default function ModalRecipe({ match, history, collection }: Props) {
             <Label>Ingredients: </Label>
             <UL>
               {ingredients.map((item: any, index: any) => (
-                <li>
-                  <ListItem
-                    initialValue={item}
-                    // key={`${item}${index}`}
-                    forwardRef={(ref: any) =>
-                      (ingredientsRef.current[index] = ref)
-                    }
-                  />
+                <li key={`ingred${index}`}>
+                  <ListItem initialValue={item} forwardRef={(ref: any) => (ingredientsRef.current[index] = ref)} />
                 </li>
               ))}
             </UL>
@@ -170,14 +134,8 @@ export default function ModalRecipe({ match, history, collection }: Props) {
             <Time initialValue={prepTime} forwardRef={prepTimeRef} />
             <OL>
               {prepInstructions.map((item: any, index: any) => (
-                <li>
-                  <ListItem
-                    initialValue={item}
-                    // key={`${item}${index}`}
-                    forwardRef={(ref: any) =>
-                      (prepInstructionsRef.current[index] = ref)
-                    }
-                  />
+                <li key={`prep${index}`}>
+                  <ListItem initialValue={item} forwardRef={(ref: any) => (prepInstructionsRef.current[index] = ref)} />
                 </li>
               ))}
             </OL>
@@ -195,14 +153,8 @@ export default function ModalRecipe({ match, history, collection }: Props) {
             <Time initialValue={cookTime} forwardRef={cookTimeRef} />
             <OL>
               {cookInstructions.map((item: any, index: any) => (
-                <li>
-                  <ListItem
-                    initialValue={item}
-                    // key={`${item}${index}`}
-                    forwardRef={(ref: any) =>
-                      (cookInstructionsRef.current[index] = ref)
-                    }
-                  />
+                <li key={`cook${index}`}>
+                  <ListItem initialValue={item} forwardRef={(ref: any) => (cookInstructionsRef.current[index] = ref)} />
                 </li>
               ))}
             </OL>

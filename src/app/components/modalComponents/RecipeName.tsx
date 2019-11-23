@@ -1,21 +1,29 @@
 import * as React from "react";
 import { NameInput } from "../styled/Modal";
-import { useState } from "react";
+import gql from "graphql-tag";
+import { useMutation } from "@apollo/react-hooks";
+
+const SET_RECIPE_NAME = gql`
+  mutation setRecipeName($id: Int!, $recipeName: String!) {
+    setRecipeName(id: $id, recipeName: $recipeName) @client
+  }
+`;
 
 interface Props {
-  initialValue: string;
-  forwardRef: any;
+  id: string;
+  recipeName: string;
 }
 
-export default function RecipeName({ initialValue, forwardRef }: Props) {
-  const [value, setValue] = useState(initialValue);
+export default function RecipeName({ id, recipeName }: Props) {
+  const [setRecipeName] = useMutation(SET_RECIPE_NAME);
 
   return (
     <NameInput
-      value={value}
-      ref={forwardRef}
-      onChange={e => {
-        setValue(e.target.value);
+      defaultValue={recipeName}
+      onChange={(e) => {
+        setRecipeName({
+          variables: { id, recipeName: e.target.value }
+        });
       }}
     />
   );

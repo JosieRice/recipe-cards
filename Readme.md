@@ -2,7 +2,9 @@
 
 ## Graphql Switch
 
+update inputs to be controlled by graphql
 drag and drop functionality with graphql in modal
+add authorization and authentication to graphql server
 
 ## TODO Next
 
