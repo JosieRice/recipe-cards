@@ -1,3 +1,12 @@
+# To Develop
+
+`npm run start`
+
+# To Deploy
+
+`npm run build`<br>
+`firebase deploy --except functions`<br>
+
 # Product Goals
 
 ## Graphql Switch
