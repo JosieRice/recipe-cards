@@ -1,11 +1,26 @@
 # To Develop
 
-`npm run start`
+`npm i`<br>
+`npm run dev`<br>
+go to localhost:3000
+staging has to be deployed for it to work
 
-# To Deploy
+# To Deploy App
 
 `npm run build`<br>
 `firebase deploy --except functions`<br>
+
+# To Deploy Functions
+
+firebase-tools must be installed globally
+
+in functions directory
+`npm i`<br>
+`firebase login`<br>
+`firebase use (staging-or OR production)`<br>
+`npm run deploy`
+
+
 
 # Product Goals
 
