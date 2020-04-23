@@ -3,6 +3,8 @@ dist
 /.firebase
 firestore-debug.log
 .firebaserc
+staging-service-account-key.json
+production-service-account-key.json
 
 # OS generated files #
 ######################

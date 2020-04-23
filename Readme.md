@@ -1,3 +1,10 @@
+# Setup First
+
+`download a service account key from your firebase console`<br>
+name them as such
+staging-service-account-key.json for staging.<br>
+production-service-account-key.json for production.
+
 # To Develop
 
 `npm i`<br>

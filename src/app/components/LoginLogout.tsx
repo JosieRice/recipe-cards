@@ -6,7 +6,7 @@ import { useEffect, useContext } from "react";
 import { userContext } from "../context/UserContext";
 import { Page } from "./styled/Page";
 import { toastError } from "../utilites/Settings";
-import { useToasts } from 'react-toast-notifications';
+import { useToasts } from "react-toast-notifications";
 
 export default function LoginLogout() {
   const [user, setUser] = useContext(userContext);
@@ -14,24 +14,39 @@ export default function LoginLogout() {
   const { addToast } = useToasts();
 
   // persistent login after refresh
-  useEffect(() => {
-    auth.onAuthStateChanged((user: UserObj) => {
-      if (user) {
-        setUser(user);
-        // identify user to FullStory
-        window.FS.identify(user.uid, {
-          displayName: user.displayName,
-          email: user.email
-        });
-      }
-    });
-  }, []);
+  // can I get the idToken to stay for this????
+  // useEffect(() => {
+  //   console.log("USER IN EFFECT: ", user)
+  //   auth.onAuthStateChanged((user: UserObj) => {
+  //     if (user) {
+  //       // console.log("USER: ", user);
+  //       setUser(user);
+  //       // identify user to FullStory
+  //       window.FS.identify(user.uid, {
+  //         displayName: user.displayName,
+  //         email: user.email,
+  //       });
+  //     }
+  //   });
+  // }, []);
 
   function login() {
     auth
       .signInWithPopup(provider)
-      .then(result => {
-        const user: UserObj = result.user;
+      .then((result) => {
+        const user: UserObj = {
+          displayName: result.user.displayName,
+          email: result.user.email,
+          photoURL: result.user.photoURL,
+          uid: result.user.uid, //should be in the token (remove soon)
+          // @ts-ignore
+          idToken: result.credential.idToken, // jwt with uid included (actually the right one)
+        };
+
+        // @ts-ignore
+        // This needs to get somewhere that it will exist or be updated when the graphql server is hit
+        // localStorage.setItem("authorization", result.credential.accessToken)
+
         setUser(user);
 
         // identify user to FullStory
@@ -39,7 +54,6 @@ export default function LoginLogout() {
           displayName: user.displayName,
           email: user.email
         });
-
       })
       .catch(function (error) {
         addToast(`Unable to login because ${error}, try again later`, toastError)
@@ -53,6 +67,7 @@ export default function LoginLogout() {
       .then(() => {
         setUser(null);
         window.FS.identify(false);
+        // localStorage.clear();
       })
       .catch(function (error) {
         addToast(`Unable to logout because ${error}, try again later`, toastError);
@@ -60,15 +75,7 @@ export default function LoginLogout() {
       });
   }
 
-  return (
-    <div style={{ marginRight: '40px' }}>
-      {!user ? (
-        <NavButton onClick={() => login()}>Log In</NavButton>
-      ) : (
-          <NavButton onClick={() => logout()}>Log Out</NavButton>
-        )}
-    </div>
-  );
+  return <div style={{ marginRight: "40px" }}>{!user ? <NavButton onClick={() => login()}>Log In</NavButton> : <NavButton onClick={() => logout()}>Log Out</NavButton>}</div>;
 }
 
 export function NotLoggedIn() {
@@ -77,4 +84,4 @@ export function NotLoggedIn() {
       <p>Please Log In to see this page.</p>
     </Page>
   );
-};
+}

@@ -13,18 +13,20 @@ if (window.location.href === "https://original-recipe.com/") {
   uri = "https://us-central1-original-recipe.cloudfunctions.net/api/api";
 }
 
+// how can I make sure that the authorization header is always there or is updated when user is logged in?
 const httpLink = new HttpLink({
   uri,
-  credentials: "same-origin"
+  credentials: "same-origin",
+  headers: {
+    authorization: localStorage.getItem("authorization"),
+  },
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError) console.error(`[Network error]: ${networkError}`);
   if (graphQLErrors)
     graphQLErrors.forEach(({ message, locations, path }) => {
-      console.error(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      );
+      console.error(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
     });
 });
 
@@ -37,7 +39,7 @@ const client = new ApolloClient({
   link,
   cache,
   typeDefs,
-  resolvers
+  resolvers,
 });
 
 export default client;
