@@ -2,6 +2,7 @@ import { ApolloClient } from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { HttpLink } from "apollo-link-http";
 import { onError } from "apollo-link-error";
+import { setContext } from 'apollo-link-context';
 import { ApolloLink } from "apollo-link";
 import resolvers from "./resolvers";
 import typeDefs from "./typeDefs";
@@ -16,10 +17,7 @@ if (window.location.href === "https://original-recipe.com/") {
 // how can I make sure that the authorization header is always there or is updated when user is logged in?
 const httpLink = new HttpLink({
   uri,
-  credentials: "same-origin",
-  headers: {
-    authorization: localStorage.getItem("authorization"),
-  },
+  credentials: "same-origin"
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -30,13 +28,25 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     });
 });
 
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = localStorage.getItem('token');
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? token : "",
+    }
+  }
+});
+
 const link = ApolloLink.from([errorLink, httpLink]);
 
 const cache = new InMemoryCache();
 
 const client = new ApolloClient({
   connectToDevTools: true,
-  link,
+  link: authLink.concat(link),
   cache,
   typeDefs,
   resolvers,

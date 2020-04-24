@@ -15,11 +15,12 @@ export default function LoginLogout() {
 
   // persistent login after refresh
   // can I get the idToken to stay for this????
+
   // useEffect(() => {
-  //   console.log("USER IN EFFECT: ", user)
   //   auth.onAuthStateChanged((user: UserObj) => {
   //     if (user) {
-  //       // console.log("USER: ", user);
+  //       localStorage.setItem("token", user.idToken);
+  //       console.log("USER: ", user);
   //       setUser(user);
   //       // identify user to FullStory
   //       window.FS.identify(user.uid, {
@@ -33,30 +34,29 @@ export default function LoginLogout() {
   function login() {
     auth
       .signInWithPopup(provider)
-      .then((result) => {
+      .then(async (result) => {
         const user: UserObj = {
           displayName: result.user.displayName,
           email: result.user.email,
           photoURL: result.user.photoURL,
           uid: result.user.uid, //should be in the token (remove soon)
-          // @ts-ignore
-          idToken: result.credential.idToken, // jwt with uid included (actually the right one)
         };
 
-        // @ts-ignore
-        // This needs to get somewhere that it will exist or be updated when the graphql server is hit
-        // localStorage.setItem("authorization", result.credential.accessToken)
+        const idToken = await auth.currentUser.getIdToken().then((token) => token);
+
+        localStorage.setItem("token", idToken);
+        // user.idToken = idToken;
 
         setUser(user);
 
         // identify user to FullStory
         window.FS.identify(user.uid, {
           displayName: user.displayName,
-          email: user.email
+          email: user.email,
         });
       })
       .catch(function (error) {
-        addToast(`Unable to login because ${error}, try again later`, toastError)
+        addToast(`Unable to login because ${error}, try again later`, toastError);
         console.error("Error adding document: ", error);
       });
   }
@@ -67,7 +67,7 @@ export default function LoginLogout() {
       .then(() => {
         setUser(null);
         window.FS.identify(false);
-        // localStorage.clear();
+        localStorage.clear();
       })
       .catch(function (error) {
         addToast(`Unable to logout because ${error}, try again later`, toastError);

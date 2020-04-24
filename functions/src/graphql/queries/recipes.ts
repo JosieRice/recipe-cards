@@ -3,7 +3,7 @@ import { ApolloError } from "apollo-server-express";
 
 const recipes = (_: null, args: { collection: string }, context: any) => {
   // testing that uid is correct in context
-  console.log("RECIPES CONTEXT: ", JSON.stringify(context.uid))
+  console.log("RECIPES CONTEXT UPDATED: ", JSON.stringify(context.uid))
   return (
     db
       .collection(args.collection)

@@ -14,7 +14,6 @@ function apolloServer() {
     playground: true,
     context: async ({ req }) => {
       // Get the user token from the headers.
-      // How do I ensure that if the user is logged in this information get's updated?
       const token = req.headers.authorization || "";
 
       // decode token to get uid
@@ -24,7 +23,7 @@ function apolloServer() {
         .then((decodedToken) => {
           return decodedToken.uid;
         })
-        .catch((error) => console.error("ERROR: ", error));
+        .catch((error) => console.error("ERROR Decoding: ", error));
 
       // add UID to context
       return { uid };
