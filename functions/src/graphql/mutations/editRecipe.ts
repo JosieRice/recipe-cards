@@ -30,12 +30,19 @@ const editRecipe = async (
     cookInstructions
   } = args;
 
+  // original or empty are the only accepted collection args. If it's empty than collection is pulled from context
   if (collection === "original") {
     return {
       code: "todo",
       success: false,
       message: "You cannot update an original recipe."
     };
+  } else if (collection !== "") {
+    return {
+      code: "todo",
+      success: false,
+      message: "There was a problem authorizing you to change this recipe."
+    }
   }
 
   // removes empty strings from array
