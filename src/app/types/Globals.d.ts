@@ -9,7 +9,6 @@ export interface UserObj {
   email: string;
   photoURL?: string;
   uid: string;
-  idToken?: string;
 }
 
 interface Location {

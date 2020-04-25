@@ -10,26 +10,25 @@ import { useToasts } from "react-toast-notifications";
 
 export default function LoginLogout() {
   const [user, setUser] = useContext(userContext);
-
   const { addToast } = useToasts();
 
-  // persistent login after refresh
-  // can I get the idToken to stay for this????
+  useEffect(() => {
+    auth.onAuthStateChanged(async (user: UserObj) => {
+      if (user) {
+        // firebase version of jwt generation being set to pass to graphql server
+        const idToken = await auth.currentUser.getIdToken().then((token) => token);
+        localStorage.setItem("token", idToken);
+        
+        setUser(user);
 
-  // useEffect(() => {
-  //   auth.onAuthStateChanged((user: UserObj) => {
-  //     if (user) {
-  //       localStorage.setItem("token", user.idToken);
-  //       console.log("USER: ", user);
-  //       setUser(user);
-  //       // identify user to FullStory
-  //       window.FS.identify(user.uid, {
-  //         displayName: user.displayName,
-  //         email: user.email,
-  //       });
-  //     }
-  //   });
-  // }, []);
+        // identify user to FullStory
+        window.FS.identify(user.uid, {
+          displayName: user.displayName,
+          email: user.email,
+        });
+      }
+    });
+  }, []);
 
   function login() {
     auth
@@ -39,13 +38,12 @@ export default function LoginLogout() {
           displayName: result.user.displayName,
           email: result.user.email,
           photoURL: result.user.photoURL,
-          uid: result.user.uid, //should be in the token (remove soon)
+          uid: result.user.uid, //should be in the token (remove soon), keeping for fs for now
         };
 
+        // firebase version of jwt generation being set to pass to graphql server
         const idToken = await auth.currentUser.getIdToken().then((token) => token);
-
         localStorage.setItem("token", idToken);
-        // user.idToken = idToken;
 
         setUser(user);
 
@@ -65,6 +63,7 @@ export default function LoginLogout() {
     auth
       .signOut()
       .then(() => {
+        // clear all information about user
         setUser(null);
         window.FS.identify(false);
         localStorage.clear();
