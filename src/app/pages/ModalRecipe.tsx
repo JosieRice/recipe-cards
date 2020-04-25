@@ -73,9 +73,10 @@ export default function ModalRecipe({ match, history, collection }: Props) {
 
   const handleSubmit = (e: any) => {
     e.preventDefault;
+    const safeCollection = collection === 'original' ? collection : "";
     editRecipe({
       variables: {
-        collection,
+        collection: safeCollection, // forces server to get collection from context via jwt if anything but 'original' is passed in
         id,
         imageUrl,
         recipeName,
