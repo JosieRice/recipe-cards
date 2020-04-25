@@ -14,7 +14,8 @@ const editRecipe = async (
     ingredients: string[];
     prepInstructions: string[];
     cookInstructions: string[];
-  }
+  },
+  context: any
 ) => {
   const {
     collection,
@@ -43,7 +44,7 @@ const editRecipe = async (
   const cleanCookInstructions = cookInstructions.filter(Boolean);
 
   const result = db
-    .collection(collection)
+    .collection(context.uid)
     .doc(id)
     .update({
       recipeName,
@@ -68,7 +69,7 @@ const editRecipe = async (
 
   // TODO: this updated recipe should probably come from the database or update response. not sure how to do that in firestore
   const recipe = {
-    collection,
+    collection: context.uid,
     id,
     imageUrl,
     recipeName,

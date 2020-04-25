@@ -1,8 +1,8 @@
 import db from "../firestore";
 
-const recipe = (_: null, args: { collection: string; id: string }) => {
+const recipe = (_: null, args: { collection: string; id: string }, context: any) => {
   return db
-    .collection(args.collection)
+    .collection(context.uid)
     .doc(args.id)
     .get()
     .then((snap: any) => {

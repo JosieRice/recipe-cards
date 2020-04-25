@@ -3,10 +3,12 @@ import { ApolloError } from "apollo-server-express";
 
 const recipes = (_: null, args: { collection: string }, context: any) => {
   // testing that uid is correct in context
-  console.log("RECIPES CONTEXT UPDATED: ", JSON.stringify(context.uid))
+  console.log("RECIPES WWHOLE CONTEXT: ", JSON.stringify(context))
+  const safeCollection = args.collection === 'original' ? 'original' : context.uid;
+  
   return (
     db
-      .collection(args.collection)
+      .collection(safeCollection)
       // .limit(5)   // use this limit for pagination or infinite scroll
       .get()
       .then((snap: any) => {
