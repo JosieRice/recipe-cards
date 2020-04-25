@@ -1,17 +1,28 @@
 # To Develop
 
-`npm run start`
+`npm i`<br>
+`npm run dev`<br>
+go to localhost:3000
+staging has to be deployed for it to work
 
-# To Deploy
+# To Deploy App
 
 `npm run build`<br>
-`firebase deploy --except functions`<br>
+`npm run deploy-production` or `deploy-staging`<br>
+
+# To Deploy Functions
+
+firebase-tools must be installed globally
+
+in functions directory
+`npm i`<br>
+`firebase login`<br>
+`firebase use (staging-or OR production)`<br>
+`npm run deploy`
+
+
 
 # Product Goals
-
-<<<<<<< Updated upstream
-## TODO Next
-=======
 
 ## TODO Next
 
@@ -20,7 +31,6 @@
 2. if original recipe has no photo, use the next updated photo.
 3. Fully move over to graphql for everything except state/cache
 4. Figure out how to package size with webpack (print that fancy graph)
->>>>>>> Stashed changes
 5. setup scrolling through multiple versions of recipe.
 6. Write a test.
 7. Setup a test pipeline.
@@ -40,34 +50,41 @@ update inputs to be controlled by graphql
 drag and drop functionality with graphql in modal
 
 ## Improve Recipe Adding UX
+
 1. Link to URL's and to books on Amazon
 
 ## Revenue Goals
+
 1. Links to books on Amazon should be linked to a company Amazon account.
 
 ## Increase Addictiveness of OR
+
 1. Add a point system for how many users have a copy of your recipe, extra points if it's unchanged, and extra points if the recipe has been cooked many times.
 
 ## Improve UX of recipe editing
+
 1. clear blank arrays before checking for updates when opening confirmation modal.
 
 ## UI
+
 - style buttons on modal recipe
 - make a logo for the site
 
 ## Bugs to Fix (without a clear path)
+
 - Full screen view while cooking allows screen to go to sleep (not sure if it's possible)
 - Full screen modal not working on ipad and iphone (might need to create an app)
 
-## UX 
+## UX
+
 - Support mobile
 - Support all browsers
 
 # Developement improvement
+
 - get react router to work in development HMR
 - https://stackoverflow.com/questions/27928372/react-router-urls-dont-work-when-refreshing-or-writing-manually
 - https://codeburst.io/getting-started-with-react-router-5c978f70df91
-
 
 # Historically helpful articles
 

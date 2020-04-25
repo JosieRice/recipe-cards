@@ -1,2 +1,9 @@
 node_modules
 dist
+/.firebase
+firestore-debug.log
+.firebaserc
+
+# OS generated files #
+######################
+.DS_Store

@@ -3,20 +3,16 @@ import { UserObj } from "../types/Globals";
 import { useState } from "react";
 
 interface User {
-  user: UserObj | null
+  user: UserObj | null;
 }
-type Context = Array<User | any>
+type Context = Array<User | any>;
 
-const userContext = React.createContext<Context>([{user: null}, () => {}]);
+const userContext = React.createContext<Context>([{ user: null }, () => {}]);
 
-const UserContextProvider = (props: any) => {
+const UserContextProvider = ({ children }: any) => {
   const [user, setUser] = useState(null);
-  
-  return (
-    <userContext.Provider value={[user, setUser]}>
-      {props.children}
-    </userContext.Provider>
-  );
-}
- 
+
+  return <userContext.Provider value={[user, setUser]}>{children}</userContext.Provider>;
+};
+
 export { userContext, UserContextProvider };

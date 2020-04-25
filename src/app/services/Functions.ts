@@ -8,7 +8,12 @@ export const login = () => {
   auth
     .signInWithPopup(provider)
     .then(result => {
+      // Is this function being used anywhere?
+      // @ts-ignore
+      // let token = result.credential.accessToken;
       const user = result.user;
+      // @ts-ignore
+      // user.token = token;
       // @ts-ignore
       this.setState({
         user

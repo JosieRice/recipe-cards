@@ -2,10 +2,15 @@ import * as React from "react";
 import { useState, useContext, FormEvent } from "react";
 import { db } from "../services/Firebase";
 import { userContext } from "../context/UserContext";
-import { isEmpty, strToArr, getRecipeDetails, arrToStr } from "../utilites/Utilities";
+import {
+  isEmpty,
+  strToArr,
+  getRecipeDetails,
+  arrToStr
+} from "../utilites/Utilities";
 import { Page, H1, Label, Input, TextArea } from "../components/styled/Page";
 
-import { useToasts } from 'react-toast-notifications';
+import { useToasts } from "react-toast-notifications";
 import { NotLoggedIn } from "../components/LoginLogout";
 import { toastInfo, toastError } from "../utilites/Settings";
 import { UploadRecipePic } from "../utilites/FileUploader";
@@ -34,8 +39,7 @@ export default function NewRecipe() {
     const ingredientsArr = strToArr(ingredients);
 
     // Create Original Recipe
-    db
-      .collection(`original`)
+    db.collection(`original`)
       .add({
         recipeName,
         description,
@@ -51,18 +55,20 @@ export default function NewRecipe() {
         creatorUid: user.uid,
         dateCreated: Date.now()
       })
-      .then(function (docRef) {
-        addToast('Recipe Saved', toastInfo)
+      .then(function(docRef) {
+        addToast("Recipe Saved", toastInfo);
         console.log("Document written with ID: ", docRef.id);
       })
-      .catch(function (error) {
-        addToast(`Unable to save original because ${error}, try again later`, toastError)
+      .catch(function(error) {
+        addToast(
+          `Unable to save original because ${error}, try again later`,
+          toastError
+        );
         console.error("Error adding document: ", error);
       });
 
     // Create your editable copy
-    db
-      .collection(user.uid)
+    db.collection(user.uid)
       .add({
         recipeName,
         description,
@@ -79,7 +85,7 @@ export default function NewRecipe() {
         creatorUid: user.uid,
         dateCreated: Date.now()
       })
-      .then(function (docRef) {
+      .then(function(docRef) {
         console.log("Document written with ID: ", docRef.id);
         setRecipeName("");
         setDescription("");
@@ -91,11 +97,13 @@ export default function NewRecipe() {
         setCookInstructions("");
         setIngredients("");
       })
-      .catch(function (error) {
-        addToast(`Unable to create recipe because ${error}, try again later`, toastError);
+      .catch(function(error) {
+        addToast(
+          `Unable to create recipe because ${error}, try again later`,
+          toastError
+        );
         console.error("Error adding document: ", error);
       });
-
   };
 
   if (isEmpty(user)) return <NotLoggedIn />;
@@ -104,7 +112,6 @@ export default function NewRecipe() {
     <Page>
       <H1>New Recipe</H1>
       <form onSubmit={handleSubmit} id="recipeForm">
-
         <Label>Recipe Name</Label>
         <Input
           type="text"
@@ -126,10 +133,11 @@ export default function NewRecipe() {
         />
         <br />
 
-        <UploadRecipePic
+        {/* TODO: make this a graphql mutation */}
+        {/* <UploadRecipePic
           imageUrl={imageUrl}
           setImageUrl={setImageUrl}
-        />
+        /> */}
         <br />
 
         <Label>Prep Time:</Label>
@@ -161,9 +169,11 @@ export default function NewRecipe() {
           onChange={e => setSourceUrl(e.target.value)}
         />
 
-        <select onChange={(e) => {
-          setSourceType(e.target.value)
-        }}>
+        <select
+          onChange={e => {
+            setSourceType(e.target.value);
+          }}
+        >
           <option value="">--Please choose an option--</option>
           <option value="web">Web Site</option>
           <option value="book">Cook Book</option>
@@ -171,20 +181,26 @@ export default function NewRecipe() {
           <option value="unknown">Not Sure</option>
         </select>
 
-        <button type="button" onClick={async () => {
-          const res = await getRecipeDetails(sourceUrl);
-          setSourceType("web")
-          res.title && setRecipeName(res.title);
-          res.description && setDescription(res.description);
-          res.prepTime && setPrepTime(res.prepTime)
-          res.cookTime && setCookTime(res.cookTime)
-          res.ingredients && setIngredients(arrToStr(res.ingredients));
-          res.instructions && setCookInstructions(arrToStr(res.instructions));
-        }}>beta web scraper</button>
+        <button
+          type="button"
+          onClick={async () => {
+            const res = await getRecipeDetails(sourceUrl);
+            setSourceType("web");
+            res.title && setRecipeName(res.title);
+            res.description && setDescription(res.description);
+            res.prepTime && setPrepTime(res.prepTime);
+            res.cookTime && setCookTime(res.cookTime);
+            res.ingredients && setIngredients(arrToStr(res.ingredients));
+            res.instructions && setCookInstructions(arrToStr(res.instructions));
+          }}
+        >
+          beta web scraper
+        </button>
 
         <br />
 
-        <br /><br />
+        <br />
+        <br />
 
         <Label>Ingredients:</Label>
         <TextArea
@@ -221,10 +237,11 @@ export default function NewRecipe() {
           onChange={e => setCookInstructions(e.target.value)}
         />
 
-        <br /><br />
+        <br />
+        <br />
 
         <button>Add Recipe</button>
       </form>
     </Page>
   );
-};
+}

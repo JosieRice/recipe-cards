@@ -19,7 +19,7 @@ app.use(
   require("webpack-dev-middleware")(compiler, {
     noInfo: true,
     publicPath: webpackConfig.output.publicPath,
-    stats: { colors: true }
+    stats: { colors: true },
   })
 );
 app.use(require("webpack-hot-middleware")(compiler));
