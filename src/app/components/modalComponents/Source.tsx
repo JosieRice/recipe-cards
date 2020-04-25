@@ -1,12 +1,12 @@
 import * as React from "react";
 import { extractHostname } from "../../utilites/Utilities";
 
-interface IProps {
-  sourceUrl: string,
-  sourceType: string
+interface Props {
+  sourceUrl: string;
+  sourceType: string;
 }
 
-export default function Source(props: IProps) {
+export default function Source(props: Props) {
   const { sourceUrl, sourceType } = props;
 
   const cleanHostname = extractHostname(sourceUrl);
@@ -20,12 +20,9 @@ export default function Source(props: IProps) {
   return (
     <>
       <span>Source: </span>
-      <a
-        href={sourceUrl}
-        target="_blank"
-      >
+      <a href={sourceUrl} target="_blank">
         {sourceType === "web" && cleanHostname}
       </a>
     </>
   );
-};
+}

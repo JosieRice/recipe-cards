@@ -1,30 +1,14 @@
-import db from "./firestore";
+import recipes from "./queries/recipes";
+import recipe from "./queries/recipe";
+import editRecipe from "./mutations/editRecipe";
 
 const resolvers = {
   Query: {
-    recipes: () => {
-      return (
-        db
-          .collection("original")
-          // .limit(5)   // use this limit for pagination or infinite scroll
-          .get()
-          .then((snap: any) => {
-            let list: any = [];
-            snap.forEach((recipe: any) => {
-              // Adds recipe id's onto the recipe object
-              const recipeObj = recipe.data();
-              recipeObj["id"] = recipe.id;
-
-              list = [...list, recipeObj];
-            });
-            // console.log("LIST: ", list);
-            return list;
-          })
-          .catch(function(error: any) {
-            console.error("Error adding document: ", error);
-          })
-      );
-    }
+    recipes,
+    recipe
+  },
+  Mutation: {
+    editRecipe
   }
 };
 

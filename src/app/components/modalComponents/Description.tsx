@@ -1,20 +1,22 @@
 import * as React from "react";
 import { StyledTextArea } from "../styled/Modal";
-import { useContext } from "react";
-import { userContext } from "../../context/UserContext";
+import { useState } from "react";
 
-export default function Description(props: any) {
-  const [user] = useContext(userContext);
-  const { fullscreen, value, setValue, setUpdate } = props
-  
+interface Props {
+  initialValue: string;
+  forwardRef: any;
+}
+
+export default function Description({ initialValue, forwardRef }: Props) {
+  const [value, setValue] = useState(initialValue);
+
   return (
     <StyledTextArea
-    disabled={fullscreen || !user}
-    value={value}
-    onChange={e => {
-      setValue(e.target.value)
-      setUpdate(true)
-    }}
-  />
+      value={value}
+      ref={forwardRef}
+      onChange={e => {
+        setValue(e.target.value);
+      }}
+    />
   );
-};
+}

@@ -1,17 +1,17 @@
 import * as React from "react";
-import { TimeInput } from "../styled/Modal";
 import { useState } from "react";
+import { ListInput } from "../styled/Modal";
 
 interface Props {
   initialValue: string;
   forwardRef: any;
 }
 
-export default function Name({ initialValue, forwardRef }: Props) {
+export default function ListItem({ initialValue, forwardRef }: Props) {
   const [value, setValue] = useState(initialValue);
 
   return (
-    <TimeInput
+    <ListInput
       value={value}
       ref={forwardRef}
       onChange={e => {

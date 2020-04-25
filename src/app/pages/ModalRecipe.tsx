@@ -1,435 +1,178 @@
 import * as React from "react";
-import { useState, useEffect, useContext } from "react";
-import { db } from "../services/Firebase";
-import { useToasts } from 'react-toast-notifications';
+import { useRef, useEffect } from "react";
+import { useQuery, useMutation } from "@apollo/react-hooks";
+import { useToasts } from "react-toast-notifications";
 import { UploadRecipePic } from "../utilites/FileUploader";
-import { toastInfo, toastError } from "../utilites/Settings";
-import { userContext } from "../context/UserContext";
-import { DragDropContext } from "react-beautiful-dnd";
-import { DragResult } from "../types/Globals";
 
 // Style
 import { RecipeCard } from "../components/styled/Page";
-import { Modal, Instructions, Label, PhotoInModal, TitleWrapper } from "../components/styled/Modal";
+import { Modal, Instructions, Label, PhotoInModal, TitleWrapper, UL, OL } from "../components/styled/Modal";
 import { Ingredients } from "../components/styled/RecipeCard";
 import { CloseButton } from "../components/styled/Buttons";
 
 // Components
 import Loading from "../components/Loading";
-import Name from "../components/modalComponents/Name";
+import RecipeName from "../components/modalComponents/RecipeName";
 import Description from "../components/modalComponents/Description";
-import List from "../components/modalComponents/List";
 import Time from "../components/modalComponents/Time";
-import { ConfirmationModal } from "../components/ConfirmationModal";
 import Source from "../components/modalComponents/Source";
-import LoginLogout from "../components/LoginLogout";
+import ListItem from "../components/modalComponents/ListItem";
+import { toastInfo, toastError } from "../utilites/Settings";
+import EDIT_RECIPE from "../mutations/EDIT_RECIPE";
+import GET_RECIPE from "../queries/GET_RECIPE";
+import ADD_INGREDIENT from "../mutations/ADD_INGREDIENT";
+import ADD_PREP_INSTRUCTION from "../mutations/ADD_PREP_INSTRUCTION";
+import ADD_COOK_INSTRUCTION from "../mutations/ADD_COOK_INSTRUCTION";
 
-// @ts-ignore
-export default function ModalRecipe({ match, history, collection }) {
-  const [recipe, setRecipe] = useState();
+type Match = {
+  params: { id: string };
+};
 
-  const [recipeName, setRecipeName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [imageUrl, setImageUrl] = useState<string>("");
-  const [prepTime, setPrepTime] = useState<string>("");
-  const [cookTime, setCookTime] = useState<string>("");
-  const [ingredients, setIngredients] = useState<string[]>([]);
-  const [prepInstructions, setPrepInstructions] = useState<string[]>([]);
-  const [cookInstructions, setCookInstructions] = useState<string[]>([]);
-  const [recipeID, setRecipeID] = useState<string>("");
-  const [sourceUrl, setSourceUrl] = useState<string>("");
-  const [sourceType, setSourceType] = useState<string>("");
-  const [trackingId, setTrackingId] = useState<string>("");
-  const [copyIds, setCopyIds] = useState<any>([]);
+interface Props {
+  match: Match;
+  history: any;
+  collection: string;
+}
 
-  const [update, setUpdate] = useState<boolean>(false)
-  const [fullscreen, setFullscreen] = useState<boolean>(false);
-  const [reorder, setReorder] = useState<boolean>(false);
-  const [confirmModal, setConfirmModal] = useState<boolean>(false)
+export default function ModalRecipe({ match, history, collection }: Props) {
+  let descriptionRef = useRef(null);
+  let prepTimeRef = useRef(null);
+  let cookTimeRef = useRef(null);
+  let ingredientsRef = useRef([]);
+  let prepInstructionsRef = useRef([]);
+  let cookInstructionsRef = useRef([]);
 
-  const [user] = useContext(userContext);
+  const { loading: queryLoad, error: queryError, data: queryData } = useQuery(GET_RECIPE, {
+    variables: { collection, id: match.params.id }
+  });
 
-  // TODO, make this only work for the moda component
-  const escCloseModal = (event: any) => {
-    if (event.keyCode === 27) {
-      history.goBack()
-    }
-  }
+  const [editRecipe] = useMutation(EDIT_RECIPE);
+  const [addIngredient] = useMutation(ADD_INGREDIENT);
+  const [addPrepInstruction] = useMutation(ADD_PREP_INSTRUCTION);
+  const [addCookInstruction] = useMutation(ADD_COOK_INSTRUCTION);
 
   useEffect(() => {
-    document.addEventListener('fullscreenchange', exitHandler);
-    document.addEventListener('webkitfullscreenchange', exitHandler);
-    document.addEventListener('mozfullscreenchange', exitHandler);
-    document.addEventListener('MSFullscreenChange', exitHandler);
-
+    const escCloseModal = (event: any) => {
+      if (event.keyCode === 27) {
+        history.goBack();
+      }
+    };
     document.addEventListener("keydown", escCloseModal, { once: true });
-
-    // db
-    //   .collection('copy-tracking')
-    //   .doc(match.params.id)
-    //   .get()
-    //   .then(function (doc) {
-    //     if (doc.exists) {
-    //       console.log("Document data:", doc.data());
-    //       setCopyIds(doc.data())
-
-    //     } else {
-    //       // doc.data() will be undefined in this case
-    //       addToast(`No such document!`, toastError);
-    //       console.log("No such document!");
-    //     }
-    //   }).catch(function (error) {
-    //     addToast(`Unable to load recipe because ${error}, try again later`, toastError);
-    //     console.log("Error getting document:", error);
-    //   });
-
-    db
-      .collection(collection)
-      .doc(match.params.id)
-      .get()
-      .then(function (doc) {
-        if (doc.exists) {
-          // console.log("Document data:", doc.data());
-          setRecipeID(doc.id);
-          const data = doc.data()
-
-          setTrackingId(data.originalDocId)
-
-          setRecipe(data);
-          setRecipeName(data.recipeName);
-          setDescription(data.description);
-          setImageUrl(data.imageUrl);
-          setPrepTime(data.prepTime);
-          setCookTime(data.cookTime);
-          setIngredients(data.ingredients);
-          setPrepInstructions(data.prepInstructions);
-          setCookInstructions(data.cookInstructions);
-          setSourceUrl(data.sourceUrl);
-          setSourceType(data.sourceType);
-
-        } else {
-          // doc.data() will be undefined in this case
-          console.log("No such document!");
-        }
-      }).catch(function (error) {
-        addToast(`Unable to load recipe because ${error}, try again later`, toastError);
-        console.log("Error getting document:", error);
-      });
 
     return () => {
       document.removeEventListener("keydown", escCloseModal);
     };
-
-  }, []);
+  });
 
   const { addToast } = useToasts();
 
-  const onDragEnd = (result: DragResult) => {
-    const { destination, source } = result;
+  if (queryLoad) return <Loading />;
+  if (queryError) return <div>error</div>;
 
-    let sameListSameSpot;
-    let differentList;
+  const { id, recipeName, description, imageUrl, prepTime, cookTime, ingredients, prepInstructions, cookInstructions, sourceUrl, sourceType } = queryData.recipe;
 
-    if (destination) {
-      sameListSameSpot = destination.droppableId === source.droppableId && destination.index === source.index;
-
-      differentList = source.droppableId !== destination.droppableId;
-    }
-
-    if (!destination) {
-      return;
-    } else if (!destination.droppableId) {
-      return;
-    } else if (differentList) {
-      return;
-    } else if (sameListSameSpot) {
-      return;
-    } else {
-
-      if (source.droppableId === 'ingredients') {
-        arrayReorder(result, ingredients, setIngredients);
-      }
-
-      if (source.droppableId === 'prepInstructions') {
-        arrayReorder(result, prepInstructions, setPrepInstructions);
-      }
-
-      if (source.droppableId === 'cookInstructions') {
-        arrayReorder(result, cookInstructions, setCookInstructions);
-      }
-
-    }
-  }
-
-  const arrayReorder = (result: DragResult, array: Array<string>, setState: any) => {
-    const { destination, source } = result;
-
-    let newArr = Array.from(array);
-    newArr.splice(source.index, 1);
-    newArr.splice(destination.index, 0, array[source.index]);
-
-    setState(newArr);
-    setUpdate(true);
-  }
-
-  const exitHandler = () => {
-    if (!document.fullscreenElement) {
-      setFullscreen(false)
-    }
-  }
-
-  const handleArrayChange = (index: number, array: any, ingredient: string, cb: any) => {
-    let newList = [...array]
-    newList[index] = ingredient
-
-    cb(newList);
-    setUpdate(true);
-  }
-
-  const modalSave = (e: any) => {
-    e.stopPropagation();
-    handleUpdate(e);
-    history.goBack();
-  };
-
-  const modalCloseUnsaved = (e: any) => {
-    e.stopPropagation();
-    history.goBack();
-  };
-
-  interface Document {
-    requestFullscreen?: () => void;
-    mozRequestFullScreen?: () => void;
-    webkitRequestFullscreen?: () => void;
-    msRequestFullscreen?: () => void;
-  }
-
-  const startFullScreen = () => {
-    const elem: Document = document.getElementById(match.params.id);
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen();
-    } else if (elem.mozRequestFullScreen) { /* Firefox */
-      elem.mozRequestFullScreen();
-    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-      elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) { /* IE/Edge */
-      elem.msRequestFullscreen();
-    }
-    setFullscreen(true)
-  }
-
-  const copyRecipe = (e: any) => {
-    e.preventDefault();
-
-    db
-      .collection(user.uid)
-      .add({
-        recipeName,
-        description,
+  const handleSubmit = (e: any) => {
+    e.preventDefault;
+    const safeCollection = collection === 'original' ? collection : "";
+    editRecipe({
+      variables: {
+        collection: safeCollection, // forces server to get collection from context via jwt if anything but 'original' is passed in
+        id,
         imageUrl,
-        prepTime,
-        cookTime,
-        prepInstructions,
-        cookInstructions,
-        ingredients,
-        ownerUid: user.uid,
-        displayName: user.displayName,
-        sourceUrl,
-        sourceType,
-        creatorUid: recipe.creatorUid,
-        dateUpdated: Date.now()
-      })
-      .then(function () {
-        addToast('Recipe Copied into your recipes.', toastInfo)
-        setUpdate(false);
-      })
-      .catch(function (error) {
-        addToast(`Unable to copy recipe because ${error}, try again later`, toastError)
-      });
-  }
-
-  const handleUpdate = (e: any) => {
-    e.preventDefault();
-
-    if (user.uid !== recipe.ownerUid) {
-      copyRecipe(e)
-      addToast('We added a copy of this recipe to your box.', toastInfo)
-      return;
-    }
-
-    // removes empty strings from array
-    const cleanPrepInstructions = prepInstructions.filter(Boolean);
-    setPrepInstructions(cleanPrepInstructions);
-
-    const cleanCookInstructions = cookInstructions.filter(Boolean);
-    setCookInstructions(cleanCookInstructions);
-
-    const cleanIngredients = ingredients.filter(Boolean);
-    setIngredients(cleanIngredients);
-
-    db
-      .collection(user.uid)
-      .doc(recipeID).update({
         recipeName,
-        description,
-        imageUrl,
-        prepTime,
-        cookTime,
-        prepInstructions: cleanPrepInstructions,
-        cookInstructions: cleanCookInstructions,
-        ingredients: cleanIngredients,
-        ownerUid: user.uid,
-        displayName: user.displayName,
-        sourceUrl,
-        sourceType,
-        dateUpdated: Date.now()
-      })
-      .then(function () {
-        // TODO: use third arguement of optional cb to close modal?
-        addToast('Updated Successfully', toastInfo);
-        setUpdate(false);
-      })
-      .catch(function (error) {
-        addToast(`Unable to Update because ${error}, try again later`, toastError);
-      });
-  }
-
-  if (!recipe) return (<Loading />);
-
-  const canReorder = user && !fullscreen && reorder;
-  const cantReorder = user && !fullscreen && !reorder;
-  const canCopy = user && !fullscreen && user && user.uid !== recipe.ownerUid;
-  const canUpdate = user && !fullscreen && update;
-  const canLogin = !user && !fullscreen;
+        description: descriptionRef.current.props.value,
+        prepTime: prepTimeRef.current.value,
+        cookTime: cookTimeRef.current.value,
+        ingredients: ingredientsRef.current.map((el) => el.value),
+        prepInstructions: prepInstructionsRef.current.map((el) => el.value),
+        cookInstructions: cookInstructionsRef.current.map((el) => el.value)
+      }
+    }).then((res) => {
+      const { success, message } = res.data.editRecipe;
+      if (success) {
+        addToast(message, toastInfo);
+      } else {
+        addToast(message, toastError);
+      }
+    });
+  };
 
   return (
     <Modal>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <RecipeCard id={match.params.id}>
-          <div style={{ margin: '0 0 10px 0' }}>
+      <RecipeCard id={id}>
+        <div style={{ margin: "0 0 10px 0", display: "flex" }}>
+          {imageUrl ? <PhotoInModal src={imageUrl} /> : <UploadRecipePic modal={true} imageUrl={imageUrl} id={id} />}
 
-            {imageUrl && !fullscreen && <PhotoInModal src={imageUrl} />}
-            {!imageUrl && !fullscreen &&
-              <UploadRecipePic
-                modal={true}
-                imageUrl={imageUrl}
-                setImageUrl={setImageUrl}
-                setUpdate={setUpdate}
-              />}
-
-            <TitleWrapper fullscreen={fullscreen}>
-              <Name
-                fullscreen={fullscreen}
-                value={recipeName}
-                setValue={setRecipeName}
-                setUpdate={setUpdate}
-              />
-
-              <Description
-                fullscreen={fullscreen}
-                value={description}
-                setValue={setDescription}
-                setUpdate={setUpdate}
-              />
-
-              {!fullscreen && <Source
-                sourceUrl={sourceUrl}
-                sourceType={sourceType}
-              />}
-            </TitleWrapper>
-          </div>
-
-          <div style={{ display: 'flex', width: "100%" }}>
-
-            <Ingredients>
-              <Label>Ingredients: </Label>
-              <List
-                listId="ingredients"
-                recipe={recipe}
-                array={ingredients}
-                setArray={setIngredients}
-                fullscreen={fullscreen}
-                onChange={handleArrayChange}
-                reorder={reorder}
-                setUpdate={setUpdate}
-              />
-            </Ingredients>
-
-            <Instructions>
-              <Label>Prep Time: </Label>
-              <Time
-                fullscreen={fullscreen}
-                value={prepTime}
-                setValue={setPrepTime}
-                setUpdate={setUpdate}
-              />
-              <List
-                listId="prepInstructions"
-                recipe={recipe}
-                array={prepInstructions}
-                setArray={setPrepInstructions}
-                fullscreen={fullscreen}
-                onChange={handleArrayChange}
-                reorder={reorder}
-                setUpdate={setUpdate}
-              />
-
-              <br />
-              <Label>Cook Time: </Label>
-              <Time
-                fullscreen={fullscreen}
-                value={cookTime}
-                setValue={setCookTime}
-                setUpdate={setUpdate}
-              />
-              <List
-                listId="cookInstructions"
-                recipe={recipe}
-                array={cookInstructions}
-                setArray={setCookInstructions}
-                fullscreen={fullscreen}
-                onChange={handleArrayChange}
-                reorder={reorder}
-                setUpdate={setUpdate}
-              />
-
-            </Instructions>
-          </div>
-
-          {/* BUTTON TOWN */}
-
-          {/* TODO: make this open a confirmation modal */}
-
-          {/* {copyIds && <div>test</div>} */}
-
-          {update ?
-            <CloseButton onClick={() => setConfirmModal(true)}>X</CloseButton> :
-            <CloseButton onClick={history.goBack}>X</CloseButton>
-          }
-
-          {canReorder && <button onClick={() => setReorder(false)}>turn reorder off</button>}
-          {cantReorder && <button onClick={() => setReorder(true)}>turn reorder on</button>}
-
-          {canCopy && <button onClick={copyRecipe}>Add to my recipes</button>}
-
-          {canUpdate && <button onClick={handleUpdate}>update</button>}
-
-          {!fullscreen && <button onClick={startFullScreen}>Cook now</button>}
-
-          {canLogin && <LoginLogout />}
-
-          {confirmModal && <ConfirmationModal
-            show={confirmModal}
-            save={modalSave}
-            closeUnsaved={modalCloseUnsaved}
-            close={() => setConfirmModal(false)}
-          >
-            How should we handle the changes that you made?
-          </ConfirmationModal>}
-
-        </RecipeCard>
-      </DragDropContext>
-
+          <TitleWrapper>
+            {/* TODO: move state of recipe name into graphql state */}
+            <RecipeName id={id} recipeName={recipeName} />
+            <Description initialValue={description} forwardRef={descriptionRef} />
+            <Source sourceUrl={sourceUrl} sourceType={sourceType} />
+          </TitleWrapper>
+        </div>
+        <div style={{ display: "flex", width: "100%" }}>
+          <Ingredients>
+            <Label>Ingredients: </Label>
+            <UL>
+              {ingredients.map((item: any, index: any) => (
+                <li key={`ingred${index}`}>
+                  <ListItem initialValue={item} forwardRef={(ref: any) => (ingredientsRef.current[index] = ref)} />
+                </li>
+              ))}
+            </UL>
+            <button
+              onClick={() => {
+                addIngredient({
+                  variables: { id: match.params.id }
+                });
+              }}
+            >
+              +
+            </button>
+          </Ingredients>
+          <Instructions>
+            <Label>Prep Time: </Label>
+            <Time initialValue={prepTime} forwardRef={prepTimeRef} />
+            <OL>
+              {prepInstructions.map((item: any, index: any) => (
+                <li key={`prep${index}`}>
+                  <ListItem initialValue={item} forwardRef={(ref: any) => (prepInstructionsRef.current[index] = ref)} />
+                </li>
+              ))}
+            </OL>
+            <button
+              onClick={() => {
+                addPrepInstruction({
+                  variables: { id: match.params.id }
+                });
+              }}
+            >
+              +
+            </button>
+            <br />
+            <Label>Cook Time: </Label>
+            <Time initialValue={cookTime} forwardRef={cookTimeRef} />
+            <OL>
+              {cookInstructions.map((item: any, index: any) => (
+                <li key={`cook${index}`}>
+                  <ListItem initialValue={item} forwardRef={(ref: any) => (cookInstructionsRef.current[index] = ref)} />
+                </li>
+              ))}
+            </OL>
+            <button
+              onClick={() => {
+                addCookInstruction({
+                  variables: { id: match.params.id }
+                });
+              }}
+            >
+              +
+            </button>
+          </Instructions>
+        </div>
+        <CloseButton onClick={history.goBack}>X</CloseButton>
+        <button onClick={handleSubmit}>Submit</button>
+      </RecipeCard>
     </Modal>
   );
-};
+}
