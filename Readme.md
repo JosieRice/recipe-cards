@@ -8,7 +8,7 @@ staging has to be deployed for it to work
 # To Deploy App
 
 `npm run build`<br>
-`firebase deploy --except functions`<br>
+`npm run deploy-production` or `deploy-staging`<br>
 
 # To Deploy Functions
 
