@@ -9,10 +9,21 @@
 
 # Product Goals
 
+<<<<<<< Updated upstream
 ## TODO Next
+=======
+
+## TODO Next
+
+0. setup an interface to set cropping of image.
+1. Move image resize logic into cloud functions. https://firebase.google.com/docs/functions/use-cases
+2. if original recipe has no photo, use the next updated photo.
+3. Fully move over to graphql for everything except state/cache
+4. Figure out how to package size with webpack (print that fancy graph)
+>>>>>>> Stashed changes
 5. setup scrolling through multiple versions of recipe.
-6. if original recipe has no photo, use the next updated photo.
-7. Move image resize logic into cloud functions. https://firebase.google.com/docs/functions/use-cases
+6. Write a test.
+7. Setup a test pipeline.
 8. Make adding a recipe more of a guided experience. start with source.
 9. Wake up web scrapper when the page loads to make it quicker to load.
 10. Make image uploading a better experience.
@@ -22,6 +33,11 @@
 14. Make a logo
 15. Update top nav.
 16. Add loading state
+
+## Graphql Switch
+
+update inputs to be controlled by graphql
+drag and drop functionality with graphql in modal
 
 ## Improve Recipe Adding UX
 1. Link to URL's and to books on Amazon
